@@ -1,0 +1,208 @@
+:root{
+    /* Core palette */
+    --tan: #D6B588;
+    --background: #FAF9F6;
+    --text: #3B3B3B;
+    --accent: #8B5E34;
+    --highlight: #F1E3C6;
+
+    /* Fonts */
+    --font-heading: 'Fredoka', sans-serif;
+    --font-body: 'Nunito', sans-serif;
+
+    /* Close button */
+    --close-bg:    #E63946;
+    --close-hover: #B8323C;
+    --close-x:     #FFFFFF;
+
+    /* Meal-time backgrounds (for whole card) — readable with dark text */
+    --mt-breakfast: #FFD8A8; /* brighter peach */
+    --mt-lunch:     #C8E6C9; /* soft green */
+    --mt-dinner:    #C5CAE9; /* lavender-blue */
+
+    /* Meal-type bold stripe/badge colors */
+    --pasta:   #E67E22;
+    --salad:   #27AE60;
+    --protien: #C0392B; /* keeping your spelling */
+    --side:    #8E44AD;
+    --snack:   #F39C12;
+    --food:    #2980B9;
+
+    /* UI */
+    --card: #FFFFFF;
+    --card-border: rgba(0,0,0,0.08);
+    --shadow: 0 6px 18px rgba(0,0,0,0.08);
+    --radius: 14px;
+    --gap: 16px;
+}
+
+/* Reset-ish */
+*, *::before, *::after { 
+    box-sizing: border-box; 
+}
+
+html, body {
+    height: 100%; 
+}
+
+body {
+    margin: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+}
+
+/* Layout */
+.main-body{
+    display: flex;
+    align-items: stretch;
+}
+
+sidebar-component{
+    height: 100vh;
+    background-color: var(--accent);
+    border-right: 2px solid var(--text);
+    min-width: 48px;
+    width: 48px;
+    transition: width 220ms ease;
+}
+
+sidebar-component.expanded {
+    width: 220px; 
+}
+
+sidebar-component.condensed {
+    width: 48px; 
+}
+
+.main{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* prevents overflow in flex layouts */
+}
+
+/* Header */
+/* ===== Header Container ===== */
+.main-title-cont{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: var(--highlight);
+    border-bottom: 1px solid var(--accent);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+
+/* subtle accent band at bottom */
+.main-title-cont::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--tan));
+    opacity: .35;
+}
+
+/* ===== Brand ===== */
+.brand{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo{
+    width: 28px; height: 28px;
+    fill: var(--accent);
+}
+
+.title{
+    position: relative;
+    font-family: var(--font-heading);
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1.1;
+    display: inline-block;
+}
+
+/* animated underline */
+.title::after{
+    content:"";
+    position:absolute;
+    left: 0; bottom: -4px;
+    height: 8px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--tan), var(--accent));
+    border-radius: 6px;
+    transform-origin: left center;
+    transform: scaleX(0.25) skewX(-8deg);
+    transition: transform .35s ease;
+    opacity: .9;
+}
+
+.brand:hover .title::after{
+    transform: scaleX(1) skewX(-8deg);
+}
+
+/* beta badge */
+.badge{
+    margin-left: 6px;
+    padding: 2px 8px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--background);
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+}
+
+/* ===== Profile Pic (no dropdown) ===== */
+.profile-pic{
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--highlight), var(--tan));
+    border: 2px solid var(--accent);
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+
+/* Cards */
+.recipe-card{
+    position: relative;
+    display: grid;
+    grid-template-columns: 8px 1fr; /* left stripe + body */
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 150ms ease, box-shadow 150ms ease;
+}
+.recipe-card:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+.type-stripe{
+    width: 8px;
+    background: var(--food); /* default */
+}
+
+/* Meal-time backgrounds (whole card tint) */
+.recipe-card.breakfast { background: var(--mt-breakfast); }
+.recipe-card.lunch     { background: var(--mt-lunch); }
+.recipe-card.dinner    { background: var(--mt-dinner); }
+
+/* Stripe color by meal type */
+.type-stripe.pasta   { background: var(--pasta); }
+.type-stripe.salad   { background: var(--salad); }
+.type-stripe.protien { background: var(--protien); }
+.type-stripe.side    { background: var(--side); }
+.type-stripe.snack   { background: var(--snack); }
+.type-stripe.food    { background: var(--food); }
+

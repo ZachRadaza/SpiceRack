@@ -1,0 +1,10 @@
+    {
+    "compilerOptions": {
+        "noUncheckedIndexedAccess": true,
+        "exactOptionalPropertyTypes": true,
+        "isolatedModules": true,
+        "noUncheckedSideEffectImports": true,
+        "moduleDetection": "force",
+        "verbatimModuleSyntax": false
+    }
+    }

@@ -1,0 +1,178 @@
+recipe-dialog{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    border: none;
+    border-radius: 40px;
+    padding: 16px;
+    width: 800px;
+    max-width: 95vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    overflow: hidden;
+}
+
+dialog::backdrop {
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(2px);
+}
+
+.dlg-cont{
+    width: 100%;
+    height: 100%;
+    background-color: var(--background); /*incase*/
+    display: flex;
+    flex-direction: row;
+
+}
+
+.edge{
+    width: 100px;
+    height: 100%;
+}
+
+#dlg-main{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.section{
+    background-color: transparent;
+}
+
+/* top column */
+.top-column{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 20px;
+    background-color: transparent;
+}
+
+#dlg-bookmark{
+
+}
+
+#dlg-close{
+    background-color: var(--close-bg);
+    color: var(--close-x);
+    width: 50px;
+    height: 50px;
+    border-radius: 25px; /*round*/
+    outline: none;
+    font-size: medium;
+}
+
+#dlg-close:hover{
+    background-color: var(--close-hover);
+}
+
+/* upper half of dialog */
+.upper-half{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin: 20px;
+    flex: 1;
+
+}
+
+#dlg-image-cont{
+
+}
+
+#dlg-image-cont input{
+    width: 350px;
+    height: 150px;
+}
+
+#dlg-image-cont img{
+    width: 350px;
+    min-height: 150px;
+}
+
+.name-cont{
+    display: flex;
+    flex-direction: column;
+}
+
+#dlg-name{
+    outline: 0;
+    background-color: transparent;
+    font-size: xx-large;
+    font-weight: 700;
+    text-align: center;
+}
+
+.name-cont .btn-cont{
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    justify-content: space-around;
+    background-color: transparent;
+}
+
+.name-cont .btn-cont button{
+    outline: 0;
+    border-radius: 25px;
+    color: var(--text);
+    font-family: var(--font-heading);
+    font-size: medium;
+    font-weight: 500;
+}
+
+.name-cont .btn-cont button:hover{
+    
+}
+
+/* lower half of dialog */
+.lower-half{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.lower-half .content{
+    background-color: transparent;
+    margin: 50px;
+    align-items: center;
+}
+
+/* footer of dialog */
+.footer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#dlg-save{
+    border-radius: 25px;
+    width: 40%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: var(--text) 2px solid;
+    margin: 10px;
+    background-color: var(--accent);
+    font-family: var(--font-body);
+    font-size: medium;
+}
+
+#dlg-save:hover{
+    background-color: var(--accent); /*darker accent color*/
+    font-size: x-large;
+}
+
+#dlg-creator{
+    background-color: transparent;
+    font-family: var(--font-body);
+    font-style: italic;
+    background-color: var(--text); /*not as dark*/
+    font-size: medium;
+    margin: 10px;
+}

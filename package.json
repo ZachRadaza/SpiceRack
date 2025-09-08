@@ -1,0 +1,28 @@
+{
+  "name": "spicerack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --watch src --exec ts-node -P tsconfig.server.json src/index.ts",
+    "build": "npm run build:server && npm run build:client && npm run copy:public",
+    "build:server": "tsc -p tsconfig.server.json",
+    "build:client": "tsc -p tsconfig.client.json",
+    "copy:public": "cpy \"public/**/*\" \"!public/**/*.ts\" \"!public/**/*.tsx\" \"!public/**/*.map\" dist/client --parents",
+    "start": "node dist/server/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.0",
+    "cpy-cli": "^6.0.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}

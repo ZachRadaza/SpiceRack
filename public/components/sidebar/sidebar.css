@@ -1,0 +1,43 @@
+#sidebar-cont {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    background-color: var(--accent);
+    border-right: 2px solid var(--text);
+}
+
+/* Base button style */
+.sidebar-btn {
+    flex: 1;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--text);
+    background-color: transparent;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    color: var(--background);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Remove double border on last button */
+.sidebar-btn:last-child {
+    border-bottom: none; 
+}
+
+/* Hover effect: subtle bg + scale */
+.sidebar-btn:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+    transform: scale(1.02);
+}
+
+/* Active/selected state */
+.sidebar-btn.active {
+    background-color: var(--tan);
+    color: var(--accent);
+    font-weight: 600;
+}

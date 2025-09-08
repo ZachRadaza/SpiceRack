@@ -1,0 +1,43 @@
+<div class="dlg-cont">
+    <div class="edge"></div>
+    <div id="dlg-main">
+        <div class="top-column section">
+            <input type="checkbox" id="dlg-bookmark">
+            <button type="button" id="dlg-close">x</button>
+        </div>
+        <div class="upper-half section">
+            <div id="dlg-image-cont">
+                <input type="file" accept="image/*">
+                <img alt="Recipe Image">
+            </div>
+            <div class="name-cont">
+                <input id="dlg-name" type="text">
+                <div class="btn-cont">
+                    <button id="dlg-meal-time" type="button"></button>
+                    <button id="dlg-meal-type" type="button"></button>
+                </div>
+            </div>
+        </div>
+        <div class="lower-half section">
+            <div class="ingredients content">
+                <h3>Ingredients:</h3>
+                <ul id="dlg-ingredients">
+                    <li><input class="body"><button type="button" class="dlg-remove-li">x</button></li>
+                    <li><button type="button">+</button></li>
+                </ul>
+            </div>
+            <div class="procedures content">
+                <h3>Procedures:</h3>
+                <ul id="dlg-procedures">
+                    <li><input class="body"><button type="button" class="dlg-remove-li">x</button></li>
+                    <li><button type="button">+</button></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer section">
+            <button type="button" id="dlg-save"></button>
+            <span id="dlg-creator"></span>
+        </div>
+    </div>
+    <div class="edge"></div>
+</div>
