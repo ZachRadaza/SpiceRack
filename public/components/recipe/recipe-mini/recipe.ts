@@ -26,7 +26,7 @@ export class Recipe extends HTMLElement{
     private _ingredients: string[] = [""];
     private _imageLink: string = "";
     private _accountName: string = "Mr.Recommended";
-    private recipeCategories!: RecipeCategories;
+    private recipeCategories: RecipeCategories = new RecipeCategories();
     private _mini: boolean = false; //if mini short version or tall
     private _bookmarked: boolean = false;
     private initialized: boolean = false;
@@ -176,13 +176,13 @@ export class Recipe extends HTMLElement{
     private update(){
         //updates changed fields
         enum Elements { eName = 0, eIngredients = 1, eProcedure = 2, eImage = 3, eCreator = 4};
-        const ids: string[] = ["name", "ingredients", "procedures", "image", "creator"];
+        const ids: string[] = ["#name", "#ingredients", "#procedures", "#image", "#creator"];
         const elements: HTMLElement[] = [];
 
-        for(let i = 0; i < ids.length; i++){
-            let temp = this.shadow.getElementById(ids[i] as string);
-            if(!temp) throw new Error(ids[i] + " not found");
-            elements.push(temp);
+        for (const id of ids) {
+            const el = this.shadow.querySelector<HTMLElement>(id);
+            if (!el) throw new Error(`${id} not found`);
+            elements.push(el); // el is HTMLElement here
         }
 
         elements[Elements.eName]!.textContent = this._name;
@@ -280,4 +280,4 @@ export class Recipe extends HTMLElement{
     }
 
 }
-customElements.define("recipe", Recipe);
+customElements.define("recipe-mini", Recipe);

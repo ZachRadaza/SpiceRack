@@ -32,7 +32,7 @@ html, body {
   color: var(--accent);
 }
 
-/* All buttons share base look */
+/* buttons share base look */
 .north-cont button{
   border: 2px solid var(--accent);
   background: var(--tan);
@@ -44,28 +44,22 @@ html, body {
   cursor: pointer;
   transition: background .2s, transform .1s;
 }
+
 .north-cont button:hover{
   background: var(--accent);
   color: var(--background);
   transform: translateY(-2px);
 }
 
-/* Bigger + button */
-.new-recipe{
+#new-recipe{
   font-size: clamp(28px, 6vw, 40px);
   width: clamp(60px, 10vw, 80px);
   height: clamp(60px, 10vw, 80px);
-  border-radius: 50%;
+  border-radius: 25px;
   padding: 0;
   line-height: 1;
   display: grid;
   place-items: center;
-  background: var(--accent);
-  color: var(--background);
-}
-.new-recipe:hover{
-  background: var(--tan);
-  color: var(--text);
 }
 
 /* Filter / Sort stack */

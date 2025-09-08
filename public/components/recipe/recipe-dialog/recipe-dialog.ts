@@ -1,4 +1,5 @@
 import { RecipeCategories, MealTime, MealType } from "../../../main.js";
+import { MyRecipes } from "../../../pages/my-recipes/my-recipes.js";
 import { Recipe, RecipeFields } from "../recipe-mini/recipe.js";
 
 export class RecipeDialog extends HTMLDialogElement{
@@ -10,6 +11,7 @@ export class RecipeDialog extends HTMLDialogElement{
     private _accountName: string = "Developer";
     private recipeCategories: RecipeCategories = new RecipeCategories();
     private _recipe!: Recipe;
+    private _myRecipe!: MyRecipes;
     private _bookmarked: boolean = false;
     private initialized: boolean = false;
     private brandNew: boolean = true;
@@ -26,7 +28,7 @@ export class RecipeDialog extends HTMLDialogElement{
 
 
 
-    async connnectedCallback(){
+    async connectedCallback(){
         if(this.initialized) return;
 
         const [html, css] = await Promise.all([
@@ -41,6 +43,8 @@ export class RecipeDialog extends HTMLDialogElement{
         ;
 
         this.initializeHTMLElements();
+
+        this.update();
 
         this.initialized = true;
     }
@@ -58,8 +62,6 @@ export class RecipeDialog extends HTMLDialogElement{
         
         const saveBtn = this.querySelector<HTMLButtonElement>("#dlg-save");
         const closeBtn = this.querySelector<HTMLButtonElement>("#dlg-close");
-        const addIngBtn = this.querySelector<HTMLButtonElement>("#ingredients button");
-        const addProBtn = this.querySelector<HTMLButtonElement>("#procedures button");
 
         if(!timeBtn || !typeBtn || !bmInput || !nameInput || !procedureList || !ingredientsList || !imageImg || !imageInput){
             throw new Error("#dlg-meal-time, #dlg-meal-type, #dlg-name, #dlg-procedures, #dlg-ingredients, and #dlg-image-cont img/input not found in recipe-dialog");
@@ -75,17 +77,20 @@ export class RecipeDialog extends HTMLDialogElement{
         this.mealTypeBtn = typeBtn;
         this.bmInput = bmInput;
 
-        this.mealTimeBtn.addEventListener("click", () => this.mealCategoryChange(Object.values(MealTime), this.mealTimeBtn));
-        this.mealTypeBtn.addEventListener("click", () => this.mealCategoryChange(Object.values(MealType), this.mealTimeBtn));
+        const mTime = Object.values(MealTime);
+        mTime.forEach(e => console.log(e));
+        const mType = Object.values(MealType);
+        mType.forEach(e => console.log(e));
+        this.mealTimeBtn.addEventListener("click", () => this.mealCategoryChange(mTime, this.mealTimeBtn));
+        this.mealTypeBtn.addEventListener("click", () => this.mealCategoryChange(mType, this.mealTypeBtn));
         this.imageInput.addEventListener("change", () => this.changeImage());
         this.bmInput?.addEventListener("change", () => this.bookmarkRecipe());
         saveBtn?.addEventListener("click", () => this.save());
         closeBtn?.addEventListener("click", () => this.close());
-        addIngBtn?.addEventListener("click", () => this.addIngProLine(this.ingredientsList));
-        addProBtn?.addEventListener("click", () => this.addIngProLine(this.procedureList));
 
     }
 
+    //setters
     public setAllFields(fields: RecipeFields, recipe: Recipe):void {
         this._name = fields.name;
         this._ingredients = fields.ingredients;
@@ -101,18 +106,58 @@ export class RecipeDialog extends HTMLDialogElement{
         this.update();
     }
 
+    public set myRecipes(r: MyRecipes){
+        this._myRecipe = r;
+    }
+
+    //getters
+    public get name(){
+        return this._name;
+    }
+
+    public get procedures(){
+        return this._procedures;
+    }
+
+    public get ingredients(){
+        return this._ingredients;
+    }
+
+    public get imageLink(){
+        return this._imageLink;
+    }
+
+    public get accountName(){
+        return this._accountName;
+    }
+
+    public get mealTime(){
+        return this.recipeCategories.mealTime;
+    }
+
+    public get mealType(){
+        return this.recipeCategories.mealType;
+    }
+
+    public get bookmarked(){
+        return this._bookmarked;
+    }
+
     //methods
     private update(){
-        if(this.brandNew) return;
-
-        this.nameInput.textContent = this._name;
-        if(this._bookmarked) this.bmInput.checked = true;
-
         //set recipe categories
         this.mealTimeBtn.textContent = this.recipeCategories.mealTime.toUpperCase();
         this.mealTimeBtn.classList.add(this.recipeCategories.mealTime);
         this.mealTypeBtn.textContent = this.recipeCategories.mealType.toUpperCase();
         this.mealTypeBtn.classList.add(this.recipeCategories.mealType);
+
+        this.addIngProLine(this.ingredientsList);
+        this.addIngProLine(this.procedureList)
+
+        if(this.brandNew) return;
+
+        this.nameInput.value = this._name;
+        if(this._bookmarked) this.bmInput.checked = true;
 
         //add ingredients and procedures
         this.updateIngPro();
@@ -131,7 +176,6 @@ export class RecipeDialog extends HTMLDialogElement{
     }
 
     private updateIngProHelper(list: string[], elementList: HTMLOListElement | HTMLUListElement): void{
-        const addBtn = elementList.lastChild;
         elementList.replaceChildren();
 
         list.forEach( i => {
@@ -145,7 +189,7 @@ export class RecipeDialog extends HTMLDialogElement{
             elementList.appendChild(li);
         });
 
-        elementList.appendChild(addBtn!);
+        elementList.appendChild(this.addButton(elementList));
     }
 
     private removeButton(): HTMLButtonElement{
@@ -155,24 +199,36 @@ export class RecipeDialog extends HTMLDialogElement{
         remBtn.type = "button";
         remBtn.classList.add("dlg-remove-li")
 
-        remBtn.addEventListener("click", () => {
-            remBtn.parentElement?.remove;
-        });
+        remBtn.addEventListener("click", () => remBtn.parentElement?.remove());
 
         return remBtn;
+    }
+
+    private addButton(list: HTMLUListElement | HTMLOListElement): HTMLButtonElement{
+        const addBtn = document.createElement("button");
+
+        addBtn.textContent = "+";
+        addBtn.type = "button";
+        addBtn.classList = "dlg-add-btn";
+
+        addBtn.addEventListener("click", () => this.addIngProLine(list));
+
+        return addBtn;
     }
 
     private mealCategoryChange(category: MealTime[] | MealType[], btn: HTMLButtonElement):void {
         let oldClass: string = "";
         let newClass: string = "";
         
+        if(category.length <= 0) return;
+
         for(let i = 0; i < category.length; i++){
-            if(category.length <= 0) return;
 
             if(category[i]!.toUpperCase() === btn.textContent.toUpperCase()){
                 oldClass = category[i] as string;
 
-                if(i + 1 <= category.length) i = 0;
+                i++;
+                if(i >= category.length) i = 0;
                 btn.textContent = category[i]!.toUpperCase();
                 newClass = category[i] as string;
                 break;
@@ -189,36 +245,42 @@ export class RecipeDialog extends HTMLDialogElement{
                 e.classList.add(newClass);
             });
             this.recipeCategories.mealType = newClass.toLowerCase() as MealType;
-        } else {
-            const bg = this.querySelector<HTMLDivElement>(".dlg-main");
+        } else if(category.length > 0 && category[0] as MealTime) {
+            const bg = this.querySelector<HTMLDivElement>("#dlg-main");
             bg?.classList.remove(oldClass);
             bg?.classList.add(newClass);
 
             this.nameInput.classList.remove(oldClass);
             this.nameInput.classList.add(newClass);
             this.recipeCategories.mealTime = newClass.toLowerCase() as MealTime;
+        } else {
+            throw new Error("something aint right here at recipe-dialog.ts");
         }
     }
 
     private save(): void{
-        this._recipe.setAllFields({
-            name: this._name,
-            ingredients: this._ingredients,
-            procedures: this._procedures,
-            imageLink: this._imageLink,
-            accountName: this._accountName,
-            mealTime: this.recipeCategories.mealTime,
-            mealType: this.recipeCategories.mealType,
-            bookmarked: this._bookmarked,
-            mini: this._recipe.mini
-        });
+        if(!this.brandNew){
+            this._recipe.setAllFields({
+                name: this._name,
+                ingredients: this._ingredients,
+                procedures: this._procedures,
+                imageLink: this._imageLink,
+                accountName: this._accountName,
+                mealTime: this.recipeCategories.mealTime,
+                mealType: this.recipeCategories.mealType,
+                bookmarked: this._bookmarked,
+                mini: this._recipe.mini
+            });
+        } else {
+            this._myRecipe.addNewRecipe(this);
+        }
 
         this.close();
     }
 
     private addIngProLine(elementList: HTMLUListElement | HTMLOListElement): void{
-        const addBtn = elementList.lastChild as ChildNode;
-        elementList.removeChild(addBtn);
+        const addBtn = elementList.lastElementChild;
+        elementList.removeChild(addBtn!);
 
         const input = document.createElement("input");
         input.classList.add("body");
@@ -228,7 +290,8 @@ export class RecipeDialog extends HTMLDialogElement{
         li.appendChild(this.removeButton());
 
         elementList.appendChild(li);
-        elementList.appendChild(addBtn);
+        elementList.appendChild(this.addButton(elementList));
+
     }
 
     //make fancier
@@ -243,11 +306,13 @@ export class RecipeDialog extends HTMLDialogElement{
 
         const reader = new FileReader();
         reader.onload = e => {
-            this.imageImg.src = e.target?.result as string;
-            this.imageInput.style.display = "block"; // show image
+            const dataUrl = String(e.target?.result || "");
+            this._imageLink = dataUrl;
+            this.imageImg.src = dataUrl;
+            this.imageImg.style.display = "block";   // show image
+            // this.imageInput.style.display = "none";  // optionally hide picker
         };
-        reader.readAsDataURL(file); // convert file to base64 string
-        this._imageLink = reader.result as string; 
+        reader.readAsDataURL(file);
     }
 }
-customElements.define("recipe-dialog", RecipeDialog);
+customElements.define('recipe-dialog', RecipeDialog, { extends: 'dialog' });
