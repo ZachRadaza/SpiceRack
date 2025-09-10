@@ -12,17 +12,17 @@ html, body {
 
 /* ---------- Top Bar ---------- */
 .north-cont{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin: 0px auto 40px auto;
-    padding: 12px 24px;
-    background: var(--highlight);
-    border-bottom-left-radius: 16px;
-    border-bottom-right-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 0px auto 40px auto;
+  padding: 12px 24px;
+  background: var(--highlight);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .title-recipes{
@@ -30,25 +30,6 @@ html, body {
   font-size: clamp(28px, 4vw, 48px);
   margin: 0;
   color: var(--accent);
-}
-
-/* buttons share base look */
-.north-cont button{
-  border: 2px solid var(--accent);
-  background: var(--tan);
-  color: var(--text);
-  font-family: var(--font-heading);
-  font-weight: 600;
-  border-radius: 25px;
-  padding: 10px 16px;
-  cursor: pointer;
-  transition: background .2s, transform .1s;
-}
-
-.north-cont button:hover{
-  background: var(--accent);
-  color: var(--background);
-  transform: translateY(-2px);
 }
 
 #new-recipe{

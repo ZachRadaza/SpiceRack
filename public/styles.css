@@ -172,25 +172,23 @@ sidebar-component.condensed {
     box-shadow: 0 2px 6px rgba(0,0,0,.15);
 }
 
-/* Cards */
-.recipe-card{
-    position: relative;
-    display: grid;
-    grid-template-columns: 8px 1fr; /* left stripe + body */
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    transition: transform 150ms ease, box-shadow 150ms ease;
+/* ==== shared elements =====*/
+button {
+    border: 2px solid var(--accent);
+    background: var(--tan);
+    color: var(--text);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    border-radius: 25px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
 }
-.recipe-card:hover{
+
+button:hover{
+    background: var(--accent);
+    color: var(--background);
     transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-}
-.type-stripe{
-    width: 8px;
-    background: var(--food); /* default */
 }
 
 /* Meal-time backgrounds (whole card tint) */
@@ -198,11 +196,4 @@ sidebar-component.condensed {
 .recipe-card.lunch     { background: var(--mt-lunch); }
 .recipe-card.dinner    { background: var(--mt-dinner); }
 
-/* Stripe color by meal type */
-.type-stripe.pasta   { background: var(--pasta); }
-.type-stripe.salad   { background: var(--salad); }
-.type-stripe.protien { background: var(--protien); }
-.type-stripe.side    { background: var(--side); }
-.type-stripe.snack   { background: var(--snack); }
-.type-stripe.food    { background: var(--food); }
 

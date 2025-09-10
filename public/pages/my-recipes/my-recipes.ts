@@ -10,7 +10,7 @@ export class MyRecipes extends HTMLElement{
     private shadow = this.attachShadow({ mode:"open" });
     private initialized: boolean = false;
 
-    private _recipeList: Recipe[] & HTMLElement[] = [];
+    private _recipeList: HTMLElement[] = [];
 
     private divList!: HTMLDivElement;
 
@@ -103,7 +103,9 @@ export class MyRecipes extends HTMLElement{
 
     //for new recipes created, to be used by dialog
     public addNewRecipe(rd: RecipeDialog): void{
-        const recipe = new Recipe();
+        const recipe = document.createElement("recipe-mini") as Recipe;
+        this._recipeList.push(recipe);
+
         recipe.setAllFields({
             name: rd.name,
             ingredients: rd.ingredients,
@@ -116,9 +118,9 @@ export class MyRecipes extends HTMLElement{
             mini: false
         });
 
-        this._recipeList.push(recipe);
-
         this.sortRecipeList();
+
+        this.update();
     }
 
     //add recipes

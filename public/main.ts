@@ -35,7 +35,7 @@ function updatePage(): void{
 export enum MealTime {
     breakfast = "breakfast",
     lunch = "lunch",
-    dinner = "dinnner"
+    dinner = "dinner"
 }
 
 export enum MealType{

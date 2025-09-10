@@ -44,9 +44,8 @@ export class RecipeDialog extends HTMLDialogElement{
 
         this.initializeHTMLElements();
 
-        this.update();
-
         this.initialized = true;
+        this.update();
     }
 
     private initializeHTMLElements() {
@@ -78,9 +77,7 @@ export class RecipeDialog extends HTMLDialogElement{
         this.bmInput = bmInput;
 
         const mTime = Object.values(MealTime);
-        mTime.forEach(e => console.log(e));
         const mType = Object.values(MealType);
-        mType.forEach(e => console.log(e));
         this.mealTimeBtn.addEventListener("click", () => this.mealCategoryChange(mTime, this.mealTimeBtn));
         this.mealTypeBtn.addEventListener("click", () => this.mealCategoryChange(mType, this.mealTypeBtn));
         this.imageInput.addEventListener("change", () => this.changeImage());
@@ -145,6 +142,8 @@ export class RecipeDialog extends HTMLDialogElement{
 
     //methods
     private update(){
+        if(!this.initialized) return;
+
         //set recipe categories
         this.mealTimeBtn.textContent = this.recipeCategories.mealTime.toUpperCase();
         this.mealTimeBtn.classList.add(this.recipeCategories.mealTime);
@@ -219,11 +218,10 @@ export class RecipeDialog extends HTMLDialogElement{
     private mealCategoryChange(category: MealTime[] | MealType[], btn: HTMLButtonElement):void {
         let oldClass: string = "";
         let newClass: string = "";
-        
+
         if(category.length <= 0) return;
 
         for(let i = 0; i < category.length; i++){
-
             if(category[i]!.toUpperCase() === btn.textContent.toUpperCase()){
                 oldClass = category[i] as string;
 
@@ -238,27 +236,33 @@ export class RecipeDialog extends HTMLDialogElement{
         btn.classList.remove(oldClass);
         btn.classList.add(newClass);
 
-        if(category.length > 0 && category[0] as MealType){
+        const isMealTypeArray = (arr: (MealTime | MealType)[]): arr is MealType[] =>
+            Object.values(MealType).includes(arr[0] as MealType);
+
+        if (isMealTypeArray(category)) {
             const edges = this.querySelectorAll<HTMLDivElement>(".edge");
-            edges.forEach( e => {
-                e.classList.remove(oldClass);
+            edges.forEach(e => {
+                if (oldClass) e.classList.remove(oldClass);
                 e.classList.add(newClass);
             });
+
             this.recipeCategories.mealType = newClass.toLowerCase() as MealType;
-        } else if(category.length > 0 && category[0] as MealTime) {
+        } else {
             const bg = this.querySelector<HTMLDivElement>("#dlg-main");
             bg?.classList.remove(oldClass);
             bg?.classList.add(newClass);
 
             this.nameInput.classList.remove(oldClass);
             this.nameInput.classList.add(newClass);
+
             this.recipeCategories.mealTime = newClass.toLowerCase() as MealTime;
-        } else {
-            throw new Error("something aint right here at recipe-dialog.ts");
         }
+
     }
 
     private save(): void{
+        this.pushInputIntoField();
+
         if(!this.brandNew){
             this._recipe.setAllFields({
                 name: this._name,
@@ -276,6 +280,24 @@ export class RecipeDialog extends HTMLDialogElement{
         }
 
         this.close();
+        
+    }
+
+    private pushInputIntoField(): void{
+        this._name = this.nameInput.value;
+
+        this._procedures.length = 0;
+        this.procedureList.querySelectorAll("input").forEach(input => {
+            this._procedures.push(input.value);
+        });
+
+        this._ingredients.length = 0;
+        this.ingredientsList.querySelectorAll("input").forEach(input => {
+            this._ingredients.push(input.value);
+        });
+
+        this._imageLink = this.imageInput.src;
+        this._bookmarked = this.bmInput.checked;
     }
 
     private addIngProLine(elementList: HTMLUListElement | HTMLOListElement): void{
@@ -284,6 +306,7 @@ export class RecipeDialog extends HTMLDialogElement{
 
         const input = document.createElement("input");
         input.classList.add("body");
+        input.placeholder = "ingredient/procedure";
 
         const li = document.createElement("li");
         li.appendChild(input);

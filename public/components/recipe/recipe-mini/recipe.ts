@@ -33,6 +33,7 @@ export class Recipe extends HTMLElement{
 
     async connectedCallback(){
         if(this.initialized) return;
+
         const [html, css] = await Promise.all([
             fetch(new URL("./recipe.html", import.meta.url)).then(r => r.text()),
             fetch(new URL("./recipe.css", import.meta.url)).then(r => r.text())
@@ -46,9 +47,8 @@ export class Recipe extends HTMLElement{
 
         this.initializeHTMLElements();
 
-        this.recipeCategories = new RecipeCategories();
-
         this.initialized = true;
+        this.update();
     }
 
     private initializeHTMLElements(): void{
@@ -71,8 +71,6 @@ export class Recipe extends HTMLElement{
             this.addEventListener("mouseenter", () => this.mainContDiv.classList.remove("condensed"));
             this.addEventListener("mouseleave", () => this.mainContDiv.classList.add("condensed"));
         }
-
-        this.initialized = true;
     }
 
     //setters
@@ -175,6 +173,8 @@ export class Recipe extends HTMLElement{
     //methods
     private update(){
         //updates changed fields
+        if(!this.initialized) return;
+
         enum Elements { eName = 0, eIngredients = 1, eProcedure = 2, eImage = 3, eCreator = 4};
         const ids: string[] = ["#name", "#ingredients", "#procedures", "#image", "#creator"];
         const elements: HTMLElement[] = [];
@@ -204,66 +204,54 @@ export class Recipe extends HTMLElement{
         elements[Elements.eImage]!.setAttribute('src', this._imageLink);
         if(!this._imageLink)    elements[Elements.eImage]!.parentElement?.remove;
 
-        elements[Elements.eCreator]!.textContent = this._accountName;
+        elements[Elements.eCreator]!.textContent = this._accountName + "'s Recipe";
 
         this.updateMealCategory();
 
     }
 
     private updateMealCategory():void {
-       this.updateMealTime();
-       this.updateMealType(); 
+        this.updateMealTime();
+        this.updateMealType(); 
     }  
 
     private updateMealTime(): void{
-        let oldClass: string = "";
-        let newClass: string = "";
-        let category: MealTime[]= Object.values(MealTime);
+        const category: MealTime[] = Object.values(MealTime);
 
-        if(!this.mainContDiv) return;
-
-        const classList = Object.values(this.mainContDiv.classList);
+        const classList = Array.from(this.mainContDiv.classList);
 
         for(let i = 0; i < category.length; i++){
             if(classList.includes(category[i] as string)){
-                oldClass = category[i] as string;
-                if(i + 1 <= category.length) i = 0;
-                newClass = category[i] as string;
+                this.mainContDiv.classList.remove(category[i] as string);
                 break;
             }
         }
 
-        this.mainContDiv.classList.remove(oldClass);
-        this.mainContDiv.classList.add(newClass);
-        this.recipeCategories.mealTime = newClass.toLowerCase() as MealTime;
+        this.mainContDiv.classList.add(this.recipeCategories.mealTime);
     }
 
     private updateMealType(): void{
         let oldClass: string = "";
-        let newClass: string = "";
-        let category: MealType[] = Object.values(MealType);
 
-        const classList = Object.values(this.edgesDiv[0]!.classList);
+        const category: MealType[] = Object.values(MealType);
+
+        const classList = Array.from(this.edgesDiv[0]!.classList);
 
         for(let i = 0; i < category.length; i++){
             if(classList.includes(category[i] as string)){
-                oldClass = category[i] as string;
-                if(i + 1 <= category.length) i = 0;
-                newClass = category[i] as string;
+                oldClass = category[i] as string;                    
                 break;
             }
         }
 
         this.edgesDiv.forEach( e => {
-            e.classList.remove(oldClass);
-            e.classList.add(newClass);
+            if(oldClass) e.classList.remove(oldClass);
+            e.classList.add(this.recipeCategories.mealType);
         });
-        this.recipeCategories.mealType = newClass.toLowerCase() as MealType;
     }
 
     private openRecipeDialog(){
-        const dialog = document.createElement("dialog", {is: "recipe-dialog"}) as HTMLDialogElement & RecipeDialog;
-        document.body.appendChild(dialog);
+        const dialog = document.createElement("dialog", {is: "recipe-dialog"}) as HTMLDialogElement;
         (dialog as any).setAllFields({
             name: this._name,
             ingredients: this._ingredients,
@@ -275,7 +263,7 @@ export class Recipe extends HTMLElement{
             bookmarked: this._bookmarked
             }, this
         );
-
+        document.body.appendChild(dialog);
         dialog.showModal();
     }
 
