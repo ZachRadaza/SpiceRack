@@ -146,8 +146,10 @@ export class RecipeDialog extends HTMLDialogElement{
 
         //set recipe categories
         this.mealTimeBtn.textContent = this.recipeCategories.mealTime.toUpperCase();
+        this.mealTimeBtn.classList.remove("lunch");
         this.mealTimeBtn.classList.add(this.recipeCategories.mealTime);
         this.mealTypeBtn.textContent = this.recipeCategories.mealType.toUpperCase();
+        this.mealTypeBtn.classList.remove("food");
         this.mealTypeBtn.classList.add(this.recipeCategories.mealType);
 
         this.addIngProLine(this.ingredientsList);
@@ -178,14 +180,7 @@ export class RecipeDialog extends HTMLDialogElement{
         elementList.replaceChildren();
 
         list.forEach( i => {
-            const input = document.createElement("input");
-            input.value = i;
-            input.classList.add("body");
-
-            const li = document.createElement("li");
-            li.appendChild(input);
-            li.appendChild(this.removeButton());
-            elementList.appendChild(li);
+            elementList.appendChild(this.ingProInput(elementList, i));
         });
 
         elementList.appendChild(this.addButton(elementList));
@@ -248,16 +243,11 @@ export class RecipeDialog extends HTMLDialogElement{
 
             this.recipeCategories.mealType = newClass.toLowerCase() as MealType;
         } else {
-            const bg = this.querySelector<HTMLDivElement>("#dlg-main");
-            bg?.classList.remove(oldClass);
-            bg?.classList.add(newClass);
-
             this.nameInput.classList.remove(oldClass);
             this.nameInput.classList.add(newClass);
 
             this.recipeCategories.mealTime = newClass.toLowerCase() as MealTime;
         }
-
     }
 
     private save(): void{
@@ -304,17 +294,102 @@ export class RecipeDialog extends HTMLDialogElement{
         const addBtn = elementList.lastElementChild;
         elementList.removeChild(addBtn!);
 
+        const listOfElements = Array.from(elementList.children) as Element[];
+        if(listOfElements.length <= 0){
+            this.addIngProEnd(elementList);
+            return;
+        }
+
+        let indexInput: number = 0;
+
+        for(let i = 0; i < listOfElements.length; i++){
+            const input = listOfElements[i]!.querySelector<HTMLInputElement>("input.current-focus");
+            if(input){
+                input.blur();
+                indexInput = i;
+                break;
+            }
+        }
+
+        if(listOfElements.length <= indexInput + 1){
+            this.addIngProEnd(elementList);
+            return;
+        }
+
+        let temp: Element[] = [];
+        for(let i = indexInput + 1; i < listOfElements.length; i++){
+            const liElement = elementList.removeChild(listOfElements[i] as Element);
+            temp.push(liElement);
+        }
+
+        //to focus
+        const newIngPro = this.ingProInput(elementList)
+        elementList.appendChild(newIngPro);
+        const newIngProInput = newIngPro.querySelector<HTMLInputElement>("input");
+        newIngProInput?.focus();
+
+        while(temp.length > 0){
+            elementList.appendChild(temp.shift() as Element);
+        }
+
+        elementList.appendChild(this.addButton(elementList));
+    }
+
+    private addIngProEnd(elementList: HTMLOListElement | HTMLUListElement){
+        const newLi = this.ingProInput(elementList);
+        const input = newLi.querySelector<HTMLInputElement>("input");
+        elementList.appendChild(newLi);
+        input?.focus();
+        elementList.appendChild(this.addButton(elementList));
+    }
+
+    private removeIngProHelper(elementList: HTMLOListElement | HTMLUListElement){
+        const listOfElements = Array.from(elementList.children) as Element[];
+        let found = false;
+
+        for(let i = listOfElements.length - 1; i >= 0; i--){
+            const input = listOfElements[i]!.querySelector<HTMLInputElement>("input");
+            if(found) {
+                input?.focus();
+                break;
+            }
+
+            if(input?.classList.contains("current-focus")){
+                input.blur();
+                found = true;
+            }
+        }
+    }
+
+    private ingProInput(elementList: HTMLUListElement | HTMLOListElement, inside: string = ""): HTMLLIElement{
         const input = document.createElement("input");
         input.classList.add("body");
         input.placeholder = "ingredient/procedure";
-
+        input.value = inside;
         const li = document.createElement("li");
         li.appendChild(input);
         li.appendChild(this.removeButton());
 
-        elementList.appendChild(li);
-        elementList.appendChild(this.addButton(elementList));
+        input.addEventListener("keydown", (event: KeyboardEvent) => {
+            if(event.key === 'Enter')
+                this.addIngProLine(elementList);
 
+            if(event.key === "Backspace" && input.value === ""){
+                this.removeIngProHelper(elementList);
+
+                li.remove();
+            }
+        });
+
+        input.addEventListener("focus", () => {
+            input.classList.add("current-focus");
+        });
+        
+        input.addEventListener("blur", () => {
+            input.classList.remove("current-focus");
+        });
+
+        return li;
     }
 
     //make fancier

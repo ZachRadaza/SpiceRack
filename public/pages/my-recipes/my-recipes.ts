@@ -29,9 +29,9 @@ export class MyRecipes extends HTMLElement{
 
         this.initializeHTMLElements();
 
-        //this.addTestRecipes();
-
         this.update();
+
+        this.addTestRecipes();
 
         this.initialized = true;
     }
@@ -53,20 +53,31 @@ export class MyRecipes extends HTMLElement{
     }
 
     private addTestRecipes(): void{
-        const rec = document.createElement("recipe-mini") as Recipe;
-        rec.setAllFields({
-            name: "Fetuchini Alfredo",
-            ingredients: ["Chicken", "Milk", "Cheese", "Dick"],
-            procedures: ["beat chicken", "cut chicken", "cook pasta", "mix pasta with stuff", "eat"],
-            imageLink: "",
-            accountName: "Zach",
-            mealTime: MealTime.lunch,
-            mealType: MealType.pasta,
-            bookmarked: false,
-            mini: false
-        });
 
-        this._recipeList.push(rec);
+        const name: string[] = ["Chicken Alfredo", "Onion Rings", "Steak"];
+        const ingrediets: string[][] = [["chicken", "pasta", "sauce", "milk"], ["Onion", "oil", "seasonings"], ["Steak", "seasonings", "potatoes", "pepper"]];
+        const procedures: string [][] = [["beat chicken", "cut chicken", "cook pasta", "mix pasta with stuff", "eat"], ["cut onions", "fry onions", "dry onoins"], ["cut steak", "cook till how you like", "mash the potatoes"]];
+        const accountName: string[] = ["Jecffrey Epstien", "Donald Trump", "Jayson Tatum"];
+        const mealTime: MealTime[] = [MealTime.lunch, MealTime.lunch, MealTime.dinner];
+        const mealType: MealType[] = [MealType.pasta, MealType.side, MealType.protien];
+        const bookmark: boolean[] = [false, false, true];
+
+        for(let i = 0; i < 3; i++){
+            const rec = document.createElement("recipe-mini") as Recipe;
+            rec.setAllFields({
+                name: name[i]!,
+                ingredients: ingrediets[i]!,
+                procedures: procedures[i]!,
+                imageLink: "",
+                accountName: accountName[i]!,
+                mealTime: mealTime[i]!,
+                mealType: mealType[i]!,
+                bookmarked: bookmark[i]!,
+                mini: false
+            });
+
+            this.addRecipe(rec);
+        }
 
     }
 
@@ -127,6 +138,8 @@ export class MyRecipes extends HTMLElement{
     public addRecipe(r: Recipe){
         //makes sure it is an html element
         const rec = document.createElement("recipe-mini") as Recipe;
+        this._recipeList.push(rec);
+
         rec.setAllFields({
             name: r.name,
             ingredients: r.ingredients,
@@ -139,7 +152,9 @@ export class MyRecipes extends HTMLElement{
             mini: false
         });
 
-        this._recipeList.push(rec);
+        this.sortRecipeList();
+
+        this.update();
     }
 
 }

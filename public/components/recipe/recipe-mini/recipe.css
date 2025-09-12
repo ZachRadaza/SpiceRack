@@ -8,10 +8,11 @@
     display: grid;
     grid-template-columns: 10px 1fr 10px; /* edge | main | edge */
     width: min(100%, 350px);
+    height: 95%;
     max-height: 800px;
 
     background: var(--card);
-    border: 1px solid var(--card-border);
+    border: 2px solid var(--accent);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     overflow: hidden;
@@ -23,8 +24,8 @@
 /* ===== Main column ===== */
 #recipe-cont > main{
     display: grid;
-    grid-template-rows: auto 1fr; /* name | content */
-    min-height: 0; /* allow inner scrolling */
+    grid-template-rows: auto 1fr auto;
+    min-height: 0;                       /* allow inner scrolling */
 }
 
 /* Title */
@@ -48,7 +49,7 @@
 /* Content area */
 .content-cont{
     display: grid;
-    grid-template-rows: auto auto auto auto; /* image + ingredients + procedures + footer */
+    grid-template-rows: auto auto auto; /* image + ingredients + procedures */
     gap: 12px;
     padding: 12px 14px 16px;
     min-height: 0;
@@ -91,7 +92,10 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    margin-top: 4px;
+    margin-top: 0;                        /* no bump */
+    padding: 10px 14px 14px;              /* comfy tap targets */
+    position: sticky;                     /* <— sticks within main */
+    z-index: 1;                           /* above scrolled content */
 }
 
 /* button: no layout jump on hover */

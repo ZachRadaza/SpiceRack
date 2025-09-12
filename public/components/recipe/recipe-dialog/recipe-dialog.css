@@ -7,16 +7,15 @@ dialog{
   border: none;
   padding: 0;
 
-  width: min(900px, 95vw);
-  max-height: 90vh;
+  width: min(90vw, 900px);
+  height: 80vh;
 
   /* Card look */
   --card-border: rgba(0,0,0,0.08);
   --shadow: 0 10px 30px rgba(0,0,0,0.18);
   --radius: 16px;
 
-  background: var(--card);
-  border: 1px solid var(--card-border);
+  border: 0px solid var(--background);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   overflow: hidden;
@@ -32,22 +31,28 @@ dialog::backdrop {
   display: grid;
   grid-template-columns: 12px 1fr 12px; /* edge | main | edge */
   height: 100%;
-  background: var(--card);
 }
 
 /* ===== Main column ===== */
 #dlg-main{
+  background-color: var(--background);
   display: grid;
   grid-template-rows: auto auto 1fr auto; /* top | upper | lower | footer */
   min-height: 0; /* allow internal scrolling */
+  height: 100%;       /* fill parent */
+  min-height: 0;      /* allow internal shrink */
+  overflow-y: auto;   /* actual scrolling */
+  overflow-x: hidden;
+  scrollbar-width: thin;                /* auto | thin | none */
+  scrollbar-color: var(--tan) var(--background);
 }
 
 /* Sections (spacing) */
 .section{ background: transparent; }
-.top-column{ padding: 12px 14px 0; }
-.upper-half{ padding: 12px 14px; display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; align-items: start; }
-.lower-half{ padding: 0 14px 12px; overflow: auto; }
-.footer{ padding: 10px 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.top-column{ padding: 12px 14px 0; display: flex; justify-content: space-between;}
+.upper-half{ padding: 12px 24px; display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; align-items: start; overflow: visible; min-height: 0; }
+.lower-half{ padding: 0 24px 12px; overflow: auto; }
+.footer{ padding: 10px 24px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; overflow: visible; min-height: 0; }
 
 /* ===== Top bar (bookmark + close) ===== */
 #dlg-bookmark{
@@ -102,12 +107,11 @@ dialog::backdrop {
   width: 100%;
   text-align: center;
   font-family: var(--font-heading);
-  font-size: clamp(20px, 2.2vw + 12px, 28px);
+  font-size: clamp(30px, 2.2vw + 12px, 28px);
   font-weight: 700;
-  color: var(--text);
   padding: 8px 10px;
   border-radius: 10px;
-  background: #ffffffaa;
+  background: transparent;
   border: 1px solid var(--card-border);
 }
 .name-cont .btn-cont{
@@ -115,6 +119,10 @@ dialog::backdrop {
 }
 .name-cont .btn-cont button{
   display: inline-flex; align-items: center; justify-content: center;
+}
+
+#dlg-meal-time, #dlg-meal-type{
+  border-color: transparent;
 }
 
 /* ===== Content (Ingredients / Procedures) ===== */
@@ -154,6 +162,10 @@ dialog::backdrop {
   background: #fff;
   font-family: var(--font-body);
 }
+#dlg-ingredients input:focus, #dlg-procedures input:focus{
+  border-color: var(--accent);
+  outline-color: var(--accent);
+}
 
 /* The trailing (+) row */
 #dlg-ingredients li:has(> button:only-child),
@@ -170,7 +182,7 @@ dialog::backdrop {
 #dlg-save{
   display: inline-flex; align-items: center; justify-content: center;
   font-size: .95rem;
- font-weight: 700;
+  font-weight: 700;
 }
 
 #dlg-creator{
@@ -186,14 +198,18 @@ dialog::backdrop {
               -webkit-mask-image: linear-gradient(to bottom, #000 85%, transparent); } */
 
 /* ===== Meal-time bg classes reused from cards ===== */
-#dlg-main.breakfast { background: var(--mt-breakfast, #FFD8A8); }
-#dlg-main-cont.lunch     { background: var(--mt-lunch,     #C8E6C9); }
-#dlg-main.dinner    { background: var(--mt-dinner,    #C5CAE9); }
+#dlg-meal-time.breakfast  { background: var(--mt-breakfast, #FFD8A8); }
+#dlg-meal-time.lunch      { background: var(--mt-lunch,     #C8E6C9); }
+#dlg-meal-time.dinner     { background: var(--mt-dinner,    #C5CAE9); }
+
+#dlg-name.breakfast {color: var(--mt-breakfast, #FFD8A8); }
+#dlg-name.lunch     {color: var(--mt-lunch,     #C8E6C9); }
+#dlg-name.dinner    {color: var(--mt-dinner,    #C5CAE9); }
 
 /* ===== Meal-type stripe classes reused from cards ===== */
-.edge.pasta   { background: var(--pasta); }
-.edge.salad   { background: var(--salad); }
-.edge.protien { background: var(--protien); }
-.edge.side    { background: var(--side); }
-.edge.snack   { background: var(--snack); }
-.edge.food    { background: var(--food); }
+.edge.pasta, #dlg-main button.pasta, #dlg-meal-type.pasta { background: var(--pasta); }
+.edge.salad, #dlg-main button.salad, #dlg-meal-type.salad { background: var(--salad); }
+.edge.protien, #dlg-main button.protien, #dlg-meal-type.protien{ background: var(--protien); }
+.edge.side, #dlg-main button.side, #dlg-meal-type.side    { background: var(--side); }
+.edge.snack, #dlg-main button.snack, #dlg-meal-type.snack { background: var(--snack); }
+.edge.food, #dlg-main button.food, #dlg-meal-type.food    { background: var(--food); }
