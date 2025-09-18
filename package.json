@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --watch src --exec ts-node -P tsconfig.server.json src/index.ts",
+    "dev": "nodemon --watch src --exec ts-node -P tsconfig.server.json dist/server/index.js",
     "build": "npm run build:server && npm run build:client && npm run copy:public",
     "build:server": "tsc -p tsconfig.server.json",
     "build:client": "tsc -p tsconfig.client.json",

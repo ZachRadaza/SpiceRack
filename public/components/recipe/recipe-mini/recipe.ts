@@ -261,10 +261,14 @@ export class Recipe extends HTMLElement{
             mealTime: this.recipeCategories.mealTime,
             mealType: this.recipeCategories.mealType,
             bookmarked: this._bookmarked
-            }, this
+            }, this, this.canEdit()
         );
         document.body.appendChild(dialog);
         dialog.showModal();
+    }
+
+    private canEdit(): boolean{
+        return true;
     }
 
 }

@@ -16,6 +16,8 @@ export class RecipeDialog extends HTMLDialogElement{
     private initialized: boolean = false;
     private brandNew: boolean = true;
 
+    private editable: boolean = true;
+
     private mealTimeBtn!: HTMLButtonElement;
     private mealTypeBtn!: HTMLButtonElement;
     private bmInput!: HTMLInputElement;
@@ -88,7 +90,7 @@ export class RecipeDialog extends HTMLDialogElement{
     }
 
     //setters
-    public setAllFields(fields: RecipeFields, recipe: Recipe):void {
+    public setAllFields(fields: RecipeFields, recipe: Recipe, editable: boolean = false):void {
         this._name = fields.name;
         this._ingredients = fields.ingredients;
         this._procedures = fields.procedures;
@@ -100,6 +102,7 @@ export class RecipeDialog extends HTMLDialogElement{
         this._recipe = recipe;
 
         this.brandNew = false;
+        this.editable = editable;
         this.update();
     }
 
@@ -145,12 +148,7 @@ export class RecipeDialog extends HTMLDialogElement{
         if(!this.initialized) return;
 
         //set recipe categories
-        this.mealTimeBtn.textContent = this.recipeCategories.mealTime.toUpperCase();
-        this.mealTimeBtn.classList.remove("lunch");
-        this.mealTimeBtn.classList.add(this.recipeCategories.mealTime);
-        this.mealTypeBtn.textContent = this.recipeCategories.mealType.toUpperCase();
-        this.mealTypeBtn.classList.remove("food");
-        this.mealTypeBtn.classList.add(this.recipeCategories.mealType);
+        this.updateMealComponents();
 
         this.addIngProLine(this.ingredientsList);
         this.addIngProLine(this.procedureList)
@@ -167,6 +165,33 @@ export class RecipeDialog extends HTMLDialogElement{
         if(!!this._imageLink){
             this.imageImg.src = this._imageLink;
         }
+
+        //disable components
+        if(!this.editable) this.disableComponents();
+    }
+
+    //updates meal time an type to match color
+    private updateMealComponents(): void{
+        const edges = this.querySelectorAll<HTMLDivElement>(".edge");
+
+
+        if(!edges){
+            throw new Error(".edge not found");
+        }
+
+        this.mealTimeBtn.textContent = this.recipeCategories.mealTime.toUpperCase();
+        this.mealTimeBtn.classList.remove("lunch");
+        this.mealTimeBtn.classList.add(this.recipeCategories.mealTime);
+
+        this.mealTypeBtn.textContent = this.recipeCategories.mealType.toUpperCase();
+        this.mealTypeBtn.classList.remove("food");
+        edges.forEach(e => {
+            console.log(e);
+            e.classList.remove("food");
+            e.classList.add(this.recipeCategories.mealType);
+        });
+
+        this.mealTypeBtn.classList.add(this.recipeCategories.mealType);
     }
 
     //updates Ingredients and Procedures
@@ -177,13 +202,28 @@ export class RecipeDialog extends HTMLDialogElement{
     }
 
     private updateIngProHelper(list: string[], elementList: HTMLOListElement | HTMLUListElement): void{
+        if(this.brandNew) return;
         elementList.replaceChildren();
 
         list.forEach( i => {
             elementList.appendChild(this.ingProInput(elementList, i));
         });
 
-        elementList.appendChild(this.addButton(elementList));
+        if(this.editable) elementList.appendChild(this.removeButton());
+    }
+
+    private disableComponents(): void{
+        this.bmInput.disabled = true;
+        this.mealTimeBtn.disabled = true;
+        this.mealTypeBtn.disabled = true;
+
+        const saveBtn = this.querySelector<HTMLButtonElement>("#dlg-save");
+        if(saveBtn){
+            saveBtn.textContent = "Close";
+            saveBtn.addEventListener("click", () => this.close());
+        }
+
+        this.nameInput.disabled = true;
     }
 
     private removeButton(): HTMLButtonElement{
@@ -368,7 +408,9 @@ export class RecipeDialog extends HTMLDialogElement{
         input.value = inside;
         const li = document.createElement("li");
         li.appendChild(input);
-        li.appendChild(this.removeButton());
+
+        if(this.editable) li.appendChild(this.removeButton());
+        else input.disabled = true;
 
         input.addEventListener("keydown", (event: KeyboardEvent) => {
             if(event.key === 'Enter')

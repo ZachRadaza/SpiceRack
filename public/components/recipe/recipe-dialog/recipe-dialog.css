@@ -124,6 +124,9 @@ dialog::backdrop {
 #dlg-meal-time, #dlg-meal-type{
   border-color: transparent;
 }
+#dlg-meal-time:disabled:hover, #dlg-meal-type:disabled:hover{
+  cursor: text;
+} 
 
 /* ===== Content (Ingredients / Procedures) ===== */
 .lower-half .content{
@@ -153,6 +156,7 @@ dialog::backdrop {
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 8px;
+  width: 100%;
 }
 #dlg-ingredients input, #dlg-procedures input{
   width: 100%;
@@ -165,6 +169,13 @@ dialog::backdrop {
 #dlg-ingredients input:focus, #dlg-procedures input:focus{
   border-color: var(--accent);
   outline-color: var(--accent);
+}
+#dlg-ingredients input:disabled, #dlg-procedures input:disabled{
+  background-color: transparent;
+  border: none;
+  border-left: 2px solid var(--accent);
+  color: var(--text);
+  cursor: text;
 }
 
 /* The trailing (+) row */
