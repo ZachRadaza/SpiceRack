@@ -1,4 +1,4 @@
-/* ===== <recipe-dialog> shell ===== */
+/*   <recipe-dialog> shell   */
 dialog{
   position: fixed;
   inset: 50% auto auto 50%;
@@ -26,14 +26,14 @@ dialog::backdrop {
   backdrop-filter: blur(2px);
 }
 
-/* ===== Edge | Main | Edge layout inside dialog ===== */
+/* Edge | Main | Edge layout inside dialog */
 .dlg-cont{
   display: grid;
   grid-template-columns: 12px 1fr 12px; /* edge | main | edge */
   height: 100%;
 }
 
-/* ===== Main column ===== */
+/*   Main column   */
 #dlg-main{
   background-color: var(--background);
   display: grid;
@@ -54,7 +54,7 @@ dialog::backdrop {
 .lower-half{ padding: 0 24px 12px; overflow: auto; }
 .footer{ padding: 10px 24px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; overflow: visible; min-height: 0; }
 
-/* ===== Top bar (bookmark + close) ===== */
+/* Top bar (bookmark + close) */
 #dlg-bookmark{
   inline-size: 1.2rem; block-size: 1.2rem;
   accent-color: var(--accent);
@@ -73,7 +73,7 @@ dialog::backdrop {
 }
 #dlg-close:hover{ background: var(--close-hover); transform: scale(1.05); }
 
-/* ===== Image picker / preview ===== */
+/*   Image picker / preview   */
 #dlg-image-cont{
   display: grid;
   gap: 10px;
@@ -94,7 +94,7 @@ dialog::backdrop {
   background: #f7f7f7;
 }
 
-/* ===== Name + meal buttons ===== */
+/* Name + meal buttons */
 .name-cont{
   display: grid;
   grid-template-rows: auto auto;
@@ -128,7 +128,7 @@ dialog::backdrop {
   cursor: text;
 } 
 
-/* ===== Content (Ingredients / Procedures) ===== */
+/* Content (Ingredients / Procedures) */
 .lower-half .content{
   display: grid;
   gap: 8px;
@@ -142,7 +142,7 @@ dialog::backdrop {
 }
 
 #dlg-ingredients, #dlg-procedures{
-  list-style: none;
+  list-style:circle;
   padding: 0;
   margin: 0;
   display: grid;
@@ -189,7 +189,7 @@ dialog::backdrop {
   padding: 8px 12px;
 }
 
-/* ===== Footer ===== */
+/*   Footer   */
 #dlg-save{
   display: inline-flex; align-items: center; justify-content: center;
   font-size: .95rem;
@@ -204,11 +204,11 @@ dialog::backdrop {
   background: transparent;
 }
 
-/* ===== Optional condensed mask inside lower-half (if content long) ===== */
+/*   Optional condensed mask inside lower-half (if content long)   */
 /* .lower-half{ mask-image: linear-gradient(to bottom, #000 85%, transparent);
               -webkit-mask-image: linear-gradient(to bottom, #000 85%, transparent); } */
 
-/* ===== Meal-time bg classes reused from cards ===== */
+/*   Meal-time bg classes reused from cards   */
 #dlg-meal-time.breakfast  { background: var(--mt-breakfast, #FFD8A8); }
 #dlg-meal-time.lunch      { background: var(--mt-lunch,     #C8E6C9); }
 #dlg-meal-time.dinner     { background: var(--mt-dinner,    #C5CAE9); }
@@ -217,7 +217,7 @@ dialog::backdrop {
 #dlg-name.lunch     {color: var(--mt-lunch,     #C8E6C9); }
 #dlg-name.dinner    {color: var(--mt-dinner,    #C5CAE9); }
 
-/* ===== Meal-type stripe classes reused from cards ===== */
+/*   Meal-type stripe classes reused from cards   */
 .edge.pasta, #dlg-main button.pasta, #dlg-meal-type.pasta { background: var(--pasta); }
 .edge.salad, #dlg-main button.salad, #dlg-meal-type.salad { background: var(--salad); }
 .edge.protien, #dlg-main button.protien, #dlg-meal-type.protien{ background: var(--protien); }

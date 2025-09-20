@@ -158,6 +158,9 @@ export class RecipeDialog extends HTMLDialogElement{
         this.nameInput.value = this._name;
         if(this._bookmarked) this.bmInput.checked = true;
 
+        //update creator tag
+        this.updateCreatorTag();
+
         //add ingredients and procedures
         this.updateIngPro();
 
@@ -168,6 +171,13 @@ export class RecipeDialog extends HTMLDialogElement{
 
         //disable components
         if(!this.editable) this.disableComponents();
+    }
+
+    private updateCreatorTag(){
+        const span = this.querySelector<HTMLSpanElement>("#dlg-creator");
+        if(!span) throw new Error("#dlg-creator not found");
+
+        span.textContent = this._accountName + "'s Recipe";
     }
 
     //updates meal time an type to match color
@@ -209,7 +219,7 @@ export class RecipeDialog extends HTMLDialogElement{
             elementList.appendChild(this.ingProInput(elementList, i));
         });
 
-        if(this.editable) elementList.appendChild(this.removeButton());
+        if(this.editable) elementList.appendChild(this.addButton(elementList));
     }
 
     private disableComponents(): void{
@@ -245,7 +255,12 @@ export class RecipeDialog extends HTMLDialogElement{
         addBtn.type = "button";
         addBtn.classList = "dlg-add-btn";
 
-        addBtn.addEventListener("click", () => this.addIngProLine(list));
+        addBtn.addEventListener("click", () => {
+            const addBtn = list.lastElementChild;
+            list.removeChild(addBtn!);
+            
+            this.addIngProEnd(list);
+        });
 
         return addBtn;
     }
