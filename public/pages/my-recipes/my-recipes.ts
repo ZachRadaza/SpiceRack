@@ -4,6 +4,7 @@ import { Recipe, RecipeFields } from "../../components/recipe/recipe-mini/recipe
 import { RecipeDialog } from "../../components/recipe/recipe-dialog/recipe-dialog.js";
 import { RecipeCategories } from "../../main.js";
 import { MealTime, MealType } from "../../main.js";
+import { BackendExtensionService } from "../../backend-extension-service.js";
 
 export class MyRecipes extends HTMLElement{
 
@@ -11,8 +12,9 @@ export class MyRecipes extends HTMLElement{
     private initialized: boolean = false;
 
     private _recipeList: HTMLElement[] = [];
-
     private divList!: HTMLDivElement;
+
+    private extensionService: BackendExtensionService = new BackendExtensionService();
 
     async connectedCallback(){
         if(this.initialized) return;
@@ -28,10 +30,10 @@ export class MyRecipes extends HTMLElement{
             ${html}`;
 
         this.initializeHTMLElements();
-
+        this.pullRecipesFromBackEnd();
         this.update();
 
-        this.addTestRecipes();
+        //this.addTestRecipes();
 
         this.initialized = true;
     }
@@ -65,6 +67,7 @@ export class MyRecipes extends HTMLElement{
         for(let i = 0; i < 3; i++){
             const rec = document.createElement("recipe-mini") as Recipe;
             rec.setAllFields({
+                id: i.toString(),
                 name: name[i]!,
                 ingredients: ingrediets[i]!,
                 procedures: procedures[i]!,
@@ -78,7 +81,37 @@ export class MyRecipes extends HTMLElement{
 
             this.addRecipe(rec);
         }
+    }
 
+    //pulls recipes from backend
+    async pullRecipesFromBackEnd(){
+        const allRecipes = await this.extensionService.accountGetAllRecipes();
+
+        allRecipes.forEach(rec => {
+            this.addRecipe(rec);
+        });
+
+        this.sortRecipeList();
+        this.update();
+    }
+
+    //add recipes
+    public addRecipe(r: RecipeFields){
+        const rec = document.createElement("recipe-mini") as Recipe;
+        this._recipeList.push(rec);
+
+        rec.setAllFields({
+            id: r.id,
+            name: r.name,
+            ingredients: r.ingredients,
+            procedures: r.procedures,
+            imageLink: r.imageLink,
+            accountName: r.accountName,
+            mealTime: r.mealTime,
+            mealType: r.mealType,
+            bookmarked: r.bookmarked,
+            mini: false
+        });
     }
 
     public get recipeList(){
@@ -108,52 +141,16 @@ export class MyRecipes extends HTMLElement{
         this._recipeList.forEach( r => {
             this.divList.appendChild(r);
         });
-
-
     }
 
-    //for new recipes created, to be used by dialog
-    public addNewRecipe(rd: RecipeDialog): void{
-        const recipe = document.createElement("recipe-mini") as Recipe;
-        this._recipeList.push(recipe);
-
-        recipe.setAllFields({
-            name: rd.name,
-            ingredients: rd.ingredients,
-            procedures: rd.procedures,
-            imageLink: rd.imageLink,
-            accountName: rd.accountName,
-            mealTime: rd.mealTime,
-            mealType: rd.mealType,
-            bookmarked: rd.bookmarked,
-            mini: false
-        });
+    //for new recipes created, to be used by dialog as an actual new recipe is added
+    async addNewRecipe(r: RecipeFields){
+        console.log(r.ingredients);
+        const newRecipe = await this.extensionService.accountCreateRecipe(r);
+        console.log(newRecipe.ingredients);
+        this.addRecipe(newRecipe);
 
         this.sortRecipeList();
-
-        this.update();
-    }
-
-    //add recipes
-    public addRecipe(r: Recipe){
-        //makes sure it is an html element
-        const rec = document.createElement("recipe-mini") as Recipe;
-        this._recipeList.push(rec);
-
-        rec.setAllFields({
-            name: r.name,
-            ingredients: r.ingredients,
-            procedures: r.procedures,
-            imageLink: r.imageLink,
-            accountName: r.accountName,
-            mealTime: r.mealTime,
-            mealType: r.mealType,
-            bookmarked: r.bookmarked,
-            mini: false
-        });
-
-        this.sortRecipeList();
-
         this.update();
     }
 

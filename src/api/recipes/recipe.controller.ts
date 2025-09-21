@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Recipe } from "./recipe";
 import * as RecipeService from "./recipe.service";
 
 export function getRecipes(req: Request, res: Response){
@@ -81,7 +82,7 @@ export function createNewRecipe(req: Request, res: Response){
 
 export function getRecipe(req: Request, res: Response){
     try{
-        let recipe = RecipeService.getRecipeById(req.params.id);
+        let recipe = RecipeService.getRecipeById(req.params.id as string);
 
         if(recipe === null){
             res.status(404);
@@ -108,12 +109,12 @@ export function replaceRecipe(req: Request, res: Response){
             procedures: req.body.procedures,
             imageLink: req.body.imageLink,
             accountName: req.body.accountName,
-            bookmarked: req.body.bookmarked
-            //mealTime: req.body.mealTime,
-            //mealType: req.body.mealType
+            bookmarked: req.body.bookmarked,
+            mealTime: req.body.mealTime,
+            mealType: req.body.mealType
         }
 
-        const recipeReplace = RecipeService.replaceRecipe(req.params.id, recipeNew);
+        const recipeReplace = RecipeService.replaceRecipe(req.params.id as string, recipeNew as Recipe);
 
         if(recipeReplace){
             res.status(200);
@@ -130,7 +131,7 @@ export function replaceRecipe(req: Request, res: Response){
 
 export function deleteRecipe(req: Request, res: Response){
     try{
-        const deleted = RecipeService.deleteRecipe(req.params.id);
+        const deleted = RecipeService.deleteRecipe(req.params.id as string);
 
         if(deleted){
             res.status(200);

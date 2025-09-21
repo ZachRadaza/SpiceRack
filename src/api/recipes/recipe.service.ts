@@ -1,20 +1,10 @@
-const recipes: Recipe[] = [
-    { id: "00000001", name: "Spaghetti", ingredients: [], procedures: [], imageLink: "", accountName: "", bookmarked:false /*mealTime: MealTime.lunch, mealType: MealType.pasta*/ },
-    { id: "00000002", name: "Garlic Noodles", ingredients: [], procedures: [], imageLink: "", accountName: "", bookmarked:false /*mealTime: MealTime.lunch, mealType: MealType.pasta*/ },
-    { id: "00000003", name: "Pasta de Luce", ingredients: [], procedures: [], imageLink: "", accountName: "", bookmarked:false /*mealTime: MealTime.lunch, mealType: MealType.pasta*/ },
-];
+import { Recipe, MealTime, MealType } from "./recipe";
 
-export interface Recipe{
-    id: string;
-    name: string;
-    ingredients: string[];
-    procedures: string[];
-    imageLink: string;
-    accountName: string;
-    //mealTime: MealTime;
-    //mealType: MealType;
-    bookmarked: boolean;
-}
+const recipes: Recipe[] = [
+    { id: "00000001", name: "Spaghetti", ingredients: [], procedures: [], imageLink: "", accountName: "", bookmarked:false, mealTime: MealTime.lunch, mealType: MealType.pasta },
+    { id: "00000002", name: "Garlic Noodles", ingredients: [], procedures: [], imageLink: "", accountName: "", bookmarked:false, mealTime: MealTime.lunch, mealType: MealType.pasta },
+    { id: "00000003", name: "Pasta de Luce", ingredients: [], procedures: [], imageLink: "", accountName: "", bookmarked:false, mealTime: MealTime.lunch, mealType: MealType.pasta },
+];
 
 export function returnFilteredRecipes(search: string): Recipe[]{
     let filtered: any = [];
@@ -53,6 +43,8 @@ export function createRecipe(recipe: Recipe){
         procedures: recipe.procedures,
         imageLink: recipe.imageLink,
         accountName: recipe.accountName,
+        mealTime: recipe.mealTime,
+        mealType: recipe.mealType,
         bookmarked: recipe.bookmarked
     }
 

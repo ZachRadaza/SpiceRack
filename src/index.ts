@@ -1,4 +1,5 @@
 import express, { ErrorRequestHandler} from "express";
+import { Request, Response, NextFunction } from "express";
 import path from "path";
 import router from "./api/router";
 
@@ -10,8 +11,9 @@ console.log("STATIC DIR:", clientDir);
 
 app.use(express.static(clientDir));
 app.use(express.json());
+app.use(logger);
+
 app.use("/api", router);
-app.use("/api/recipes");
 
 
 // Fallback only for non-file GETs (no dot) – avoids path-to-regexp "*"
@@ -32,6 +34,22 @@ app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
 
+//logger
+function logger(req: Request, res: Response, next: NextFunction){
+    const startTime = Date.now();
+
+    res.on("finish", () => {
+        const finalTime = Date.now() - startTime;
+
+        console.log(`
+            ${req.method} ${req.originalUrl} ${res.statusCode} - ${finalTime}ms    
+        `);
+    });
+
+    next();
+}
+
+//error handler
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     console.error(err?.stack ?? err);
 

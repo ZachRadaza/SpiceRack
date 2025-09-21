@@ -3,6 +3,7 @@ import "../recipe-dialog/recipe-dialog.js";
 import { RecipeDialog } from "../recipe-dialog/recipe-dialog.js";
 
 export interface RecipeFields {
+    id: string;
     name: string;
     ingredients: string[];
     procedures: string[];
@@ -21,6 +22,7 @@ export class Recipe extends HTMLElement{
     private mainContDiv!: HTMLDivElement;
     private edgesDiv!: NodeListOf<HTMLDivElement>;
 
+    private _id: string = "";
     private _name: string = "";
     private _procedures: string[] = [""];
     private _ingredients: string[] = [""];
@@ -74,6 +76,10 @@ export class Recipe extends HTMLElement{
     }
 
     //setters
+    public set id(id: string){
+        this._id = id;
+    }
+
     public set name(name: string){
         this._name = name;
         this.update();
@@ -120,6 +126,7 @@ export class Recipe extends HTMLElement{
     }
 
     public setAllFields(fields: RecipeFields) {
+        this._id = fields.id;
         this._name = fields.name;
         this._ingredients = fields.ingredients;
         this._procedures = fields.procedures;
@@ -134,6 +141,10 @@ export class Recipe extends HTMLElement{
     }
 
     //getters
+    public get id(){
+        return this._id;
+    }
+
     public get name(){
         return this._name;
     }
@@ -188,6 +199,7 @@ export class Recipe extends HTMLElement{
         elements[Elements.eName]!.textContent = this._name;
         
         elements[Elements.eIngredients]!.replaceChildren();
+        console.log(this._ingredients);
         this._ingredients.forEach(i => {
             const temp = document.createElement('li');
             temp.textContent = i;
@@ -253,6 +265,7 @@ export class Recipe extends HTMLElement{
     private openRecipeDialog(){
         const dialog = document.createElement("dialog", {is: "recipe-dialog"}) as HTMLDialogElement;
         (dialog as any).setAllFields({
+            id: this._id,
             name: this._name,
             ingredients: this._ingredients,
             procedures: this._procedures,

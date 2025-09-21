@@ -1,11 +1,11 @@
 import { Router } from "express";
 import * as RecipeController from "./recipe.controller";
 
-const router = Router();
+const recipeRouter = Router();
 
-router.get("/recipes", RecipeController.getRecipes);
-router.get("/recipe/:id", RecipeController.getRecipe);
-router.post("/recipes", RecipeController.createNewRecipe);
-router.put("/recipe/:id", RecipeController.replaceRecipe);
-
-export default router;
+recipeRouter.get("/", RecipeController.getRecipes);
+recipeRouter.post("/", RecipeController.createNewRecipe);
+recipeRouter.get("/:id", RecipeController.getRecipe);
+recipeRouter.put("/:id", RecipeController.replaceRecipe);
+recipeRouter.delete("/:id", RecipeController.deleteRecipe);
+export default recipeRouter;

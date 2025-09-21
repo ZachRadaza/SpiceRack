@@ -1,9 +1,11 @@
 import { RecipeCategories, MealTime, MealType } from "../../../main.js";
 import { MyRecipes } from "../../../pages/my-recipes/my-recipes.js";
 import { Recipe, RecipeFields } from "../recipe-mini/recipe.js";
+import { BackendExtensionService } from "../../../backend-extension-service.js";
 
 export class RecipeDialog extends HTMLDialogElement{
 
+    private _id: string = "";
     private _name: string = "";
     private _procedures: string[] = [""];
     private _ingredients: string[] = [""];
@@ -28,7 +30,7 @@ export class RecipeDialog extends HTMLDialogElement{
     private imageImg!: HTMLImageElement;
     private imageInput!: HTMLInputElement;
 
-
+    private extensionService: BackendExtensionService = new BackendExtensionService();
 
     async connectedCallback(){
         if(this.initialized) return;
@@ -91,6 +93,7 @@ export class RecipeDialog extends HTMLDialogElement{
 
     //setters
     public setAllFields(fields: RecipeFields, recipe: Recipe, editable: boolean = false):void {
+        this._id = fields.id;
         this._name = fields.name;
         this._ingredients = fields.ingredients;
         this._procedures = fields.procedures;
@@ -111,6 +114,10 @@ export class RecipeDialog extends HTMLDialogElement{
     }
 
     //getters
+    public get id(){
+        return this._id
+    }
+
     public get name(){
         return this._name;
     }
@@ -208,7 +215,7 @@ export class RecipeDialog extends HTMLDialogElement{
     private updateIngPro(): void{
         this.updateIngProHelper(this._ingredients, this.ingredientsList);
         this.updateIngProHelper(this._procedures, this.procedureList);
-
+        this.nameInput.focus();
     }
 
     private updateIngProHelper(list: string[], elementList: HTMLOListElement | HTMLUListElement): void{
@@ -308,20 +315,24 @@ export class RecipeDialog extends HTMLDialogElement{
     private save(): void{
         this.pushInputIntoField();
 
+        const recipeFields = {
+            id: this._id,
+            name: this._name,
+            ingredients: this._ingredients,
+            procedures: this._procedures,
+            imageLink: this._imageLink,
+            accountName: this._accountName,
+            mealTime: this.recipeCategories.mealTime,
+            mealType: this.recipeCategories.mealType,
+            bookmarked: this._bookmarked,
+            mini: false
+        };
+
         if(!this.brandNew){
-            this._recipe.setAllFields({
-                name: this._name,
-                ingredients: this._ingredients,
-                procedures: this._procedures,
-                imageLink: this._imageLink,
-                accountName: this._accountName,
-                mealTime: this.recipeCategories.mealTime,
-                mealType: this.recipeCategories.mealType,
-                bookmarked: this._bookmarked,
-                mini: this._recipe.mini
-            });
+            this.extensionService.accountUpdateRecipe(recipeFields);
+            this._recipe.setAllFields(recipeFields);
         } else {
-            this._myRecipe.addNewRecipe(this);
+            this._myRecipe.addNewRecipe(recipeFields);
         }
 
         this.close();
