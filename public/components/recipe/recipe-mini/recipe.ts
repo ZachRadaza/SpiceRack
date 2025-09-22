@@ -1,4 +1,5 @@
 import { RecipeCategories, MealTime, MealType } from "../../../main.js";
+import { MyRecipes } from "../../../pages/my-recipes/my-recipes.js";
 import "../recipe-dialog/recipe-dialog.js";
 import { RecipeDialog } from "../recipe-dialog/recipe-dialog.js";
 
@@ -32,6 +33,7 @@ export class Recipe extends HTMLElement{
     private _mini: boolean = false; //if mini short version or tall
     private _bookmarked: boolean = false;
     private initialized: boolean = false;
+    private _myRecipes!: MyRecipes;
 
     async connectedCallback(){
         if(this.initialized) return;
@@ -125,7 +127,11 @@ export class Recipe extends HTMLElement{
         this.update();
     }
 
-    public setAllFields(fields: RecipeFields) {
+    public set myrecipes(mr: MyRecipes){
+        this._myRecipes = mr;
+    }
+
+    public setAllFields(fields: RecipeFields, myRecipes: MyRecipes){
         this._id = fields.id;
         this._name = fields.name;
         this._ingredients = fields.ingredients;
@@ -136,6 +142,7 @@ export class Recipe extends HTMLElement{
         this.recipeCategories.mealType = fields.mealType;
         this._mini = fields.mini;
         this._bookmarked = fields.bookmarked;
+        this._myRecipes = myRecipes;
 
         this.update();
     }
@@ -199,7 +206,6 @@ export class Recipe extends HTMLElement{
         elements[Elements.eName]!.textContent = this._name;
         
         elements[Elements.eIngredients]!.replaceChildren();
-        console.log(this._ingredients);
         this._ingredients.forEach(i => {
             const temp = document.createElement('li');
             temp.textContent = i;
@@ -276,6 +282,7 @@ export class Recipe extends HTMLElement{
             bookmarked: this._bookmarked
             }, this, this.canEdit()
         );
+        (dialog as any).myRecipes = this._myRecipes;
         document.body.appendChild(dialog);
         dialog.showModal();
     }

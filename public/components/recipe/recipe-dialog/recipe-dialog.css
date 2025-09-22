@@ -54,22 +54,26 @@ dialog::backdrop {
 .lower-half{ padding: 0 24px 12px; overflow: auto; }
 .footer{ padding: 10px 24px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; overflow: visible; min-height: 0; }
 
+/* Shared Classes */
+.danger-btn{
+  all: unset;
+  place-items: center;
+  background: var(--close-bg);
+  color: var(--close-x);
+  cursor: pointer;
+  transition: transform .12s ease, background-color .2s ease;
+}
+
 /* Top bar (bookmark + close) */
 #dlg-bookmark{
   inline-size: 1.2rem; block-size: 1.2rem;
   accent-color: var(--accent);
 }
 #dlg-close{
-  all: unset;
-  display: inline-grid;
-  place-items: center;
+  align-items: center;
   width: 36px; height: 36px;
   border-radius: 50%;
-  background: var(--close-bg);
-  color: var(--close-x);
   font-size: 18px;
-  cursor: pointer;
-  transition: transform .12s ease, background-color .2s ease;
 }
 #dlg-close:hover{ background: var(--close-hover); transform: scale(1.05); }
 
@@ -190,6 +194,12 @@ dialog::backdrop {
 }
 
 /*   Footer   */
+#dlg-delete{
+  border-radius: 25px;
+  font-weight: 600;
+  padding: 10px 16px;
+}
+
 #dlg-save{
   display: inline-flex; align-items: center; justify-content: center;
   font-size: .95rem;

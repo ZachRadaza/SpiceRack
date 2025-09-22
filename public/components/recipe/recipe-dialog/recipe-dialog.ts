@@ -63,6 +63,7 @@ export class RecipeDialog extends HTMLDialogElement{
         const typeBtn = this.querySelector<HTMLButtonElement>("#dlg-meal-type");
         const bmInput = this.querySelector<HTMLInputElement>("#dlg-bookmark");
         
+        const deleteBtn = this.querySelector<HTMLButtonElement>("#dlg-delete");
         const saveBtn = this.querySelector<HTMLButtonElement>("#dlg-save");
         const closeBtn = this.querySelector<HTMLButtonElement>("#dlg-close");
 
@@ -86,6 +87,7 @@ export class RecipeDialog extends HTMLDialogElement{
         this.mealTypeBtn.addEventListener("click", () => this.mealCategoryChange(mType, this.mealTypeBtn));
         this.imageInput.addEventListener("change", () => this.changeImage());
         this.bmInput?.addEventListener("change", () => this.bookmarkRecipe());
+        deleteBtn?.addEventListener("click", () => this.delete());
         saveBtn?.addEventListener("click", () => this.save());
         closeBtn?.addEventListener("click", () => this.close());
 
@@ -213,8 +215,8 @@ export class RecipeDialog extends HTMLDialogElement{
 
     //updates Ingredients and Procedures
     private updateIngPro(): void{
-        this.updateIngProHelper(this._ingredients, this.ingredientsList);
         this.updateIngProHelper(this._procedures, this.procedureList);
+        this.updateIngProHelper(this._ingredients, this.ingredientsList);
         this.nameInput.focus();
     }
 
@@ -312,6 +314,13 @@ export class RecipeDialog extends HTMLDialogElement{
         }
     }
 
+    private delete(): void{
+        if(!this.brandNew)
+            this._myRecipe.deleteRecipe(this._id);
+
+        this.close();
+    }
+
     private save(): void{
         this.pushInputIntoField();
 
@@ -330,7 +339,7 @@ export class RecipeDialog extends HTMLDialogElement{
 
         if(!this.brandNew){
             this.extensionService.accountUpdateRecipe(recipeFields);
-            this._recipe.setAllFields(recipeFields);
+            this._recipe.setAllFields(recipeFields, this.myRecipes);
         } else {
             this._myRecipe.addNewRecipe(recipeFields);
         }

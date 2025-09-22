@@ -77,7 +77,7 @@ export class MyRecipes extends HTMLElement{
                 mealType: mealType[i]!,
                 bookmarked: bookmark[i]!,
                 mini: false
-            });
+            }, this);
 
             this.addRecipe(rec);
         }
@@ -85,6 +85,7 @@ export class MyRecipes extends HTMLElement{
 
     //pulls recipes from backend
     async pullRecipesFromBackEnd(){
+        this._recipeList.length = 0;
         const allRecipes = await this.extensionService.accountGetAllRecipes();
 
         allRecipes.forEach(rec => {
@@ -111,7 +112,8 @@ export class MyRecipes extends HTMLElement{
             mealType: r.mealType,
             bookmarked: r.bookmarked,
             mini: false
-        });
+        }, this);
+
     }
 
     public get recipeList(){
@@ -145,13 +147,17 @@ export class MyRecipes extends HTMLElement{
 
     //for new recipes created, to be used by dialog as an actual new recipe is added
     async addNewRecipe(r: RecipeFields){
-        console.log(r.ingredients);
         const newRecipe = await this.extensionService.accountCreateRecipe(r);
-        console.log(newRecipe.ingredients);
         this.addRecipe(newRecipe);
 
         this.sortRecipeList();
         this.update();
+    }
+
+    async deleteRecipe(id: string){
+        await this.extensionService.accountDeleteRecipe(id);
+
+        this.pullRecipesFromBackEnd();
     }
 
 }
