@@ -2,12 +2,12 @@ import { RecipeFields } from "./components/recipe/recipe-mini/recipe";
 
 export class BackendExtensionService{
 
-    async accountGetAllRecipes(): Promise<RecipeFields[]>{
+    async accountGetAllRecipes(): Promise<[RecipeFields[], number]>{
         const res = await fetch("/api/recipes");
         if(!res.ok) throw new Error(`Error: ${res.status}`);
 
         const data = await res.json();
-        return data.data as RecipeFields[];
+        return data.data;
     }
 
     async accountCreateRecipe(recipe: Omit<RecipeFields, "id" | "mini">): Promise<RecipeFields>{
@@ -22,7 +22,7 @@ export class BackendExtensionService{
         return data.data as RecipeFields;
     }
 
-    async accountGetRecipe(id: string): Promise<RecipeFields>{
+    async accountGetRecipe(id: number): Promise<RecipeFields>{
         const res = await fetch(`/api/recipes/${id}`);
 
         if(!res.ok) throw new Error(`Error Retrieving Recipe: ${res.status}`);
@@ -43,7 +43,7 @@ export class BackendExtensionService{
         return res.json() as Promise<RecipeFields>;
     }
 
-    async accountDeleteRecipe(id: string): Promise<boolean>{
+    async accountDeleteRecipe(id: number): Promise<boolean>{
         const res = await fetch(`api/recipes/${id}`, { method: "DELETE" });
 
         if(!res.ok) throw new Error(`Error Deleting Recipe: ${res.status}`);

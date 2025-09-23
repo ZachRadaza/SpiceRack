@@ -65,9 +65,8 @@ export class MyRecipes extends HTMLElement{
         const bookmark: boolean[] = [false, false, true];
 
         for(let i = 0; i < 3; i++){
-            const rec = document.createElement("recipe-mini") as Recipe;
-            rec.setAllFields({
-                id: i.toString(),
+            const rec = {
+                id: i,
                 name: name[i]!,
                 ingredients: ingrediets[i]!,
                 procedures: procedures[i]!,
@@ -77,8 +76,7 @@ export class MyRecipes extends HTMLElement{
                 mealType: mealType[i]!,
                 bookmarked: bookmark[i]!,
                 mini: false
-            }, this);
-
+            }
             this.addRecipe(rec);
         }
     }
@@ -88,7 +86,7 @@ export class MyRecipes extends HTMLElement{
         this._recipeList.length = 0;
         const allRecipes = await this.extensionService.accountGetAllRecipes();
 
-        allRecipes.forEach(rec => {
+        allRecipes[0].forEach(rec => {
             this.addRecipe(rec);
         });
 
@@ -154,7 +152,7 @@ export class MyRecipes extends HTMLElement{
         this.update();
     }
 
-    async deleteRecipe(id: string){
+    async deleteRecipe(id: number){
         await this.extensionService.accountDeleteRecipe(id);
 
         this.pullRecipesFromBackEnd();

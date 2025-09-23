@@ -4,7 +4,7 @@ import "../recipe-dialog/recipe-dialog.js";
 import { RecipeDialog } from "../recipe-dialog/recipe-dialog.js";
 
 export interface RecipeFields {
-    id: string;
+    id: number;
     name: string;
     ingredients: string[];
     procedures: string[];
@@ -23,7 +23,7 @@ export class Recipe extends HTMLElement{
     private mainContDiv!: HTMLDivElement;
     private edgesDiv!: NodeListOf<HTMLDivElement>;
 
-    private _id: string = "";
+    private _id!: number;
     private _name: string = "";
     private _procedures: string[] = [""];
     private _ingredients: string[] = [""];
@@ -78,7 +78,7 @@ export class Recipe extends HTMLElement{
     }
 
     //setters
-    public set id(id: string){
+    public set idNumber(id: number){
         this._id = id;
     }
 
@@ -148,7 +148,7 @@ export class Recipe extends HTMLElement{
     }
 
     //getters
-    public get id(){
+    public get idNumber(){
         return this._id;
     }
 

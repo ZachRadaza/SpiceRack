@@ -63,6 +63,9 @@ dialog::backdrop {
   cursor: pointer;
   transition: transform .12s ease, background-color .2s ease;
 }
+.danger-btn:hover{
+  background: var(--close-hover); transform: scale(1.05);
+}
 
 /* Top bar (bookmark + close) */
 #dlg-bookmark{
@@ -70,12 +73,11 @@ dialog::backdrop {
   accent-color: var(--accent);
 }
 #dlg-close{
-  align-items: center;
+  text-align: center;
   width: 36px; height: 36px;
   border-radius: 50%;
   font-size: 18px;
 }
-#dlg-close:hover{ background: var(--close-hover); transform: scale(1.05); }
 
 /*   Image picker / preview   */
 #dlg-image-cont{

@@ -2,49 +2,44 @@ import { Request, Response } from "express";
 import { Recipe } from "./recipe";
 import * as RecipeService from "./recipe.service";
 
-export function getRecipes(req: Request, res: Response){
+export async function getRecipes(req: Request, res: Response){
     try{
-        const search: string = req.query.q as string | "";
-        const page: number = parseInt(req.query.page as string) | 1;
-        const pageSize: number = parseInt(req.query.pageSize as string) | 10;
+        const q: string = req.query.q as string | "";
+        const skip: number = parseInt(req.query.skip as string) | 1;
+        const take: number = parseInt(req.query.take as string) | 10;
 
-        let filtered;
-        if(!search){
-            filtered = RecipeService.returnAllRecipes();
-        } else {
-            filtered = RecipeService.returnFilteredRecipes(search);
-        }
+        let filtered = await RecipeService.returnFilteredRecipes({ q, skip, take});
 
-        const start = (page - 1) * pageSize;
-        const end = start + pageSize;
-        const pagedResults = filtered.slice(start, end);
-        const totalPages = Math.ceil((filtered.length / pageSize));
+        const start = (skip - 1) * take;
+        const end = start + take;
+        const skipdResults = filtered.slice(start, end);
+        const totalskips = Math.ceil((filtered.length / take));
 
         res.status(200);
         res.json({
-            data: pagedResults,
+            data: skipdResults,
             meta: {
-                query: { q: search, page: page, pageSize: pageSize },
+                query: { q: q, skip: skip, take: take },
                 total: filtered.length,
-                page: page,
-                pageSize: pageSize,
-                totalPages: totalPages,
-                hasPrev: page > 1,
-                hasNext: page < totalPages
+                skip: skip,
+                take: take,
+                totalskips: totalskips,
+                hasPrev: skip > 1,
+                hasNext: skip < totalskips
             },
             links:{
-                self: `/api/recipes?q=${search}&page=${page}&pageSize=${pageSize}`,
-                ...(((search && filtered.length > 0) || (!search)) && {
-                    first: `/api/recipes?q=${search}&page=1&pageSize=${pageSize}`
+                self: `/api/recipes?q=${q}&skip=${skip}&take=${take}`,
+                ...(((q && filtered.length > 0) || (!q)) && {
+                    first: `/api/recipes?q=${q}&skip=1&take=${take}`
                 }),
-                ...(page > 1 && {
-                    prev: `/api/recipes?q=${search}&page=${page - 1}&pageSize=${pageSize}`
+                ...(skip > 1 && {
+                    prev: `/api/recipes?q=${q}&skip=${skip - 1}&take=${take}`
                 }),
-                ...(page < totalPages && {
-                    next: `/api/recipes?q=${search}&page=${page + 1}&pageSize=${pageSize}`
+                ...(skip < totalskips && {
+                    next: `/api/recipes?q=${q}&skip=${skip + 1}&take=${take}`
                 }),
-                ...(((search && filtered.length > 0) || (!search)) && {
-                    last: `/api/recipes?q=${search}&page=${totalPages}&pageSize=${pageSize}`
+                ...(((q && filtered.length > 0) || (!q)) && {
+                    last: `/api/recipes?q=${q}&skip=${totalskips}&take=${take}`
                 })
             }
         });
@@ -57,9 +52,9 @@ export function getRecipes(req: Request, res: Response){
     }
 }
 
-export function createNewRecipe(req: Request, res: Response){
+export async function createNewRecipe(req: Request, res: Response){
     try{
-        const recipeNew = RecipeService.createRecipe(req.body);
+        const recipeNew = await RecipeService.createRecipe(req.body);
 
         if(recipeNew === null){
             res.status(400);
@@ -80,9 +75,9 @@ export function createNewRecipe(req: Request, res: Response){
     }
 }
 
-export function getRecipe(req: Request, res: Response){
+export async function getRecipe(req: Request, res: Response){
     try{
-        let recipe = RecipeService.getRecipeById(req.params.id as string);
+        let recipe = await RecipeService.getRecipeById(Number(req.params.id));
 
         if(recipe === null){
             res.status(404);
@@ -100,10 +95,10 @@ export function getRecipe(req: Request, res: Response){
     }
 }
 
-export function replaceRecipe(req: Request, res: Response){
+export async function replaceRecipe(req: Request, res: Response){
     try{
-        const recipeNew = {
-            id: req.params.id,
+        const recipeNew: Recipe = {
+            id: Number(req.params.id),
             name: req.body.name, 
             ingredients: req.body.ingredients, 
             procedures: req.body.procedures,
@@ -114,7 +109,7 @@ export function replaceRecipe(req: Request, res: Response){
             mealType: req.body.mealType
         }
 
-        const recipeReplace = RecipeService.replaceRecipe(req.params.id as string, recipeNew as Recipe);
+        const recipeReplace = await RecipeService.replaceRecipe(Number(req.params.id), recipeNew);
 
         if(recipeReplace){
             res.status(200);
@@ -129,9 +124,9 @@ export function replaceRecipe(req: Request, res: Response){
     }
 }
 
-export function deleteRecipe(req: Request, res: Response){
+export async function deleteRecipe(req: Request, res: Response){
     try{
-        const deleted = RecipeService.deleteRecipe(req.params.id as string);
+        const deleted = await RecipeService.deleteRecipe(Number(req.params.id));
 
         if(deleted){
             res.status(200);

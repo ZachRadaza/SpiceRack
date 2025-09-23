@@ -8,11 +8,9 @@
     display: grid;
     grid-template-columns: 10px 1fr 10px; /* edge | main | edge */
     width: min(100%, 350px);
-    height: 95%;
-    max-height: 800px;
+    height: 90%;
 
     background: var(--card);
-    border: 2px solid var(--accent);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     overflow: hidden;

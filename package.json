@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "postinstall": "prisma generate",
     "dev": "nodemon --watch src --exec ts-node -P tsconfig.server.json dist/server/index.js",
-    "build": "npm run build:server && npm run build:client && npm run copy:public",
+    "build": "npm run build:server && npm run build:client && npm run copy:public && npm run postinstall",
     "build:server": "tsc -p tsconfig.server.json",
     "build:client": "tsc -p tsconfig.client.json",
     "copy:public": "cpy \"public/**/*\" \"!public/**/*.ts\" \"!public/**/*.tsx\" \"!public/**/*.map\" dist/client --parents",
@@ -15,6 +16,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@prisma/client": "^6.16.2",
     "express": "^5.1.0"
   },
   "devDependencies": {
@@ -23,6 +25,7 @@
     "cpy-cli": "^6.0.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "prisma": "^6.16.2"
   }
 }
