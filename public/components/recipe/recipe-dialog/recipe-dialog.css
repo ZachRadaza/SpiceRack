@@ -27,6 +27,8 @@ dialog::backdrop {
 }
 
 /* Edge | Main | Edge layout inside dialog */
+.edge{ transition: background 400ms ease; }
+
 .dlg-cont{
   display: grid;
   grid-template-columns: 12px 1fr 12px; /* edge | main | edge */
@@ -119,6 +121,7 @@ dialog::backdrop {
   border-radius: 10px;
   background: transparent;
   border: 1px solid var(--card-border);
+  transition: background 400ms ease;
 }
 .name-cont .btn-cont{
   display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
@@ -129,6 +132,7 @@ dialog::backdrop {
 
 #dlg-meal-time, #dlg-meal-type{
   border-color: transparent;
+  transition: background 400ms ease;
 }
 #dlg-meal-time:disabled:hover, #dlg-meal-type:disabled:hover{
   cursor: text;
@@ -172,7 +176,7 @@ dialog::backdrop {
   background: #fff;
   font-family: var(--font-body);
 }
-#dlg-ingredients input:focus, #dlg-procedures input:focus{
+#dlg-ingredients li input:focus, #dlg-procedures li input:focus{
   border-color: var(--accent);
   outline-color: var(--accent);
 }

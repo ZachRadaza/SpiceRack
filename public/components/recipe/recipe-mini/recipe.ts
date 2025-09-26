@@ -34,6 +34,7 @@ export class Recipe extends HTMLElement{
     private _bookmarked: boolean = false;
     private initialized: boolean = false;
     private _myRecipes!: MyRecipes;
+    private _index: number = 0;
 
     async connectedCallback(){
         if(this.initialized) return;
@@ -131,6 +132,10 @@ export class Recipe extends HTMLElement{
         this._myRecipes = mr;
     }
 
+    public set index(i: number){
+        this._index = i;
+    }
+
     public setAllFields(fields: RecipeFields, myRecipes: MyRecipes){
         this._id = fields.id;
         this._name = fields.name;
@@ -186,6 +191,10 @@ export class Recipe extends HTMLElement{
 
     public get mini(){
         return this._mini;
+    }
+
+    public get index(){
+        return this._index;
     }
 
     //methods

@@ -11,7 +11,9 @@ export class MyRecipes extends HTMLElement{
     private shadow = this.attachShadow({ mode:"open" });
     private initialized: boolean = false;
 
-    private _recipeList: HTMLElement[] = [];
+    private currentSplitPoint: number = 0; //split point on recipe list
+
+    private _recipeList: Recipe[] = [];
     private divList!: HTMLDivElement;
 
     private extensionService: BackendExtensionService = new BackendExtensionService();
@@ -33,8 +35,6 @@ export class MyRecipes extends HTMLElement{
         this.pullRecipesFromBackEnd();
         this.update();
 
-        //this.addTestRecipes();
-
         this.initialized = true;
     }
 
@@ -52,33 +52,6 @@ export class MyRecipes extends HTMLElement{
         addBtn!.addEventListener("click", () => this.openEmptyRecipeDialog());
         filterBtn!.addEventListener("click", () => this.filterRecipeList());
         filterBtn!.addEventListener("click", () => this.sortRecipeList());
-    }
-
-    private addTestRecipes(): void{
-
-        const name: string[] = ["Chicken Alfredo", "Onion Rings", "Steak"];
-        const ingrediets: string[][] = [["chicken", "pasta", "sauce", "milk"], ["Onion", "oil", "seasonings"], ["Steak", "seasonings", "potatoes", "pepper"]];
-        const procedures: string [][] = [["beat chicken", "cut chicken", "cook pasta", "mix pasta with stuff", "eat"], ["cut onions", "fry onions", "dry onoins"], ["cut steak", "cook till how you like", "mash the potatoes"]];
-        const accountName: string[] = ["Jecffrey Epstien", "Donald Trump", "Jayson Tatum"];
-        const mealTime: MealTime[] = [MealTime.lunch, MealTime.lunch, MealTime.dinner];
-        const mealType: MealType[] = [MealType.pasta, MealType.side, MealType.protien];
-        const bookmark: boolean[] = [false, false, true];
-
-        for(let i = 0; i < 3; i++){
-            const rec = {
-                id: i,
-                name: name[i]!,
-                ingredients: ingrediets[i]!,
-                procedures: procedures[i]!,
-                imageLink: "",
-                accountName: accountName[i]!,
-                mealTime: mealTime[i]!,
-                mealType: mealType[i]!,
-                bookmarked: bookmark[i]!,
-                mini: false
-            }
-            this.addRecipe(rec);
-        }
     }
 
     //pulls recipes from backend
@@ -112,6 +85,14 @@ export class MyRecipes extends HTMLElement{
             mini: false
         }, this);
 
+        rec.addEventListener("mouseover", () => this.recipeHover(rec));
+        rec.addEventListener("mouseout", () => {
+            rec.style.transform += ` translateY(25px)`; 
+        })
+
+        this.currentSplitPoint = Math.floor(this._recipeList.length / 2);
+
+        this.divList.appendChild(this._recipeList[this.recipeList.length - 1] as HTMLElement);
     }
 
     public get recipeList(){
@@ -134,13 +115,44 @@ export class MyRecipes extends HTMLElement{
 
     }
 
-    //class methods
-    private update(): void{
-        this.divList.replaceChildren();
+    private recipeHover(recipe: Recipe): void{
+        //nothing happens if hover is at the two topmost recipes
+        if(recipe.index === this.currentSplitPoint || recipe.index === this.currentSplitPoint - 1){
+            recipe.style.transform += ` translateY(-25px)`;
+            return;
+        }
+        recipe.index < this.currentSplitPoint - 1 
+            ? this.currentSplitPoint = recipe.index + 1
+            : this.currentSplitPoint = recipe.index;
 
-        this._recipeList.forEach( r => {
-            this.divList.appendChild(r);
-        });
+        if (recipe.index <= 0) this.currentSplitPoint = 1;
+        
+        this.update(true);
+        recipe.style.transform += ` translateY(-25px)`;
+    }
+
+    //class methods
+    private update(fromRecipeHover?: boolean): void{
+        let i = 0;
+        while(i < this._recipeList.length){
+            this._recipeList[i]!.index = i;
+
+            if(i < this.currentSplitPoint){
+                this._recipeList[i]!.style.transform = `translateX(${30 * i}px)`;
+                this._recipeList[i]!.style.zIndex = (i + 100).toString();
+            } else {
+                const gap = 80;
+                //const recipeWidth = this._recipeList[i]!.style.width;
+                const recipeWidth = 350;
+                this._recipeList[i]!.style.transform = `translateX(${(30 * i) + 40 + recipeWidth}px)`;
+                this._recipeList[i]!.style.zIndex = (this.currentSplitPoint - (i - this.currentSplitPoint) + 100).toString();
+            }
+
+            if(this._recipeList[i]!.index !== i && fromRecipeHover) this._recipeList[i]!.style.transform += ` rotate(15deg)`;
+
+            i++;
+        }
+
     }
 
     //for new recipes created, to be used by dialog as an actual new recipe is added
