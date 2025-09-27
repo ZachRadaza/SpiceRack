@@ -4,9 +4,9 @@ import "./pages/my-recipes/my-recipes.js";
 import "./components/sidebar/sidebar.js";
 
 export enum Pages {
-    home = "home-p",
-    explore = "explore",
-    myRecipes= "my-recipes"
+    home = "home-page",
+    explore = "explore-page",
+    myRecipes= "my-recipes-page"
 }
 
 const pageDiv = document.getElementById("page-cont");

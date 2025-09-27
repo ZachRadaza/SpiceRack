@@ -35,6 +35,7 @@ export class Recipe extends HTMLElement{
     private initialized: boolean = false;
     private _myRecipes!: MyRecipes;
     private _index: number = 0;
+    private _canEdit: boolean = false;
 
     async connectedCallback(){
         if(this.initialized) return;
@@ -73,8 +74,7 @@ export class Recipe extends HTMLElement{
 
         this.shadow.querySelector<HTMLButtonElement>("#expand-btn")?.addEventListener("click", () => this.openRecipeDialog());
         if(this._mini) {
-            this.addEventListener("mouseenter", () => this.mainContDiv.classList.remove("condensed"));
-            this.addEventListener("mouseleave", () => this.mainContDiv.classList.add("condensed"));
+            this.mainContDiv.classList.add("extended");
         }
     }
 
@@ -136,7 +136,11 @@ export class Recipe extends HTMLElement{
         this._index = i;
     }
 
-    public setAllFields(fields: RecipeFields, myRecipes: MyRecipes){
+    public set canEdit(e: boolean){
+        this._canEdit = e;
+    }
+
+    public setAllFields(fields: RecipeFields, myRecipes?: MyRecipes, canEdit?: boolean){
         this._id = fields.id;
         this._name = fields.name;
         this._ingredients = fields.ingredients;
@@ -147,7 +151,9 @@ export class Recipe extends HTMLElement{
         this.recipeCategories.mealType = fields.mealType;
         this._mini = fields.mini;
         this._bookmarked = fields.bookmarked;
-        this._myRecipes = myRecipes;
+
+        if(myRecipes) this._myRecipes = myRecipes;
+        if(canEdit) this._canEdit = canEdit;
 
         this.update();
     }
@@ -195,6 +201,10 @@ export class Recipe extends HTMLElement{
 
     public get index(){
         return this._index;
+    }
+
+    public get canEdit(){
+        return this._canEdit;
     }
 
     //methods
@@ -289,15 +299,11 @@ export class Recipe extends HTMLElement{
             mealTime: this.recipeCategories.mealTime,
             mealType: this.recipeCategories.mealType,
             bookmarked: this._bookmarked
-            }, this, this.canEdit()
+            }, this, this._canEdit
         );
         (dialog as any).myRecipes = this._myRecipes;
         document.body.appendChild(dialog);
         dialog.showModal();
-    }
-
-    private canEdit(): boolean{
-        return true;
     }
 
 }

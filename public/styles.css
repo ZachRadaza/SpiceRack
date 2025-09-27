@@ -175,6 +175,9 @@ sidebar-component.condensed {
 /* Main Page Containter */
 #page-cont{
     padding: 30px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-width: 0;
 }
 
 /* ==== shared elements =====*/

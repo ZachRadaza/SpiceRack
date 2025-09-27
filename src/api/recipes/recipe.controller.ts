@@ -4,43 +4,36 @@ import * as RecipeService from "./recipe.service";
 
 export async function getRecipes(req: Request, res: Response){
     try{
-        const q: string = req.query.q as string | "";
-        const skip: number = parseInt(req.query.skip as string) | 1;
-        const take: number = parseInt(req.query.take as string) | 10;
+        const q: string = req.query.q !== undefined ? req.query.q as string : "";
+        const skip: number = req.query.skip !== undefined ? parseInt(req.query.skip as string) : 0;
+        const take: number = req.query.take !== undefined ? parseInt(req.query.take as string) : 10;
 
-        let filtered = await RecipeService.returnFilteredRecipes({ q, skip, take});
+        let all = await RecipeService.returnFilteredRecipes({ q });
+        const total = all.length;
+        const items = all.slice(skip, skip + take);
 
-        const start = (skip - 1) * take;
-        const end = start + take;
-        const skipdResults = filtered.slice(start, end);
-        const totalskips = Math.ceil((filtered.length / take));
+        const hasPrev = skip > 0;
+        const hasNext = skip + take < total;
 
         res.status(200);
         res.json({
-            data: skipdResults,
+            data: items,
             meta: {
                 query: { q: q, skip: skip, take: take },
-                total: filtered.length,
+                total: total,
                 skip: skip,
                 take: take,
-                totalskips: totalskips,
-                hasPrev: skip > 1,
-                hasNext: skip < totalskips
+                hasPrev: hasPrev,
+                hasNext: hasNext
             },
             links:{
                 self: `/api/recipes?q=${q}&skip=${skip}&take=${take}`,
-                ...(((q && filtered.length > 0) || (!q)) && {
-                    first: `/api/recipes?q=${q}&skip=1&take=${take}`
-                }),
-                ...(skip > 1 && {
+                ...(hasPrev && {
                     prev: `/api/recipes?q=${q}&skip=${skip - 1}&take=${take}`
                 }),
-                ...(skip < totalskips && {
+                ...(hasNext && {
                     next: `/api/recipes?q=${q}&skip=${skip + 1}&take=${take}`
                 }),
-                ...(((q && filtered.length > 0) || (!q)) && {
-                    last: `/api/recipes?q=${q}&skip=${totalskips}&take=${take}`
-                })
             }
         });
     } catch(error: unknown){

@@ -25,4 +25,4 @@ export class Home extends HTMLElement{
     
 
 }
-customElements.define("home-p", Home);
+customElements.define("home-page", Home);

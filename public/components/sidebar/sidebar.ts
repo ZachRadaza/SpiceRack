@@ -17,8 +17,8 @@ export class SideBar extends HTMLElement{
 
     async connectedCallback(){
         const [html, css] = await Promise.all([
-        fetch(new URL("./sidebar.html", import.meta.url)).then(r => r.text()),
-        fetch(new URL("./sidebar.css", import.meta.url)).then(r => r.text())
+            fetch(new URL("./sidebar.html", import.meta.url)).then(r => r.text()),
+            fetch(new URL("./sidebar.css", import.meta.url)).then(r => r.text())
         ]);
 
         this.shadow.innerHTML = `

@@ -243,6 +243,10 @@ export class RecipeDialog extends HTMLDialogElement{
         }
 
         this.nameInput.disabled = true;
+
+        const deleteBtn = this.querySelector<HTMLButtonElement>("#dlg-delete");
+        if(!deleteBtn) throw new Error("#dlg-delete not found");
+        this.removeChild(deleteBtn);
     }
 
     private removeButton(): HTMLButtonElement{

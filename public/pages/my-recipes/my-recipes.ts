@@ -72,6 +72,8 @@ export class MyRecipes extends HTMLElement{
         const rec = document.createElement("recipe-mini") as Recipe;
         this._recipeList.push(rec);
 
+        const canEdit: boolean = true;
+
         rec.setAllFields({
             id: r.id,
             name: r.name,
@@ -83,7 +85,7 @@ export class MyRecipes extends HTMLElement{
             mealType: r.mealType,
             bookmarked: r.bookmarked,
             mini: false
-        }, this);
+        }, this, canEdit);
 
         rec.addEventListener("mouseover", () => this.recipeHover(rec));
         rec.addEventListener("mouseout", () => {
@@ -171,4 +173,4 @@ export class MyRecipes extends HTMLElement{
     }
 
 }
-customElements.define("my-recipes", MyRecipes)
+customElements.define("my-recipes-page", MyRecipes);

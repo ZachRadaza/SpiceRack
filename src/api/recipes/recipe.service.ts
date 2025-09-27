@@ -1,19 +1,17 @@
 import { Recipe, MealTime, MealType } from "./recipe";
 import { prisma } from "../../db/prisma";
 
-export async function returnFilteredRecipes(params: { q?: string, skip?: number, take?: number }){
-    const { q, skip = 0, take = 0 } = params;
+export async function returnFilteredRecipes(params: { q?: string }){
+    const { q } = params;
 
     const where = q
-        ? { name: {contains: q, mode: "insensitive" } }
+        ? { name: { contains: q, mode: "insensitive" } }
         : {};
 
     const [data, total] = await Promise.all([
         prisma.recipe.findMany({
             where,
-            orderBy: { createdAt: "desc" },
-            skip,
-            take
+            orderBy: { createdAt: "desc" }
         }),
         prisma.recipe.count({ where })
     ]);

@@ -1,4 +1,4 @@
-import { RecipeFields } from "./components/recipe/recipe-mini/recipe";
+import { RecipeFields } from "./components/recipe/recipe-mini/recipe.js";
 
 export class BackendExtensionService{
 
@@ -49,5 +49,13 @@ export class BackendExtensionService{
         if(!res.ok) throw new Error(`Error Deleting Recipe: ${res.status}`);
 
         return true;
+    }
+
+    async getAllRecipes(q: string = "", skip?: number, take?: number) {
+        const res = await fetch(`/api/recipes?q=${q.toLowerCase()}&skip=${skip}&take=${take}`);
+        if(!res.ok) throw new Error(`Error: ${res.status}`);
+
+        const data = await res.json();
+        return data.data;
     }
 }
