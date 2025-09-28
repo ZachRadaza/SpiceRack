@@ -39,10 +39,9 @@ dialog::backdrop {
 #dlg-main{
   background-color: var(--background);
   display: grid;
-  grid-template-rows: auto auto 1fr auto; /* top | upper | lower | footer */
+  grid-template-rows: auto auto auto auto; /* top | upper | lower | footer */
   min-height: 0; /* allow internal scrolling */
   height: 100%;       /* fill parent */
-  min-height: 0;      /* allow internal shrink */
   overflow-y: auto;   /* actual scrolling */
   overflow-x: hidden;
   scrollbar-width: thin;                /* auto | thin | none */
@@ -52,9 +51,9 @@ dialog::backdrop {
 /* Sections (spacing) */
 .section{ background: transparent; }
 .top-column{ padding: 12px 14px 0; display: flex; justify-content: space-between;}
-.upper-half{ padding: 12px 24px; display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; align-items: start; overflow: visible; min-height: 0; }
-.lower-half{ padding: 0 24px 12px; overflow: auto; }
-.footer{ padding: 10px 24px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; overflow: visible; min-height: 0; }
+.upper-half{ padding: 12px 24px; display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; align-items: start; overflow: visible; }
+.lower-half{ padding: 0 24px 12px; overflow: visible; }
+.footer{ padding: 10px 24px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; overflow: visible; }
 
 /* Shared Classes */
 .danger-btn{
@@ -226,10 +225,6 @@ dialog::backdrop {
   color: var(--text);
   background: transparent;
 }
-
-/*   Optional condensed mask inside lower-half (if content long)   */
-/* .lower-half{ mask-image: linear-gradient(to bottom, #000 85%, transparent);
-              -webkit-mask-image: linear-gradient(to bottom, #000 85%, transparent); } */
 
 /*   Meal-time bg classes reused from cards   */
 #dlg-meal-time.breakfast  { background: var(--mt-breakfast, #FFD8A8); }
