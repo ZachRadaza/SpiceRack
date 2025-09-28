@@ -30,8 +30,7 @@
 /* ===== Main column ===== */
 #recipe-cont > main{
     display: grid;
-    grid-template-rows: min-content min-content min-content;
-    min-height: 0;                       /* allow inner scrolling */
+    grid-template-rows: min-content auto min-content;
 }
 
 /* Title */
@@ -71,6 +70,7 @@
     border-radius: 12px;
     border: 1px solid var(--card-border);
     box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    align-self: center;
 }
 
 /* headings + lists */

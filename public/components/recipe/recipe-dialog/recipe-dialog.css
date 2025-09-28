@@ -112,16 +112,17 @@ dialog::backdrop {
 
 #dlg-name{
   all: unset;
-  width: 100%;
+  max-width: 380px;
+  min-height: 2em;
+  resize: vertical;
   text-align: center;
   font-family: var(--font-heading);
-  font-size: clamp(30px, 2.2vw + 12px, 28px);
+  font-size: 50px;
   font-weight: 700;
-  padding: 8px 10px;
-  border-radius: 10px;
+  padding: 10px;
   background: transparent;
-  border: 1px solid var(--card-border);
-  transition: background 400ms ease;
+  transition: color 400ms ease;
+  margin: 20px;
 }
 .name-cont .btn-cont{
   display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
@@ -132,7 +133,7 @@ dialog::backdrop {
 
 #dlg-meal-time, #dlg-meal-type{
   border-color: transparent;
-  transition: background 400ms ease;
+  transition: background 400ms ease, transform 120ms ease;
 }
 #dlg-meal-time:disabled:hover, #dlg-meal-type:disabled:hover{
   cursor: text;
@@ -147,12 +148,12 @@ dialog::backdrop {
 .lower-half h3{
   margin: 0;
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: large;
   color: var(--text);
 }
 
 #dlg-ingredients, #dlg-procedures{
-  list-style:circle;
+  list-style: circle;
   padding: 0;
   margin: 0;
   display: grid;
@@ -165,19 +166,22 @@ dialog::backdrop {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 8px;
   width: 100%;
 }
 #dlg-ingredients input, #dlg-procedures input{
-  width: 100%;
+  all: unset;
+  width: 97%;
   padding: 8px 10px;
-  border: 1px solid rgba(0,0,0,.15);
-  border-radius: 8px;
+  font-size: medium;
+  font-weight: 500;
+  line-height: 1.2;
+  border: 1px solid var(--tan);
+  border-radius: 16px;
   background: #fff;
   font-family: var(--font-body);
 }
 #dlg-ingredients li input:focus, #dlg-procedures li input:focus{
-  border-color: var(--accent);
+  border: 2px solid var(--accent);
   outline-color: var(--accent);
 }
 #dlg-ingredients input:disabled, #dlg-procedures input:disabled{
@@ -192,11 +196,14 @@ dialog::backdrop {
 #dlg-ingredients li:has(> button:only-child),
 #dlg-procedures  li:has(> button:only-child){
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  gap: 10px;
 }
 #dlg-ingredients li > button,
 #dlg-procedures  li > button{
   padding: 8px 12px;
+  border-radius: 16px;
+  margin-left: 10px;
 }
 
 /*   Footer   */

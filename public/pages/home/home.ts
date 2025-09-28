@@ -6,8 +6,8 @@ export class Home extends HTMLElement{
 
     async connectedCallback(){
         const [html, css] = await Promise.all([
-        fetch(new URL("./home.html", import.meta.url)).then(r => r.text()),
-        fetch(new URL("./home.css", import.meta.url)).then(r => r.text())
+            fetch(new URL("./home.html", import.meta.url)).then(r => r.text()),
+            fetch(new URL("./home.css", import.meta.url)).then(r => r.text())
         ]);
 
         this.shadow.innerHTML = `

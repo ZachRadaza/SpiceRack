@@ -24,7 +24,7 @@ export class RecipeDialog extends HTMLDialogElement{
     private mealTypeBtn!: HTMLButtonElement;
     private bmInput!: HTMLInputElement;
 
-    private nameInput!: HTMLInputElement;
+    private nameInput!: HTMLTextAreaElement;
     private procedureList!: HTMLOListElement;
     private ingredientsList!: HTMLUListElement;
     private imageImg!: HTMLImageElement;
@@ -53,7 +53,7 @@ export class RecipeDialog extends HTMLDialogElement{
     }
 
     private initializeHTMLElements() {
-        const nameInput = this.querySelector<HTMLInputElement>("#dlg-name");
+        const nameInput = this.querySelector<HTMLTextAreaElement>("#dlg-name");
         const procedureList = this.querySelector<HTMLOListElement>("#dlg-procedures");
         const ingredientsList = this.querySelector<HTMLUListElement>("#dlg-ingredients");
         const imageImg = this.querySelector<HTMLImageElement>("#dlg-image-cont img");
@@ -200,7 +200,9 @@ export class RecipeDialog extends HTMLDialogElement{
 
         this.mealTimeBtn.textContent = this.recipeCategories.mealTime.toUpperCase();
         this.mealTimeBtn.classList.remove("lunch");
+        this.nameInput.classList.remove("lunch");
         this.mealTimeBtn.classList.add(this.recipeCategories.mealTime);
+        this.nameInput.classList.add(this.recipeCategories.mealTime);
 
         this.mealTypeBtn.textContent = this.recipeCategories.mealType.toUpperCase();
         this.mealTypeBtn.classList.remove("food");
@@ -246,7 +248,7 @@ export class RecipeDialog extends HTMLDialogElement{
 
         const deleteBtn = this.querySelector<HTMLButtonElement>("#dlg-delete");
         if(!deleteBtn) throw new Error("#dlg-delete not found");
-        this.removeChild(deleteBtn);
+        deleteBtn.remove();
     }
 
     private removeButton(): HTMLButtonElement{
@@ -443,7 +445,7 @@ export class RecipeDialog extends HTMLDialogElement{
     private ingProInput(elementList: HTMLUListElement | HTMLOListElement, inside: string = ""): HTMLLIElement{
         const input = document.createElement("input");
         input.classList.add("body");
-        input.placeholder = "ingredient/procedure";
+        input.placeholder = elementList instanceof HTMLUListElement ? "Ingredient" : "Procedure";
         input.value = inside;
         const li = document.createElement("li");
         li.appendChild(input);
