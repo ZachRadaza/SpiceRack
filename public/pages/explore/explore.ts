@@ -10,6 +10,7 @@ export class Explore extends HTMLElement{
     private searchInput!: HTMLInputElement;
 
     private listAllRecipes: Recipe[] = [];
+    private numberOfColumns: number = 0;
     private hasNext: boolean = true;
     private lastSkip: number = -1;
 
@@ -36,28 +37,38 @@ export class Explore extends HTMLElement{
     }
 
     private initializeHTMLElements(){
-        const searchArea1 = this.shadow.getElementById("search-area-1") as HTMLDivElement;
-        const searchArea2 = this.shadow.getElementById("search-area-2") as HTMLDivElement;
-        const searchArea3 = this.shadow.getElementById("search-area-3") as HTMLDivElement;
-        const searchArea4 = this.shadow.getElementById("search-area-4") as HTMLDivElement;
         const searchInput = this.shadow.getElementById("search-bar-input") as HTMLInputElement;
-
+        const searchAreaCont = this.shadow.getElementById("search-area-cont") as HTMLDivElement;
         const searchButton = this.shadow.getElementById("search-btn") as HTMLButtonElement;
 
-        if(!searchArea1 ||  !searchArea2 || !searchArea3 || !searchArea4 || !searchButton || !searchInput){
-            throw new Error("#search-area-n, #search-btn, #search-barinput is not found in explore.html");
+        if(!searchButton || !searchInput || !searchAreaCont){
+            throw new Error("#search-area-cont, #search-btn, #search-bar-input is not found in explore.html");
         }
 
-        this.searchArea.push(searchArea1);
-        this.searchArea.push(searchArea2);
-        this.searchArea.push(searchArea3);
-        this.searchArea.push(searchArea4);
         this.searchInput = searchInput;
 
         searchButton.addEventListener("click", () => this.searchName());
         this.searchInput.addEventListener("keydown", (event: KeyboardEvent) => {
             if(event.key === 'Enter') this.searchName();
         });
+
+        this.initializeSearchArea(searchAreaCont);
+    }
+
+    private initializeSearchArea(areaCont: HTMLDivElement){
+        const widthRecipe = 350;
+        this.numberOfColumns = Math.floor(areaCont.offsetWidth / widthRecipe);
+
+        for(let i = 0; i < this.numberOfColumns; i++){
+            const columnDiv = document.createElement("div") as HTMLDivElement;
+
+            columnDiv.style.gridArea = `1 / ${i + 1}`;
+            columnDiv.classList.add("search-area");
+            areaCont.appendChild(columnDiv);
+            this.searchArea.push(columnDiv);
+        }
+
+        areaCont.style.width = "fit-content";
     }
 
     //pulls recipes from backend
@@ -86,7 +97,7 @@ export class Explore extends HTMLElement{
 
             this.listAllRecipes.push(rec);
 
-            this.searchArea[i % 4]!.appendChild(rec);
+            this.searchArea[i % this.numberOfColumns]!.appendChild(rec);
         }
 
         //this.hasNext = listRecipes.meta.hasNext;
@@ -102,7 +113,7 @@ export class Explore extends HTMLElement{
         if(this.listAllRecipes.length === 0){
             const message: HTMLHeadingElement = document.createElement("h4");
 
-            message.textContent = `Sorry, ${this.searchInput.value} does not match any of our Recipes`;
+            message.textContent = `Sorry, "${this.searchInput.value}" does not match any of our Recipes`;
             message.classList.add("failed-search");
 
             this.searchArea[1]!.appendChild(message);

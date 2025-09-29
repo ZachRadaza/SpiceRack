@@ -22,7 +22,7 @@
 }
 
 .search-bar{
-    border: 2px var(--accent) solic;
+    border: 2px solid var(--accent);
     border-radius: 25px;
     background-color: var(--tan);
     padding: 5px;
@@ -63,10 +63,11 @@
     width: 100%;
 }
 
-.search-area-cont{
+#search-area-cont{
     display: grid;
     gap: 20px;
     margin: 30px;
+    width: 100%;
 }
 
 .search-area{
@@ -74,17 +75,4 @@
     flex-direction: column;
     gap: 20px;
     align-items: center;
-}
-
-#search-area-1{
-    grid-area: 1 / 1;
-}
-#search-area-2{
-    grid-area: 1 / 2;
-}
-#search-area-3{
-    grid-area: 1 / 3;
-}
-#search-area-4{
-    grid-area: 1 / 4;
 }
