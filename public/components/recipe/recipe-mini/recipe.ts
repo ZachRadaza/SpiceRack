@@ -20,9 +20,6 @@ export class Recipe extends HTMLElement{
 
     private shadow = this.attachShadow({ mode:"open"}); 
 
-    private mainContDiv!: HTMLDivElement;
-    private edgesDiv!: NodeListOf<HTMLDivElement>;
-
     private _id!: number;
     private _name: string = "";
     private _procedures: string[] = [""];
@@ -51,31 +48,10 @@ export class Recipe extends HTMLElement{
             ${html}`
         ;
 
-        this.initializeHTMLElements();
+        this.shadow.querySelector<HTMLButtonElement>("#expand-btn")?.addEventListener("click", () => this.openRecipeDialog());
 
         this.initialized = true;
         this.update();
-    }
-
-    private initializeHTMLElements(): void{
-        const mainContDiv = this.shadow.getElementById("recipe-cont") as HTMLDivElement;
-        const edgesDiv = this.shadow.querySelectorAll<HTMLDivElement>(".edge");
-
-        if(!mainContDiv){
-            throw new Error(".recipe-cont not found")
-        }
-
-        if (edgesDiv.length === 0) {
-            throw new Error(".edge not found");
-        }
-
-        this.mainContDiv = mainContDiv;
-        this.edgesDiv = edgesDiv;
-
-        this.shadow.querySelector<HTMLButtonElement>("#expand-btn")?.addEventListener("click", () => this.openRecipeDialog());
-        if(this._mini) {
-            this.mainContDiv.classList.add("extended");
-        }
     }
 
     //setters
@@ -253,26 +229,45 @@ export class Recipe extends HTMLElement{
     }  
 
     private updateMealTime(): void{
+        const mainContDiv = this.shadow.getElementById("recipe-cont") as HTMLDivElement;
+        const footer = this.shadow.querySelector<HTMLDivElement>(".footer");
+
+        if(!mainContDiv || !footer){
+            throw new Error("#recipe-cont or .footer not found")
+        }
+
         const category: MealTime[] = Object.values(MealTime);
 
-        const classList = Array.from(this.mainContDiv.classList);
+        const classList = Array.from(mainContDiv.classList);
 
         for(let i = 0; i < category.length; i++){
             if(classList.includes(category[i] as string)){
-                this.mainContDiv.classList.remove(category[i] as string);
+                mainContDiv.classList.remove(category[i] as string);
+                footer.classList.remove(category[i] as string);
                 break;
             }
         }
 
-        this.mainContDiv.classList.add(this.recipeCategories.mealTime);
+        mainContDiv.classList.add(this.recipeCategories.mealTime);
+        footer.classList.add(this.recipeCategories.mealTime);
+
+        if(this._mini) {
+            mainContDiv.classList.add("extended");
+        }
     }
 
     private updateMealType(): void{
+        const edgesDiv = this.shadow.querySelectorAll<HTMLDivElement>(".edge");
+
+        if (edgesDiv.length === 0) {
+            throw new Error(".edge not found");
+        }
+
         let oldClass: string = "";
 
         const category: MealType[] = Object.values(MealType);
 
-        const classList = Array.from(this.edgesDiv[0]!.classList);
+        const classList = Array.from(edgesDiv[0]!.classList);
 
         for(let i = 0; i < category.length; i++){
             if(classList.includes(category[i] as string)){
@@ -281,7 +276,7 @@ export class Recipe extends HTMLElement{
             }
         }
 
-        this.edgesDiv.forEach( e => {
+        edgesDiv.forEach( e => {
             if(oldClass) e.classList.remove(oldClass);
             e.classList.add(this.recipeCategories.mealType);
         });

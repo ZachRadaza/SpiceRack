@@ -10,7 +10,6 @@
     width: 350px;
     height: 620px;
     min-height: 400px;
-    max-height: 800px;
 
     background: var(--card);
     border-radius: var(--radius);
@@ -21,6 +20,7 @@
 }
 #recipe-cont:hover{
     scale: 1.05;
+    z-index: 100;
 }
 
 
@@ -97,10 +97,11 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    margin-top: 0;                        /* no bump */
-    padding: 10px 14px 14px;              /* comfy tap targets */
-    position: sticky;                     /* <— sticks within main */
-    z-index: 1;                           /* above scrolled content */
+    margin-top: 0;
+    padding: 10px 14px 14px;
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
 }
 
 /* button: no layout jump on hover */
@@ -130,9 +131,12 @@
 }
 
 /* ===== Meal-time tints (apply to #recipe-cont) ===== */
-#recipe-cont.breakfast { background: var(--mt-breakfast, #FFD8A8); }
-#recipe-cont.lunch     { background: var(--mt-lunch,     #C8E6C9); }
-#recipe-cont.dinner    { background: var(--mt-dinner,    #C5CAE9); }
+#recipe-cont.breakfast { background: var(--mt-breakfast); }
+.footer.breakfast      { background: var(--mt-breakfast); }
+#recipe-cont.lunch     { background: var(--mt-lunch); }
+.footer.lunch          { background: var(--mt-lunch); }
+#recipe-cont.dinner    { background: var(--mt-dinner); }
+.footer.dinner         { background: var(--mt-dinner); }
 
 /* ===== Meal-type stripes (apply class to each .edge) ===== */
 .edge.pasta   { background: var(--pasta); }

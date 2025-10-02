@@ -170,6 +170,9 @@ dialog::backdrop {
 #dlg-ingredients input, #dlg-procedures input{
   all: unset;
   width: 97%;
+  max-width: 97%;
+  resize: vertical;
+  min-height: 2em;
   padding: 8px 10px;
   font-size: medium;
   font-weight: 500;

@@ -52,7 +52,7 @@ export class BackendExtensionService{
     }
 
     async getAllRecipes(q: string = "", skip?: number, take?: number) {
-        const res = await fetch(`/api/recipes?q=${q.toLowerCase()}&skip=${skip}&take=${take}`);
+        const res = await fetch(`/api/recipes?q=${q.toLowerCase()}&skip=${skip || 0}&take=${take || 15}`);
         if(!res.ok) throw new Error(`Error: ${res.status}`);
 
         const data = await res.json();

@@ -1,7 +1,6 @@
 main{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    display: block;
+    gap: 20px
 }
 
 #hero-section{
@@ -126,15 +125,45 @@ main{
     height: 90vh;
     display: grid;
     grid-column: 1fr 1fr;
+    margin: 5px;
 }
 
-.about-cont{
+.about-cont-1{
+    grid-area: 1 / 1;
+    display: grid;
+}
+.about-cont-1 h1{
+    all: unset;
+    margin: 0px;
+    grid-area: 1 / 1;
+    font-family: var(--font-heading);
+    font-size: 18vh;
+    font-weight: 600;
+    color: var(--background);
+    line-height: 0.6;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    z-index: 10;
+    margin-left: 90%;
+}
+.about-cont-1 img{
+    grid-area: 1 / 1;
+    overflow: hidden;
+    width: 45vw;
+    height: auto;
+}
+
+.about-cont-2{
     grid-area: 1 / 2;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     gap: 20px;
     align-items: center;
     justify-content: center;
+    margin: 2px;
 }
 
 .about{
@@ -155,11 +184,108 @@ main{
     font-size: larger;
 }
 .about p{
-
+    justify-content: center;
+    text-align: center ;
 }
 
-#about-section img{
-    grid-area: 1 / 1;
-    width: 50vw;
+#popular-section{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 128px;
+    overflow-x: hidden;
+    border: 4px solid var(--accent);
+    border-radius: 64px;
+}
+#popular-section h3{
+    all: unset;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 8vh;
+    font-weight: 900;
+    line-height: 1.2;
+    padding: 40px;
+    color: var(--tan);
+    background-color: var(--accent);
+}
+
+#popular-recipes{
+    display: grid;
+    max-height: 130vh;
+    overflow-y: hidden;
+    overflow-x: visible;
+    margin: auto;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.popular-area{
+    display: flex;
+    height: fit-content;
+    flex-direction: column;
+    overflow-x: visible;
+    gap: 20px;
+    align-items: center;
+    will-change: transform;
+}
+
+#action-section{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px;
+    padding: 40px;
+    background-image: 
+        linear-gradient(to top, rgba(255, 255, 255, 0) 60%, var(--background) 100%),
+        url(../../assets/images/hero-page-bg.jpg);
+    background-size: cover;
+}
+
+#action-section button{
+    all: unset;
+    width: auto;
     height: auto;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 40px;
+    background-color: var(--accent);
+    border: 4px solid var(--tan);
+    border-radius: 32px;
+    transition: scale 200ms ease-in, transform 200ms ease-in;
+}
+#action-section button:hover{
+    scale: 1.05;
+    transform: translateY(-10px);
+}
+#action-section button div{
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+#action-section button div svg{
+    height: auto;
+    width: 200px;
+    max-width: 100%;
+    fill: var(--tan);
+    justify-self: center;
+}
+#action-section button div h2{
+    color: var(--background);
+    font-size: xx-large;
+    font-weight: 700;
+}
+#action-section button div p{
+    color: var(--tan);
+}
+
+footer{
+    background-color: var(--accent);
 }
