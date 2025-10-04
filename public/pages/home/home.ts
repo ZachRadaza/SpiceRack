@@ -1,17 +1,20 @@
 import { RecipeFields, Recipe } from "../../components/recipe/recipe-mini/recipe.js";
 import { BackendExtensionService } from "../../backend-extension-service.js";
-import { SignUpDialog } from "../../components/dialog/sign-up/sign-up.js";
+import "../../components/dialog/login/login.js";
+import "../../components/dialog/sign-up/sign-up.js";
 
 export class Home extends HTMLElement{
 
     private shadow = this.attachShadow({ mode: "open" });
     private initialized: boolean = false;
+    private expanded: boolean = false;
 
     private popularRecipes: Recipe[] = [];
     private backendExtensionService: BackendExtensionService = new BackendExtensionService();
 
     private popularRecipesDiv!: HTMLDivElement;
     private popularRecipesDivArea: HTMLDivElement[] = []; //list of the columns in popularRecipeDIv
+    private expandableDiv!: HTMLDivElement;
 
     async connectedCallback(){
         if(this.initialized) return;
@@ -38,15 +41,22 @@ export class Home extends HTMLElement{
         const popRec = this.shadow.getElementById("popular-recipes") as HTMLDivElement;
         const signUp = this.shadow.getElementById("signup-btn") as HTMLButtonElement;
         const login = this.shadow.getElementById("login-btn") as HTMLButtonElement;
+        const expand = this.shadow.getElementById("expand-hero-btn") as HTMLButtonElement;
+        const expandable = this.shadow.getElementById("hero-expandable") as HTMLDivElement;
 
-        if(!popRec || !signUp || !login){
-            throw new Error("#popular-recipes, #signup-btn, #login-btn not found in home.html");
+        if(!popRec || !signUp || !login || !expand || !expandable){
+            throw new Error("#popular-recipes, #signup-btn, #login-btn, #expand-hero-btn, #hero-expandable not found in home.html");
         }
 
         this.popularRecipesDiv = popRec;
+        this.expandableDiv = expandable;
 
         signUp.addEventListener("click", () => this.openSignUp());
         login.addEventListener("click", () => this.openLogin());
+        expand.addEventListener("click", () => this.expandHero(expand));
+
+        const offset = this.expandableDiv.offsetHeight - expand.offsetHeight;
+        this.expandableDiv.style.transform = `translateY(${offset})`;
     }
 
     private async pullPopularRecipesBackend(){
@@ -100,7 +110,7 @@ export class Home extends HTMLElement{
                 listAreaDiv.push(columnDiv);
                 listAreaDiv.push(copy as HTMLDivElement);
             }
-            areaCont.style.width = "fit-content";
+            areaCont.style.width = "auto";
 
             return ret;
         }
@@ -109,24 +119,28 @@ export class Home extends HTMLElement{
     //animation of moving recipes
     private async movingRecipe(){
         const recipesArea = Array.from(this.popularRecipesDivArea);
-        const msWait = 20000;
+        const msWait = 40000;
+        const delay = emulateFirstRow();
 
-        firstRow(recipesArea, msWait);
+        firstRow(recipesArea);
 
-        await wait(msWait / 2);
+        await wait((delay * 2) + (msWait / 2));
+        //await wait(msWait / 2);
 
-        secondRow(recipesArea, msWait);
+        secondRow(recipesArea);
 
         function wait(ms: number){
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        async function firstRow(recipesArea: HTMLDivElement[], ms: number){
+        async function firstRow(recipesArea: HTMLDivElement[]){
             while(true){
                 for(let i = 0; i < recipesArea.length; i += 2){
                     recipesArea[i]!.style.transform = `translateY(-${recipesArea[i]!.offsetHeight}px)`;
                     recipesArea[i]!.style.transition = `transform ${msWait}ms linear`;
                 }
+
+                await wait(msWait);
 
                 for(let i = 0; i < recipesArea.length; i += 2) {
                     recipesArea[i]!.style.transform = `translateY(${recipesArea[i]!.offsetHeight}px)`;
@@ -135,7 +149,24 @@ export class Home extends HTMLElement{
             }
         }
 
-        async function secondRow(recipesArea: HTMLDivElement[], ms: number){
+        //used to get how long it takes to run the commands to have accurate delay
+        function emulateFirstRow():number {
+            const startTime = Date.now();
+        
+            for(let i = 0; i < recipesArea.length; i += 2){
+                recipesArea[i]!.style.transform = `translateY(-${recipesArea[i]!.offsetHeight}px)`;
+                recipesArea[i]!.style.transition = `transform ${msWait}ms linear`;
+            }
+
+            for(let i = 0; i < recipesArea.length; i += 2) {
+                recipesArea[i]!.style.transform = `translateY(${recipesArea[i]!.offsetHeight}px)`;
+                recipesArea[i]!.style.transition = ``;
+            }
+
+            return  Date.now() - startTime;
+        }
+
+        async function secondRow(recipesArea: HTMLDivElement[]){
             while(true){
                 for(let i = 1; i < recipesArea.length; i += 2){
                     recipesArea[i]!.style.transform = `translateY(-${recipesArea[i]!.offsetHeight}px)`;
@@ -153,14 +184,37 @@ export class Home extends HTMLElement{
     }
 
     private openSignUp(){
-        const dialog = document.createElement("dialog", { is:"sign-up-dialog" }) as HTMLDialogElement;
+        const dialog = document.createElement('dialog', { is:'sign-up-dialog' }) as HTMLDialogElement;
 
         document.body.appendChild(dialog);
         dialog.showModal();
     }
 
     private openLogin(){
+        const dialog = document.createElement('dialog', { is:'login-dialog' }) as HTMLDialogElement;
 
+        document.body.appendChild(dialog);
+        dialog.showModal();
+    }
+
+    private expandHero(expandBtn: HTMLButtonElement){
+        const expandArrows = Array.from(expandBtn.children);
+
+        expandArrows.forEach(a => {
+            a.classList.remove("current");
+        });
+
+        if(this.expanded){
+            const offset = this.expandableDiv.offsetHeight - expandBtn.offsetHeight;
+            console.log(offset)
+            this.expandableDiv.style.transform = `translateY(${offset})`;
+
+            expandArrows[1]!.classList.add("current");
+        } else {
+            this.expandableDiv.style.transform = `translateY(0px)`;
+            expandArrows[0]!.classList.add("current");
+        }
+        this.expanded = !this.expanded;
     }
 
 }

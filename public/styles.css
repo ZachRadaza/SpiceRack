@@ -199,6 +199,10 @@ button:hover{
     transform: translateY(-2px);
 }
 
+dialog:not([open]){
+    display: none;
+}
+
 /* Meal-time backgrounds (whole card tint) */
 .recipe-card.breakfast { background: var(--mt-breakfast); }
 .recipe-card.lunch     { background: var(--mt-lunch); }

@@ -29,7 +29,7 @@ export class SignUpDialog extends HTMLDialogElement{
 
     private initializeHTMLElements(){
         const submit = this.querySelector<HTMLButtonElement>("#dlg-submit");
-        const close = this.querySelector<HTMLButtonElement>("#dlg-close")
+        const close = this.querySelector<HTMLButtonElement>("#dlg-close");
 
         if(!submit || !close){
             throw new Error("#dlg-submit not found in sign-up.html");
@@ -121,4 +121,4 @@ export class SignUpDialog extends HTMLDialogElement{
         }
     }
 }
-customElements.define("sign-up-dialog", SignUpDialog, { extends: 'dialog'});
+customElements.define('sign-up-dialog', SignUpDialog, { extends: 'dialog' });

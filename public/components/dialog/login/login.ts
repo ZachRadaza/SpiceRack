@@ -28,12 +28,14 @@ export class LoginDialog extends HTMLDialogElement{
 
     private initializeHTMLElements(){
         const submit = this.querySelector<HTMLButtonElement>("#dlg-submit");
+        const close = this.querySelector<HTMLButtonElement>("#dlg-close");
 
-        if(!submit){
-            throw new Error("#dlg-submit not found in login.html");
+        if(!submit || !close){
+            throw new Error("#dlg-submit or #dlg-close not found in login.html");
         }
 
         submit.addEventListener("click", () => this.loginAccount());
+        close.addEventListener("click", () => this.close());
     }
 
     private async loginAccount(){
@@ -69,4 +71,4 @@ export class LoginDialog extends HTMLDialogElement{
         return valid;
     }
 }
-customElements.define("login-dialog", LoginDialog, { extends: 'dialog' });
+customElements.define('login-dialog', LoginDialog, { extends: 'dialog' });

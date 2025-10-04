@@ -1,0 +1,91 @@
+dialog{
+    width: 500px;
+    min-width: 250px;
+    height: fit-content;
+    border: 4px solid var(--accent);
+    border-radius: 64px;
+    background-color: var(--background);
+    padding: 0px;
+    overflow: hidden;
+}
+
+#dlg-main{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin: 20px 50px;
+    align-items: center;
+    justify-content: left;
+}
+
+#dlg-login{
+    color: var(--accent);
+    font-family: var(--font-heading);
+    font-size: xx-large;
+    font-weight: 700;
+}
+
+#dlg-main div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: var(--background);
+    border-radius: 16px;
+    padding: 10px;
+    transition: scale 200ms ease, background 200ms ease;
+}
+#dlg-main div:hover{
+    scale: 1.05;
+    background-color: var(--tan);
+}
+
+#dlg-main div h4{
+    all: unset;
+    font-family: var(--font-heading);
+    font-size: large;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--accent);
+}
+
+#dlg-main div input{
+    all: unset;
+    width: 350px;
+    border: 2px solid var(--accent);
+    border-radius: 16px;
+    background-color: var(--background);
+    font-style: var(--font-body);
+    font-weight: 600;
+    font-size: medium;
+    line-height: 1.2;
+    padding: 5px 5px 5px 15px;
+}
+
+#dlg-top{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+#dlg-close{
+    all: unset;
+    place-items: center;
+    background: var(--close-bg);
+    color: var(--close-x);
+    cursor: pointer;
+    text-align: center;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    font-size: 18px;
+    transition: transform .12s ease, background-color .2s ease;
+}
+#dlg-close:hover{
+    background-color: var(--close-hover);
+    transform: scale(1.05);
+}
+
+#dlg-submit{
+    font-size: large;
+}
