@@ -43,9 +43,10 @@ export class Home extends HTMLElement{
         const login = this.shadow.getElementById("login-btn") as HTMLButtonElement;
         const expand = this.shadow.getElementById("expand-hero-btn") as HTMLButtonElement;
         const expandable = this.shadow.getElementById("hero-expandable") as HTMLDivElement;
+        const expandP = this.shadow.querySelector<HTMLDivElement>("#hero-expandable div");
 
-        if(!popRec || !signUp || !login || !expand || !expandable){
-            throw new Error("#popular-recipes, #signup-btn, #login-btn, #expand-hero-btn, #hero-expandable not found in home.html");
+        if(!popRec || !signUp || !login || !expand || !expandable || !expandP){
+            throw new Error("#popular-recipes, #signup-btn, #login-btn, #expand-hero-btn, #hero-expandable, #hero-expandable div not found in home.html");
         }
 
         this.popularRecipesDiv = popRec;
@@ -53,10 +54,10 @@ export class Home extends HTMLElement{
 
         signUp.addEventListener("click", () => this.openSignUp());
         login.addEventListener("click", () => this.openLogin());
-        expand.addEventListener("click", () => this.expandHero(expand));
+        expand.addEventListener("click", () => this.expandHero(expand, expandP));
 
         const offset = this.expandableDiv.offsetHeight - expand.offsetHeight;
-        this.expandableDiv.style.transform = `translateY(${offset})`;
+        this.expandableDiv.style.transform = `translateY(${offset}px)`;
     }
 
     private async pullPopularRecipesBackend(){
@@ -197,7 +198,7 @@ export class Home extends HTMLElement{
         dialog.showModal();
     }
 
-    private expandHero(expandBtn: HTMLButtonElement){
+    private expandHero(expandBtn: HTMLButtonElement, expandP: HTMLDivElement){
         const expandArrows = Array.from(expandBtn.children);
 
         expandArrows.forEach(a => {
@@ -206,13 +207,13 @@ export class Home extends HTMLElement{
 
         if(this.expanded){
             const offset = this.expandableDiv.offsetHeight - expandBtn.offsetHeight;
-            console.log(offset)
-            this.expandableDiv.style.transform = `translateY(${offset})`;
-
-            expandArrows[1]!.classList.add("current");
+            this.expandableDiv.style.transform = `translateY(${offset}px)`;
+            expandArrows[0]!.classList.add("current");
+            expandP.classList.remove("current");
         } else {
             this.expandableDiv.style.transform = `translateY(0px)`;
-            expandArrows[0]!.classList.add("current");
+            expandArrows[1]!.classList.add("current");
+            expandP.classList.add("current");
         }
         this.expanded = !this.expanded;
     }

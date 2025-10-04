@@ -1,6 +1,6 @@
 main{
     display: block;
-    gap: 20px
+    gap: 20px;
 }
 
 #hero-section{
@@ -54,10 +54,11 @@ main{
 .hero-image-description ul,
 .hero-image-description p{
     color: var(--background);
-    margin: 2px;
+    margin: 5px;
 }
 .hero-image-description h2{
     justify-self: center;
+    text-align: center;
     font-size: xx-large;
     font-weight: 800;
     line-height: 1.2;
@@ -86,7 +87,7 @@ main{
     gap: 15px;
     align-items: center;
     width: 100%;
-    overflow-y: hidden;
+    overflow: hidden;
     transition: transform 400ms ease;
 }
 .hero-section-area #hero-expandable button{
@@ -97,16 +98,23 @@ main{
     justify-items: center;
     align-items: center;
     width: 100%;
+    transition: scale 200ms ease;
+}
+.hero-section-area #hero-expandable button:hover{
+    scale: 1.05;
 }
 .hero-section-area #hero-expandable button svg{
     grid-area:  1 / 1;
-    stroke: var(--accent);
-    width: autp;
+    stroke: var(--tan);
+    width: auto;
     height: 80px;
     opacity: 0;
-    transition: 400ms opacity;
+    transition: 400ms opacity ease, stroke 200ms ease;
 }
-.hero-section-area #hero-expandable button svg.current{
+.hero-section-area #hero-expandable button:hover svg{
+    stroke: var(--accent);
+}
+.hero-section-area #hero-expandable .current{
     opacity: 1;
 }
 
@@ -115,6 +123,8 @@ main{
     justify-self: left;
     justify-items: left;
     align-items: center;
+    opacity: 0;
+    transition: 400ms opacity ease;
 }
 
 .hero-section-area #hero-expandable div p{
@@ -270,6 +280,10 @@ main{
     padding: 40px;
     color: var(--tan);
     background-color: var(--accent);
+    transition: color 400ms ease;
+}
+#popular-section:hover h3{
+    color: var(--background);
 }
 
 #popular-recipes{
@@ -338,6 +352,10 @@ main{
     max-width: 100%;
     fill: var(--tan);
     justify-self: center;
+    transition: fill 400ms ease;
+}
+#action-section button:hover div svg{
+    fill: var(--background);
 }
 #action-section button div h2{
     color: var(--background);
@@ -347,16 +365,60 @@ main{
 }
 #action-section button div p{
     color: var(--tan);
+    transition: color 400ms ease;
+}
+#action-section button:hover div p{
+    color: var(--background);
 }
 
 footer{
     background-color: var(--accent);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
     justify-items: center;
     align-items: center;
+    padding: 40px;
 }
 
 footer h2{
     color: var(--tan);
-    font-size: xx-large;
-    font-weight: 800;
+    font-size: x-large;
+    font-weight: 700;
+    width: 100%;
+    text-align: center;
+    justify-self: center;
+    align-self: center;
+}
+
+footer div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+
+footer div .social-media{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+    align-items: center;
+}
+footer div .social-media a{
+    transition: scale 200ms ease;
+}
+footer div .social-media a:hover{
+    scale: 1.05;
+}
+footer div .social-media a svg{
+    fill: var(--tan);
+    height: 128px;
+    width: auto;
+    transition: fill 400ms ease;
+}
+footer div .social-media a:hover svg{
+    fill: var(--background);
 }
