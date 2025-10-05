@@ -214,6 +214,7 @@ main{
     overflow: hidden;
     width: auto;
     height: 100%;
+    justify-self: right;
 }
 
 .about-cont-2{

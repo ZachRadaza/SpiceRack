@@ -18,7 +18,7 @@ app.use("/api", router);
 
 // Fallback only for non-file GETs (no dot) – avoids path-to-regexp "*"
 app.use((req, res, next) => {
-    if (req.method === "GET" && !req.path.includes(".")) {
+    if(req.method === "GET" && !req.path.includes(".")) {
             console.log("FALLBACK -> index.html for:", req.path);
             return res.sendFile(path.join(clientDir, "index.html"));
     }

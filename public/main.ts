@@ -18,6 +18,8 @@ const pageTitles: Record<Pages, string> = {
     [Pages.myRecipes]: "SpiceRack - My Recipes"
 };
 
+checkUrl();
+
 export function setCurrentPage(p: Pages){
     currentPage = p;
     document.title = pageTitles[p];
@@ -30,6 +32,17 @@ function updatePage(): void{
     const element = document.createElement(currentPage);
     pageDiv?.appendChild(element);
     
+    history.replaceState({}, "", `/${currentPage}`);
+}
+
+function checkUrl(){
+    const pathUrl = location.pathname.substring(1 , location.pathname.length);
+
+    if(pathUrl === Pages.explore || pathUrl === Pages.home || pathUrl === Pages.myRecipes){
+        setCurrentPage(pathUrl);
+    } else {
+        setCurrentPage(Pages.home);
+    }
 }
 
 export enum MealTime {
