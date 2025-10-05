@@ -1,43 +1,62 @@
 #sidebar-cont {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 2px;
+    background-color: var(--text);
     height: 100%;
     width: 100%;
-    background-color: var(--accent);
-    border-right: 2px solid var(--text);
+    opacity: 0;
+    transition: opacity 200ms ease;
+}
+#sidebar-cont:hover{
+    opacity: 1;
 }
 
-/* Base button style */
 .sidebar-btn {
-    flex: 1;
+    all: unset;
     width: 100%;
-    border: none;
-    border-bottom: 1px solid var(--text);
-    background-color: transparent;
-    font-family: var(--font-heading);
-    font-size: 1rem;
-    color: var(--background);
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.15s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
+    background-color: var(--accent);
 }
-
-/* Remove double border on last button */
-.sidebar-btn:last-child {
-    border-bottom: none; 
-}
-
-/* Hover effect: subtle bg + scale */
 .sidebar-btn:hover {
-    background-color: rgba(0, 0, 0, 0.15);
-    transform: scale(1.02);
+    transform: translateY(0px);
 }
 
-/* Active/selected state */
-.sidebar-btn.active {
-    background-color: var(--tan);
-    color: var(--accent);
-    font-weight: 600;
+.sidebar-btn h1, .sidebar-btn span{
+    grid-area: 1 / 1;
+    text-align: center;
+}
+
+.sidebar-btn h1{
+    text-align: center;
+    color: var(--background);
+    font-weight: 700;
+    z-index: 2;
+    font-size: large;
+    transition: font-size 400ms ease, font-weight 400ms ease;
+}
+.sidebar-btn:hover h1{
+    font-size: x-large;
+    font-weight: 900;
+}
+
+.sidebar-btn span{
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: clamp(2rem, 4.5vw, 6rem);
+    line-height: 0.8;
+    width: 100%;
+    height: 100%;
+    color: var(--tan);
+    opacity: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 400ms ease;
+}
+.sidebar-btn:hover span{
+    opacity: 1;
 }

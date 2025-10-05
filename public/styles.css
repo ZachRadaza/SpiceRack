@@ -62,18 +62,14 @@ body {
 sidebar-component{
     height: 100vh;
     background-color: var(--accent);
-    border-right: 2px solid var(--text);
+    border-right: 4px solid var(--text);
     min-width: 48px;
     width: 48px;
     transition: width 220ms ease;
 }
 
-sidebar-component.expanded {
+sidebar-component:hover {
     width: 220px; 
-}
-
-sidebar-component.condensed {
-    width: 48px; 
 }
 
 .main{
@@ -174,7 +170,6 @@ sidebar-component.condensed {
 
 /* Main Page Containter */
 #page-cont{
-    padding: 30px;
     overflow-x: hidden;
     overflow-y: auto;
     min-width: 0;
@@ -199,9 +194,31 @@ button:hover{
     transform: translateY(-2px);
 }
 
+dialog{
+    opacity: 0;
+    border: 4px solid var(--accent);
+    border-radius: 64px;
+    background-color: var(--background);
+    padding: 0px;
+    overflow: hidden;
+    transition: opacity 1000ms ease-out, display 400ms allow-discrete;
+}
+
+dialog[open]{
+    opacity: 1;
+}
+
 dialog:not([open]){
     display: none;
 }
+
+
+@starting-style {
+    dialog[open] {
+        opacity: 0;
+    }
+}
+
 
 /* Meal-time backgrounds (whole card tint) */
 .recipe-card.breakfast { background: var(--mt-breakfast); }

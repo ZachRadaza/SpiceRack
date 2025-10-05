@@ -36,10 +36,11 @@ function updatePage(): void{
 }
 
 function checkUrl(){
-    const pathUrl = location.pathname.substring(1 , location.pathname.length);
+    const pathUrls: string[] = Object.values(Pages);
+    const currentUrl = location.pathname.substring(1 , location.pathname.length);
 
-    if(pathUrl === Pages.explore || pathUrl === Pages.home || pathUrl === Pages.myRecipes){
-        setCurrentPage(pathUrl);
+    if(pathUrls.includes(currentUrl)){
+        setCurrentPage(currentUrl as Pages);
     } else {
         setCurrentPage(Pages.home);
     }
