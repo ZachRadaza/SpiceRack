@@ -4,9 +4,10 @@ interface SignUpFields {
     password: string
 }
 
-export class SignUpDialog extends HTMLDialogElement{
+export class SignUpDialog extends HTMLElement{
 
     private initialized: boolean = false;
+    private dialog!: HTMLDialogElement;
 
     async connectedCallback(){
         if(this.initialized) return;
@@ -30,13 +31,16 @@ export class SignUpDialog extends HTMLDialogElement{
     private initializeHTMLElements(){
         const submit = this.querySelector<HTMLButtonElement>("#dlg-submit");
         const close = this.querySelector<HTMLButtonElement>("#dlg-close");
+        const dialog = this.querySelector<HTMLDialogElement>("dialog");
 
-        if(!submit || !close){
-            throw new Error("#dlg-submit not found in sign-up.html");
+        if(!submit || !close || !dialog){
+            throw new Error("#dlg-submit, #dlg-close, dialog not found in sign-up.html");
         }
 
         submit.addEventListener("click", () => this.createAccount());
         close.addEventListener("click", () => this.close());
+
+        this.dialog = dialog;
     }
 
     private async createAccount(){
@@ -120,5 +124,15 @@ export class SignUpDialog extends HTMLDialogElement{
             return valid;
         }
     }
+
+    public close(){
+        this.dialog.close();
+    }
+
+    public async showModal(){
+        if(!this.initialized) await this.connectedCallback();
+
+        this.dialog.showModal();
+    }
 }
-customElements.define('sign-up-dialog', SignUpDialog, { extends: 'dialog' });
+customElements.define('sign-up-dialog', SignUpDialog);

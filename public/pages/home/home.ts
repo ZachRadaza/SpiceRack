@@ -2,6 +2,8 @@ import { RecipeFields, Recipe } from "../../components/recipe/recipe-mini/recipe
 import { BackendExtensionService } from "../../backend-extension-service.js";
 import "../../components/dialog/login/login.js";
 import "../../components/dialog/sign-up/sign-up.js";
+import { LoginDialog } from "../../components/dialog/login/login.js";
+import { SignUpDialog } from "../../components/dialog/sign-up/sign-up.js";
 
 export class Home extends HTMLElement{
 
@@ -185,14 +187,14 @@ export class Home extends HTMLElement{
     }
 
     private openSignUp(){
-        const dialog = document.createElement('dialog', { is:'sign-up-dialog' }) as HTMLDialogElement;
+        const dialog = document.createElement('sign-up-dialog') as SignUpDialog;
 
         document.body.appendChild(dialog);
         dialog.showModal();
     }
 
     private openLogin(){
-        const dialog = document.createElement('dialog', { is:'login-dialog' }) as HTMLDialogElement;
+        const dialog = document.createElement('login-dialog') as LoginDialog;
 
         document.body.appendChild(dialog);
         dialog.showModal();

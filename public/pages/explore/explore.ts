@@ -56,7 +56,7 @@ export class Explore extends HTMLElement{
     }
 
     private initializeSearchArea(areaCont: HTMLDivElement){
-        const widthRecipe = 350;
+        const widthRecipe = 350 + 30; //30 for safer spacing
         this.numberOfColumns = Math.floor(areaCont.offsetWidth / widthRecipe);
 
         for(let i = 0; i < this.numberOfColumns; i++){

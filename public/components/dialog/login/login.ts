@@ -3,9 +3,10 @@ interface LoginFields{
     password: string
 }
 
-export class LoginDialog extends HTMLDialogElement{
+export class LoginDialog extends HTMLElement{
 
     private initialized: boolean = false;
+    private dialog!: HTMLDialogElement;
 
     async connectedCallback(){
         if(this.initialized) return;
@@ -29,13 +30,16 @@ export class LoginDialog extends HTMLDialogElement{
     private initializeHTMLElements(){
         const submit = this.querySelector<HTMLButtonElement>("#dlg-submit");
         const close = this.querySelector<HTMLButtonElement>("#dlg-close");
+        const dialog = this.querySelector('dialog');
 
-        if(!submit || !close){
-            throw new Error("#dlg-submit or #dlg-close not found in login.html");
+        if(!submit || !close || !dialog){
+            throw new Error("#dlg-submit, #dlg-close, or dialog not found in login.html");
         }
 
         submit.addEventListener("click", () => this.loginAccount());
         close.addEventListener("click", () => this.close());
+
+        this.dialog = dialog;
     }
 
     private async loginAccount(){
@@ -70,5 +74,15 @@ export class LoginDialog extends HTMLDialogElement{
 
         return valid;
     }
+
+    public close(){
+        this.dialog.close();
+    }
+
+    public async showModal(){
+        if(!this.initialized) await this.connectedCallback();
+
+        this.dialog.showModal();
+    }
 }
-customElements.define('login-dialog', LoginDialog, { extends: 'dialog' });
+customElements.define('login-dialog', LoginDialog);

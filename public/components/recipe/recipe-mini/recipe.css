@@ -8,24 +8,23 @@
     display: grid;
     grid-template-columns: 10px 1fr 10px; /* edge | main | edge */
     width: 350px;
-    height: 620px;
+    height: auto;
     min-height: 400px;
+    max-height: var(--random-height);
 
     background: var(--card);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     overflow: hidden;
 
-    transition: scale 200ms ease-out, transform 200ms ease;
+    transition: scale 200ms ease-out, transform 200ms ease, max-height 600ms ease;
 }
 #recipe-cont:hover{
     scale: 1.05;
     z-index: 100;
 }
 
-
-/* optional compact state */
-#recipe-cont.extended { height: fit-content; }
+#recipe-cont.extended{ max-height: 2000px; }
 
 /* ===== Main column ===== */
 #recipe-cont > main{

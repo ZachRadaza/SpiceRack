@@ -8,6 +8,7 @@
     margin: 20px 50px;
     align-items: center;
     justify-content: left;
+    overflow-y: auto;
 }
 
 #dlg-login{

@@ -103,7 +103,7 @@ export class MyRecipes extends HTMLElement{
 
     //button methods
     private openEmptyRecipeDialog(): void{
-        const dlg = document.createElement("dialog", {is: "recipe-dialog"}) as HTMLDialogElement;
+        const dlg = document.createElement("recipe-dialog") as RecipeDialog;
         (dlg as any).myRecipes = this;
         document.body.appendChild(dlg);
         dlg.showModal();

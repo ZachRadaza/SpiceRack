@@ -1,42 +1,44 @@
-<div class="dlg-cont">
-    <div class="edge food"></div>
-    <div id="dlg-main">
-        <div class="top-column section">
-            <input type="checkbox" id="dlg-bookmark">
-            <button type="button" id="dlg-close" class="danger-btn">x</button>
-        </div>
-        <div class="upper-half section">
-            <div id="dlg-image-cont">
-                <input type="file" accept="image/*">
-                <img alt="Recipe Image">
+<dialog>
+    <div class="dlg-cont">
+        <div class="edge food"></div>
+        <div id="dlg-main">
+            <div class="top-column section">
+                <input type="checkbox" id="dlg-bookmark">
+                <button type="button" id="dlg-close" class="danger-btn">x</button>
             </div>
-            <div class="name-cont">
-                <textarea id="dlg-name" class="lunch" type="text" placeholder="Recipe Name"></textarea>
-                <div class="btn-cont">
-                    <button id="dlg-meal-time" class="lunch" type="button"></button>
-                    <button id="dlg-meal-type" class="food" type="button"></button>
+            <div class="upper-half section">
+                <div id="dlg-image-cont">
+                    <input type="file" accept="image/*">
+                    <img alt="Recipe Image">
+                </div>
+                <div class="name-cont">
+                    <textarea id="dlg-name" class="lunch" type="text" placeholder="Recipe Name"></textarea>
+                    <div class="btn-cont">
+                        <button id="dlg-meal-time" class="lunch" type="button"></button>
+                        <button id="dlg-meal-type" class="food" type="button"></button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="lower-half section">
-            <div class="ingredients content">
-                <h3>Ingredients:</h3>
-                <ul id="dlg-ingredients">
-                    <li><button type="button">+</button></li>
-                </ul>
+            <div class="lower-half section">
+                <div class="ingredients content">
+                    <h3>Ingredients:</h3>
+                    <ul id="dlg-ingredients">
+                        <li><button type="button">+</button></li>
+                    </ul>
+                </div>
+                <div class="procedures content">
+                    <h3>Procedures:</h3>
+                    <ol id="dlg-procedures">
+                        <li><button type="button">+</button></li>
+                    </ol>
+                </div>
             </div>
-            <div class="procedures content">
-                <h3>Procedures:</h3>
-                <ol id="dlg-procedures">
-                    <li><button type="button">+</button></li>
-                </ol>
+            <div class="footer section">
+                <button type="button" id="dlg-delete" class="danger-btn">Delete</button>
+                <button type="button" id="dlg-save">Save</button>
+                <span id="dlg-creator"></span>
             </div>
         </div>
-        <div class="footer section">
-            <button type="button" id="dlg-delete" class="danger-btn">Delete</button>
-            <button type="button" id="dlg-save">Save</button>
-            <span id="dlg-creator"></span>
-        </div>
+        <div class="edge food"></div>
     </div>
-    <div class="edge food"></div>
-</div>
+</dialog>

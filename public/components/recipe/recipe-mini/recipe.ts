@@ -215,7 +215,7 @@ export class Recipe extends HTMLElement{
         });
 
         elements[Elements.eImage]!.setAttribute('src', this._imageLink);
-        if(!this._imageLink)    elements[Elements.eImage]!.parentElement?.remove;
+        if(!this._imageLink) elements[Elements.eImage]!.remove();
 
         elements[Elements.eCreator]!.textContent = this._accountName + "'s Recipe";
 
@@ -251,8 +251,23 @@ export class Recipe extends HTMLElement{
         mainContDiv.classList.add(this.recipeCategories.mealTime);
         footer.classList.add(this.recipeCategories.mealTime);
 
+        let mainHeight = 620;
         if(this._mini) {
-            mainContDiv.classList.add("extended");
+            mainHeight = getHeight(400, 620);
+            mainContDiv.addEventListener("click", () => {
+                if(mainContDiv.classList.contains('extended'))
+                    mainContDiv.classList.remove('extended');
+                else
+                    mainContDiv.classList.add('extended');
+            });
+        }
+
+        mainContDiv.style.setProperty('--random-height', `${mainHeight}px`);
+
+        function getHeight(min: number, max: number): number {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
         }
     }
 
@@ -283,7 +298,7 @@ export class Recipe extends HTMLElement{
     }
 
     private openRecipeDialog(){
-        const dialog = document.createElement("dialog", {is: "recipe-dialog"}) as HTMLDialogElement;
+        const dialog = document.createElement("recipe-dialog") as RecipeDialog;
         (dialog as any).setAllFields({
             id: this._id,
             name: this._name,

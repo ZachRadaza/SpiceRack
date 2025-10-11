@@ -3,7 +3,7 @@ import { MyRecipes } from "../../../pages/my-recipes/my-recipes.js";
 import { Recipe, RecipeFields } from "../recipe-mini/recipe.js";
 import { BackendExtensionService } from "../../../backend-extension-service.js";
 
-export class RecipeDialog extends HTMLDialogElement{
+export class RecipeDialog extends HTMLElement{
 
     private _id!: number;
     private _name: string = "";
@@ -29,6 +29,7 @@ export class RecipeDialog extends HTMLDialogElement{
     private ingredientsList!: HTMLUListElement;
     private imageImg!: HTMLImageElement;
     private imageInput!: HTMLInputElement;
+    private dialog!: HTMLDialogElement;
 
     private extensionService: BackendExtensionService = new BackendExtensionService();
 
@@ -66,9 +67,10 @@ export class RecipeDialog extends HTMLDialogElement{
         const deleteBtn = this.querySelector<HTMLButtonElement>("#dlg-delete");
         const saveBtn = this.querySelector<HTMLButtonElement>("#dlg-save");
         const closeBtn = this.querySelector<HTMLButtonElement>("#dlg-close");
+        const dialog = this.querySelector<HTMLDialogElement>('dialog');
 
-        if(!timeBtn || !typeBtn || !bmInput || !nameInput || !procedureList || !ingredientsList || !imageImg || !imageInput){
-            throw new Error("#dlg-meal-time, #dlg-meal-type, #dlg-name, #dlg-procedures, #dlg-ingredients, and #dlg-image-cont img/input not found in recipe-dialog");
+        if(!timeBtn || !typeBtn || !bmInput || !nameInput || !procedureList || !ingredientsList || !imageImg || !imageInput || !dialog){
+            throw new Error("dialog, #dlg-meal-time, #dlg-meal-type, #dlg-name, #dlg-procedures, #dlg-ingredients, and #dlg-image-cont img/input not found in recipe-dialog");
         }
 
         this.nameInput = nameInput;
@@ -80,6 +82,7 @@ export class RecipeDialog extends HTMLDialogElement{
         this.mealTimeBtn = timeBtn;
         this.mealTypeBtn = typeBtn;
         this.bmInput = bmInput;
+        this.dialog = dialog;
 
         const mTime = Object.values(MealTime);
         const mType = Object.values(MealType);
@@ -207,7 +210,6 @@ export class RecipeDialog extends HTMLDialogElement{
         this.mealTypeBtn.textContent = this.recipeCategories.mealType.toUpperCase();
         this.mealTypeBtn.classList.remove("food");
         edges.forEach(e => {
-            console.log(e);
             e.classList.remove("food");
             e.classList.add(this.recipeCategories.mealType);
         });
@@ -495,5 +497,15 @@ export class RecipeDialog extends HTMLDialogElement{
         };
         reader.readAsDataURL(file);
     }
+
+    public close(){
+        this.dialog.close();
+    }
+
+    public async showModal(){
+        if(!this.initialized) await this.connectedCallback();
+
+        this.dialog.showModal();
+    }
 }
-customElements.define('recipe-dialog', RecipeDialog, { extends: 'dialog' });
+customElements.define('recipe-dialog', RecipeDialog);
