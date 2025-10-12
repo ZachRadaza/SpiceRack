@@ -5,7 +5,7 @@
   "scripts": {
     "postinstall": "prisma generate",
     "dev": "nodemon --watch src --exec ts-node -P tsconfig.server.json dist/server/index.js",
-    "build": "npm run build:server && npm run build:client && npm run copy:public && npm run postinstall",
+    "build": "npm run build:server && npm run build:client && npm run copy:public",
     "build:server": "tsc -p tsconfig.server.json",
     "build:client": "tsc -p tsconfig.client.json",
     "copy:public": "cpy \"public/**/*\" \"!public/**/*.ts\" \"!public/**/*.tsx\" \"!public/**/*.map\" dist/client --parents",

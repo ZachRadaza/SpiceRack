@@ -1,11 +1,12 @@
 import { Recipe, MealTime, MealType } from "./recipe";
 import { prisma } from "../../db/prisma";
+import { Prisma } from "@prisma/client";
 
-export async function returnFilteredRecipes(params: { q?: string }){
-    const { q } = params;
+export async function returnFilteredRecipes(params: { q?: string, skip?: number, take?: number }){
+    const { q, skip = 0, take = 10 } = params;
 
-    const where = q
-        ? { name: { contains: q, mode: "insensitive" } }
+    const where: Prisma.RecipeWhereInput = q
+        ? { name: { contains: q, mode: Prisma.QueryMode.insensitive } }
         : {};
 
     const [data, total] = await Promise.all([
@@ -19,7 +20,7 @@ export async function returnFilteredRecipes(params: { q?: string }){
     return [data, total];
 }
 
-export function getRecipeById(id: number){
+export function getRecipeById(id: string){
     return prisma.recipe.findUnique({ where: { id }});
 }
 
@@ -42,14 +43,14 @@ export function createRecipe(recipe: Omit<Recipe, "id">){
     });
 }
 
-export function replaceRecipe(id: number, recipeNew: Recipe){
+export function replaceRecipe(id: string, recipeNew: Recipe){
     return prisma.recipe.update({
         where: { id },
         data: recipeNew
     });
 }
 
-export function deleteRecipe(id: number){
+export function deleteRecipe(id: string){
     return prisma.recipe.delete({
         where: { id }
     });

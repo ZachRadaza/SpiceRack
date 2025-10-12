@@ -166,7 +166,7 @@ export class MyRecipes extends HTMLElement{
         this.update();
     }
 
-    async deleteRecipe(id: number){
+    async deleteRecipe(id: string){
         await this.extensionService.accountDeleteRecipe(id);
 
         this.pullRecipesFromBackEnd();

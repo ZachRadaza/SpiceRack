@@ -1,3 +1,6 @@
+// to start local backend: brew services start postgresql
+// to stop lcoal backend: brew services stop postgresql
+
 import express, { ErrorRequestHandler} from "express";
 import { Request, Response, NextFunction } from "express";
 import path from "path";

@@ -8,7 +8,7 @@ export async function getRecipes(req: Request, res: Response){
         const skip: number = req.query.skip !== undefined ? parseInt(req.query.skip as string) : 0;
         const take: number = req.query.take !== undefined ? parseInt(req.query.take as string) : 10;
 
-        let all = await RecipeService.returnFilteredRecipes({ q });
+        let all = await RecipeService.returnFilteredRecipes({ q, skip, take});
         const total = all.length;
         const items = all.slice(skip, skip + take);
 
@@ -68,9 +68,9 @@ export async function createNewRecipe(req: Request, res: Response){
     }
 }
 
-export async function getRecipe(req: Request, res: Response){
+export async function getRecipe(req: Request<{ id: string }>, res: Response){
     try{
-        let recipe = await RecipeService.getRecipeById(Number(req.params.id));
+        let recipe = await RecipeService.getRecipeById(req.params.id);
 
         if(recipe === null){
             res.status(404);
@@ -88,10 +88,10 @@ export async function getRecipe(req: Request, res: Response){
     }
 }
 
-export async function replaceRecipe(req: Request, res: Response){
+export async function replaceRecipe(req: Request<{ id: string }>, res: Response){
     try{
         const recipeNew: Recipe = {
-            id: Number(req.params.id),
+            id: req.params.id,
             name: req.body.name, 
             ingredients: req.body.ingredients, 
             procedures: req.body.procedures,
@@ -102,7 +102,7 @@ export async function replaceRecipe(req: Request, res: Response){
             mealType: req.body.mealType
         }
 
-        const recipeReplace = await RecipeService.replaceRecipe(Number(req.params.id), recipeNew);
+        const recipeReplace = await RecipeService.replaceRecipe(req.params.id, recipeNew);
 
         if(recipeReplace){
             res.status(200);
@@ -117,9 +117,9 @@ export async function replaceRecipe(req: Request, res: Response){
     }
 }
 
-export async function deleteRecipe(req: Request, res: Response){
+export async function deleteRecipe(req: Request<{ id: string }>, res: Response){
     try{
-        const deleted = await RecipeService.deleteRecipe(Number(req.params.id));
+        const deleted = await RecipeService.deleteRecipe(req.params.id);
 
         if(deleted){
             res.status(200);

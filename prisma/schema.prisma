@@ -7,15 +7,15 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Recipe {
-  id            Int    @id @default(autoincrement())
+  id            String   @id @default(cuid())
   name          String
-  ingredients   Json
-  procedures    Json
+  ingredients   String[]
+  procedures    String[]
   imageLink     String
   accountName   String
   mealTime      String

@@ -22,7 +22,7 @@ export class BackendExtensionService{
         return data.data as RecipeFields;
     }
 
-    async accountGetRecipe(id: number): Promise<RecipeFields>{
+    async accountGetRecipe(id: string): Promise<RecipeFields>{
         const res = await fetch(`/api/recipes/${id}`);
 
         if(!res.ok) throw new Error(`Error Retrieving Recipe: ${res.status}`);
@@ -43,7 +43,7 @@ export class BackendExtensionService{
         return res.json() as Promise<RecipeFields>;
     }
 
-    async accountDeleteRecipe(id: number): Promise<boolean>{
+    async accountDeleteRecipe(id: string): Promise<boolean>{
         const res = await fetch(`api/recipes/${id}`, { method: "DELETE" });
 
         if(!res.ok) throw new Error(`Error Deleting Recipe: ${res.status}`);

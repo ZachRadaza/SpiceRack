@@ -5,7 +5,7 @@ import { BackendExtensionService } from "../../../backend-extension-service.js";
 
 export class RecipeDialog extends HTMLElement{
 
-    private _id!: number;
+    private _id!: string;
     private _name: string = "";
     private _procedures: string[] = [""];
     private _ingredients: string[] = [""];
