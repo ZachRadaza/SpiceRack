@@ -5,6 +5,8 @@ import express, { ErrorRequestHandler} from "express";
 import { Request, Response, NextFunction } from "express";
 import path from "path";
 import router from "./api/router";
+import { attachUser } from "./lib/session";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = 3000;
@@ -15,6 +17,8 @@ console.log("STATIC DIR:", clientDir);
 app.use(express.static(clientDir));
 app.use(express.json());
 app.use(logger);
+app.use(cookieParser());
+app.use(attachUser);
 
 app.use("/api", router);
 

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Recipe } from "./recipe";
 import * as RecipeService from "./recipe.service";
 
-export async function getRecipes(req: Request, res: Response){
+export async function getRecipesHandler(req: Request, res: Response){
     try{
         const q: string = req.query.q !== undefined ? req.query.q as string : "";
         const skip: number = req.query.skip !== undefined ? parseInt(req.query.skip as string) : 0;
@@ -15,8 +15,7 @@ export async function getRecipes(req: Request, res: Response){
         const hasPrev = skip > 0;
         const hasNext = skip + take < total;
 
-        res.status(200);
-        res.json({
+        return res.status(200).json({
             data: items,
             meta: {
                 query: { q: q, skip: skip, take: take },
@@ -37,58 +36,49 @@ export async function getRecipes(req: Request, res: Response){
             }
         });
     } catch(error: unknown){
-        res.status(404);
-        res.json({
+        console.error("Error Fetching Recipes: " + error);
+        return res.status(404).json({
             error: error,
             message: "Invalid Request"
         });
     }
 }
 
-export async function createNewRecipe(req: Request, res: Response){
+export async function createNewRecipeHandler(req: Request, res: Response){
     try{
         const recipeNew = await RecipeService.createRecipe(req.body);
 
-        if(recipeNew === null){
-            res.status(400);
-            res.json({
-                message:"Invalid request when attempting to create recipe",
-                data: req.body
-            });
-        } else {
-            res.status(201),
-            res.json({
-                message:"Successfully created new recipe",
-                data: recipeNew
-            });
-        }
-    } catch( error: unknown){
-        res.status(400);
-        res.json(error);
+        res.status(201).json({
+            message: "Successfully created new recipe",
+            data: recipeNew
+        });
+    } catch(error: unknown){
+        console.error("Error Creating New Recipe: " + error);
+        res.status(400).json({
+            error: error,
+            message: "Invalid Request"
+        });
     }
 }
 
-export async function getRecipe(req: Request<{ id: string }>, res: Response){
+export async function getRecipeHandler(req: Request<{ id: string }>, res: Response){
     try{
         let recipe = await RecipeService.getRecipeById(req.params.id);
 
-        if(recipe === null){
-            res.status(404);
-            res.json({ error: "recipe id does not exist"});
-        } else {
-            res.status(200);
-            res.json({
-                message:"Successfully returned recipe",
-                data: recipe
-            });
-        }
+        res.status(200).json({
+            message: "Successfully returned recipe",
+            data: recipe
+        });
     } catch(error: unknown){
-        res.status(400);
-        res.json(error);
+        console.error("Error in fetching Recipe: " + error);
+        res.status(400).json({
+            error: error,
+            message: "Invalid Request"
+        });
     }
 }
 
-export async function replaceRecipe(req: Request<{ id: string }>, res: Response){
+export async function replaceRecipeHandler(req: Request<{ id: string }>, res: Response){
     try{
         const recipeNew: Recipe = {
             id: req.params.id,
@@ -104,32 +94,33 @@ export async function replaceRecipe(req: Request<{ id: string }>, res: Response)
 
         const recipeReplace = await RecipeService.replaceRecipe(req.params.id, recipeNew);
 
-        if(recipeReplace){
-            res.status(200);
-            res.json({ message:`recipe id: ${req.params.id} was updated`, data: recipeNew });
-        } else {
-            res.status(404);
-            res.json({ error:"recipe id does not exist"});
-        }
+        res.status(200).json({ 
+            message:`recipe id: ${req.params.id} was updated`, 
+            data: recipeNew
+        });
     } catch(error: unknown){
-        res.status(400);
-        res.json(error);
+        console.error("Error in Replacing Recipe: " + error);
+        res.status(400).json({
+            error: error,
+            message: "Invalid Request"
+        });
     }
 }
 
-export async function deleteRecipe(req: Request<{ id: string }>, res: Response){
+export async function deleteRecipeHandler(req: Request<{ id: string }>, res: Response){
     try{
         const deleted = await RecipeService.deleteRecipe(req.params.id);
 
-        if(deleted){
-            res.status(200);
-            res.json({ message:`recipe id: ${req.params.id} was deleted` });
-        } else {
-            res.status(404);
-            res.json({ error:"recipe id does not exist", id: req.params.id});
-        }
+        res.status(200);
+        res.json({ 
+            message:`recipe id: ${req.params.id} was deleted`,
+            data: deleted
+        });
     } catch(error: unknown){
-        res.status(400);
-        res.json(error);
+        console.error("Error in Deleting Recipe: " + error);
+        res.status(400).json({
+            error: error,
+            message: "Invalid Request"
+        });
     }
 }

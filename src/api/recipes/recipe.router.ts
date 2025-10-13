@@ -3,9 +3,9 @@ import * as RecipeController from "./recipe.controller";
 
 const recipeRouter = Router();
 
-recipeRouter.get("/", RecipeController.getRecipes);
-recipeRouter.post("/", RecipeController.createNewRecipe);
-recipeRouter.get("/:id", RecipeController.getRecipe);
-recipeRouter.put("/:id", RecipeController.replaceRecipe);
-recipeRouter.delete("/:id", RecipeController.deleteRecipe);
+recipeRouter.get("/", RecipeController.getRecipesHandler);
+recipeRouter.post("/", RecipeController.createNewRecipeHandler);
+recipeRouter.get("/:id", RecipeController.getRecipeHandler);
+recipeRouter.put("/:id", RecipeController.replaceRecipeHandler);
+recipeRouter.delete("/:id", RecipeController.deleteRecipeHandler);
 export default recipeRouter;
