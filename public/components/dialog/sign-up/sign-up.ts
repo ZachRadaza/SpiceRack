@@ -1,3 +1,5 @@
+import { BackendExtensionService } from "../../../backend-extension-service.js";
+
 interface SignUpFields {
     username: string,
     email: string,
@@ -8,6 +10,12 @@ export class SignUpDialog extends HTMLElement{
 
     private initialized: boolean = false;
     private dialog!: HTMLDialogElement;
+    private backendExtension: BackendExtensionService = new BackendExtensionService();
+
+    private responseP!: HTMLParagraphElement;
+    private userP!: HTMLParagraphElement;
+    private emailP!: HTMLParagraphElement;
+    private passwordP!: HTMLParagraphElement;
 
     async connectedCallback(){
         if(this.initialized) return;
@@ -33,14 +41,23 @@ export class SignUpDialog extends HTMLElement{
         const close = this.querySelector<HTMLButtonElement>("#dlg-close");
         const dialog = this.querySelector<HTMLDialogElement>("dialog");
 
-        if(!submit || !close || !dialog){
-            throw new Error("#dlg-submit, #dlg-close, dialog not found in sign-up.html");
+        const responseP = this.querySelector<HTMLParagraphElement>("#dlg-response");
+        const userP = this.querySelector<HTMLParagraphElement>("#dlg-username-response");
+        const emailP = this.querySelector<HTMLParagraphElement>("#dlg-email-response");
+        const passwordP = this.querySelector<HTMLParagraphElement>("#dlg-password-response");
+
+        if(!submit || !close || !dialog || !responseP || !userP || !emailP || !passwordP){
+            throw new Error("#dlg-submit, #dlg-close, dialog, #dlg-response, or response elements not found in sign-up.html");
         }
 
         submit.addEventListener("click", () => this.createAccount());
         close.addEventListener("click", () => this.close());
 
         this.dialog = dialog;
+        this.responseP = responseP;
+        this.userP = userP;
+        this.emailP = emailP;
+        this.passwordP = passwordP;
     }
 
     private async createAccount(){
@@ -49,8 +66,40 @@ export class SignUpDialog extends HTMLElement{
         const validInputs = await this.validateInputs(inputs);
 
         if(validInputs){
-            //call backend
+            const signUp = await this.backendExtension.signUpUser(inputs);
+            this.responseP.textContent = "";
+            this.responseP.className = "";
+
+            if(!signUp) {
+                this.responseP.textContent = "Server Error Has Occured";
+                this.responseP.classList.add("failure");
+            } else {
+                this.responseP.textContent = "Successfully Created an Account";
+                this.responseP.classList.add("success");
+
+                this.delay(1500);
+                await this.loginUser(inputs);
+            }
         } 
+    }
+
+    private async loginUser(cred: Omit<SignUpFields, "username">){
+        const login = await this.backendExtension.loginUser(cred);
+
+        if(login){
+            this.responseP.textContent = "Successfully Logged In";
+            this.responseP.style.color = "green";
+            await this.delay(1500);
+            this.close();
+        } else {
+            this.responseP.textContent = "Wrong Email or Password";
+            this.responseP.style.color = "var(--close-bg)";
+        }
+
+    }
+
+    private delay(ms: number){
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     private gatherInputs(): SignUpFields{
@@ -62,9 +111,9 @@ export class SignUpDialog extends HTMLElement{
             throw new Error("#dlg-username, #dlg-email, #dlg-password not found in sign-up.html");
         }
 
-        const username = usernameInput.value;
-        const email = emailInput.value;
-        const password = passwordInput.value;
+        const username = usernameInput.value.trim();
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
 
         return { username, email, password };
     }
@@ -72,46 +121,52 @@ export class SignUpDialog extends HTMLElement{
     private async validateInputs(inputs: SignUpFields): Promise<boolean>{
         let valid: boolean = true;
 
-        const userValid = await validateUsername(inputs.username);
-        const emailValid = await validateEmail(inputs.email);
+        this.userP.textContent = "";
+        this.emailP.textContent = "";
+        this.passwordP.textContent = "";
+
+        const userValid = await validateUsername(inputs.username, this.backendExtension);
+        const emailValid = await validateEmail(inputs.email, this.backendExtension);
         const passwordValid = await validatePassword(inputs.password);
 
         if(!userValid){
-            //add stuff to dialog
+            this.userP.textContent = "Username Already Taken";
 
             valid = false;
         }
 
         if(!emailValid){
-            //add stiff to dialog
+            this.emailP.textContent = "Email Already Taken";
 
             valid = false;
         }
 
         if(!passwordValid){
-            //add stuff to dialog
+            this.passwordP.textContent = "Password Must Be Atleast 8 Characters";
 
             valid = false;
         }
 
         return valid;
 
-        async function validateUsername(username: string): Promise<boolean>{
+        async function validateUsername(username: string, extension: BackendExtensionService): Promise<boolean>{
             let valid = true;
+            const forbidden = ["fuck", "shit", "bitch", "admin", "penis", "dick", "boob", "vagina"];
+            
+            valid = await extension.checkUsername(username);
 
-            //check syntax
-
-            //check backend if taken
+            for(let i = 0; i < forbidden.length; i++){
+                if(username.toLocaleLowerCase().includes(forbidden[i]!)){
+                    valid = false;
+                    break;
+                }
+            }
 
             return valid;
         }
 
-        async function validateEmail(email: string): Promise<boolean>{
-            let valid = true;
-
-            //check syntax
-
-            //check backend if taken
+        async function validateEmail(email: string, extension: BackendExtensionService): Promise<boolean>{
+            let valid = await extension.checkEmail(email);
 
             return valid;
         }
@@ -119,7 +174,7 @@ export class SignUpDialog extends HTMLElement{
         function validatePassword(password: string): boolean{
             let valid = true;
 
-            //check syntax
+            if(password.length < 8) valid = false;
 
             return valid;
         }

@@ -11,6 +11,8 @@ authRouter.get("/me", requireAuth, (req, res) => {
     return res.status(200).json(res.locals.user);
 });
 authRouter.get("/:id", AuthController.getUserHandler)
+authRouter.get("/:username", AuthController.checkUsernameHandler);
+authRouter.get("/:email", AuthController.checkEmailHandler)
 
 
 export default authRouter;

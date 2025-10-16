@@ -11,6 +11,7 @@ export class RecipeDialog extends HTMLElement{
     private _ingredients: string[] = [""];
     private _imageLink: string = "";
     private _accountName: string = "Developer";
+    private _ownerId: string = "";
     private recipeCategories: RecipeCategories = new RecipeCategories();
     private _recipe!: Recipe;
     private _myRecipe!: MyRecipes;
@@ -103,7 +104,8 @@ export class RecipeDialog extends HTMLElement{
         this._ingredients = fields.ingredients;
         this._procedures = fields.procedures;
         this._imageLink = fields.imageLink;
-        this._accountName = fields.accountName;
+        this._accountName = fields.accountName || "";
+        this._ownerId = fields.ownerId;
         this.recipeCategories.mealTime = fields.mealTime;
         this.recipeCategories.mealType = fields.mealType;
         this._bookmarked = fields.bookmarked;
@@ -141,6 +143,10 @@ export class RecipeDialog extends HTMLElement{
 
     public get accountName(){
         return this._accountName;
+    }
+
+    public get ownerId(){
+        return this._ownerId;
     }
 
     public get mealTime(){
@@ -339,6 +345,7 @@ export class RecipeDialog extends HTMLElement{
             procedures: this._procedures,
             imageLink: this._imageLink,
             accountName: this._accountName,
+            ownerId: this._ownerId,
             mealTime: this.recipeCategories.mealTime,
             mealType: this.recipeCategories.mealType,
             bookmarked: this._bookmarked,

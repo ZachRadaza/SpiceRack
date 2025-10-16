@@ -2,13 +2,13 @@ import { Request, Response } from "express";
 import { Recipe } from "./recipe";
 import * as RecipeService from "./recipe.service";
 
-export async function getRecipesHandler(req: Request, res: Response){
+export async function getAllRecipesHandler(req: Request, res: Response){
     try{
         const q: string = req.query.q !== undefined ? req.query.q as string : "";
         const skip: number = req.query.skip !== undefined ? parseInt(req.query.skip as string) : 0;
         const take: number = req.query.take !== undefined ? parseInt(req.query.take as string) : 10;
 
-        let all = await RecipeService.returnFilteredRecipes({ q, skip, take});
+        let all = await RecipeService.returnAllFilteredRecipes({ q, skip, take });
         const total = all.length;
         const items = all.slice(skip, skip + take);
 
@@ -46,6 +46,7 @@ export async function getRecipesHandler(req: Request, res: Response){
 
 export async function createNewRecipeHandler(req: Request, res: Response){
     try{
+        req.body.ownerId = res.locals.user.id;
         const recipeNew = await RecipeService.createRecipe(req.body);
 
         res.status(201).json({
@@ -86,10 +87,18 @@ export async function replaceRecipeHandler(req: Request<{ id: string }>, res: Re
             ingredients: req.body.ingredients, 
             procedures: req.body.procedures,
             imageLink: req.body.imageLink,
-            accountName: req.body.accountName,
+            ownerId: res.locals.user.id,
             bookmarked: req.body.bookmarked,
             mealTime: req.body.mealTime,
             mealType: req.body.mealType
+        }
+
+        const recipe = await RecipeService.getRecipeById(req.params.id);
+        if(recipe?.ownerId !== recipeNew.ownerId){
+            res.status(400).json({
+                message: "no proper autherization to edit recipe"
+            });
+            return;
         }
 
         const recipeReplace = await RecipeService.replaceRecipe(req.params.id, recipeNew);
@@ -109,10 +118,17 @@ export async function replaceRecipeHandler(req: Request<{ id: string }>, res: Re
 
 export async function deleteRecipeHandler(req: Request<{ id: string }>, res: Response){
     try{
+        const recipe = await RecipeService.getRecipeById(req.params.id);
+        if(recipe?.ownerId !== res.locals.user.id){
+            res.status(400).json({
+                message: "no proper autherization to edit recipe"
+            });
+            return;
+        }
+
         const deleted = await RecipeService.deleteRecipe(req.params.id);
 
-        res.status(200);
-        res.json({ 
+        res.status(200).json({ 
             message:`recipe id: ${req.params.id} was deleted`,
             data: deleted
         });

@@ -1,5 +1,7 @@
+import { BackendExtensionService } from "../../../backend-extension-service.js";
+
 interface LoginFields{
-    user: string,
+    email: string,
     password: string
 }
 
@@ -7,6 +9,9 @@ export class LoginDialog extends HTMLElement{
 
     private initialized: boolean = false;
     private dialog!: HTMLDialogElement;
+    private backendExension: BackendExtensionService = new BackendExtensionService();
+
+    private responseP!: HTMLParagraphElement;
 
     async connectedCallback(){
         if(this.initialized) return;
@@ -32,14 +37,17 @@ export class LoginDialog extends HTMLElement{
         const close = this.querySelector<HTMLButtonElement>("#dlg-close");
         const dialog = this.querySelector('dialog');
 
-        if(!submit || !close || !dialog){
-            throw new Error("#dlg-submit, #dlg-close, or dialog not found in login.html");
+        const responseP = this.querySelector<HTMLParagraphElement>("#dlg-response")
+
+        if(!submit || !close || !dialog || !responseP){
+            throw new Error("#dlg-submit, #dlg-close, #dlg-response, or dialog not found in login.html");
         }
 
         submit.addEventListener("click", () => this.loginAccount());
         close.addEventListener("click", () => this.close());
 
         this.dialog = dialog;
+        this.responseP = responseP;
     }
 
     private async loginAccount(){
@@ -47,30 +55,42 @@ export class LoginDialog extends HTMLElement{
 
         const valid = await this.validateInputs(inputs);
 
-        if(valid){
-            //sign them in
+        console.log(valid);
+
+        if(!valid){
+            this.responseP.textContent = "Wrong Email or Password";
+            this.responseP.style.color = "var(--close-bg)";
         } else {
-            //add message about sign up fail
+            this.responseP.textContent = "Successfully Logged In";
+            this.responseP.style.color = "green";
+            await delay(1500);
+            this.close();
+        }
+
+        function delay(ms: number){
+            return new Promise(resolve => setTimeout(resolve, ms));
         }
     }
 
     private gatherInputs(): LoginFields{
-        const userInput = this.querySelector<HTMLInputElement>("#dlg-user");
+        const emailInput = this.querySelector<HTMLInputElement>("#dlg-user");
         const passwordInput = this.querySelector<HTMLInputElement>("#dlg-password");
 
-        if(!userInput || !passwordInput)
+        if(!emailInput || !passwordInput)
             throw new Error("#dlg-user or #dlg-password is not found in login.html");
 
-        const user = userInput.value;
+        const email = emailInput.value;
         const password = passwordInput.value;
 
-        return { user, password };
+        return { email, password };
     }
 
     private async validateInputs(inputs: LoginFields): Promise<boolean>{
-        let valid = true;
+        let valid = false;
 
-        //check backend if it exists and correct
+        if(await this.backendExension.loginUser(inputs)){
+            valid = true;
+        }
 
         return valid;
     }

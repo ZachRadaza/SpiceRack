@@ -58,4 +58,60 @@ export class BackendExtensionService{
         const data = await res.json();
         return data.data;
     }
+
+    //auth
+    async loginUser(loginCred: { email: string, password: string }){
+        const res = await fetch(`/api/auth/login`, { 
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(loginCred)
+        });
+
+        let data;
+        if(res.ok)
+            data = await res.json();
+        else
+            data = false;
+
+        return data;
+    }
+
+    async signUpUser(signUpCred: { email: string, username: string, password: string }){
+        const res = await fetch(`/api/auth/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(signUpCred)
+        })
+
+        if(!res.ok) throw new Error(`Error in Signing in: ${res.status}`);
+        const data = await res.json();
+        return data;
+    }
+
+    async checkUsername(username: string){
+        const res = await fetch(`/api/auth/${username}`);
+
+        if(!res.ok) throw new Error(`Error Checking Usernames: ${res.status}`);
+
+        const data = await res.json();
+        return data;
+    }
+
+    async checkEmail(email: string){
+        const res = await fetch(`/api/auth/${email}`);
+
+        if(!res.ok) throw new Error(`Error Checking Emails: ${res.status}`);
+
+        const data = await res.json();
+        return data;
+    }
+
+    async getUser(id: string){
+        const res = await fetch(`/api/auth/${id}`);
+
+        if(!res.ok) throw new Error(`Error Fetching User: ${res.status}`);
+
+        const data = await res.json();
+        return data;
+    }
 }

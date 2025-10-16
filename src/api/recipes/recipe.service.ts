@@ -2,7 +2,7 @@ import { Recipe, MealTime, MealType } from "./recipe";
 import { prisma } from "../../db/prisma";
 import { Prisma } from "@prisma/client";
 
-export async function returnFilteredRecipes(params: { q?: string, skip?: number, take?: number }){
+export async function returnAllFilteredRecipes(params: { q?: string, skip?: number, take?: number }){
     const { q, skip = 0, take = 10 } = params;
 
     const where: Prisma.RecipeWhereInput = q
@@ -35,7 +35,7 @@ export function createRecipe(recipe: Omit<Recipe, "id">){
             ingredients: recipe.ingredients, 
             procedures: recipe.procedures,
             imageLink: recipe.imageLink,
-            accountName: recipe.accountName,
+            ownerId: recipe.ownerId,
             mealTime: recipe.mealTime,
             mealType: recipe.mealType,
             bookmarked: recipe.bookmarked

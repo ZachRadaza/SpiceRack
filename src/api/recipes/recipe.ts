@@ -4,7 +4,7 @@ export interface Recipe{
     ingredients: string[];
     procedures: string[];
     imageLink: string;
-    accountName: string;
+    ownerId: string;
     mealTime: MealTime;
     mealType: MealType;
     bookmarked: boolean;

@@ -4,8 +4,9 @@
     height: fit-content;
     display: flex;
     flex-direction: column;
-    gap: 40px;
-    margin: 20px 50px;
+    gap: 10px;
+    margin: 20px 30px;
+    padding-top: 10px;
     align-items: center;
     justify-content: left;
     overflow-y: auto;
@@ -54,12 +55,23 @@
     padding: 5px 5px 5px 15px;
 }
 
+#dlg-response{
+    all: unset;
+    font-family: var(--font-body);
+    justify-self: center;
+    align-self: center;
+    font-weight: 700;
+    margin: 0px;
+    padding: 0px;
+}
+
 #dlg-top-cred{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin-top: 20px;
     margin-right: 20px;
+    margin-bottom: -20px;
 }
 
 #dlg-close{

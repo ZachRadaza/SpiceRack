@@ -9,7 +9,8 @@ export interface RecipeFields {
     ingredients: string[];
     procedures: string[];
     imageLink: string;
-    accountName: string;
+    ownerId: string,
+    accountName?: string;
     mealTime: MealTime;
     mealType: MealType;
     mini: boolean;
@@ -26,6 +27,7 @@ export class Recipe extends HTMLElement{
     private _ingredients: string[] = [""];
     private _imageLink: string = "";
     private _accountName: string = "Mr.Recommended";
+    private _ownerId: string = "";
     private recipeCategories: RecipeCategories = new RecipeCategories();
     private _mini: boolean = false; //if mini short version or tall
     private _bookmarked: boolean = false;
@@ -122,7 +124,8 @@ export class Recipe extends HTMLElement{
         this._ingredients = fields.ingredients;
         this._procedures = fields.procedures;
         this._imageLink = fields.imageLink;
-        this._accountName = fields.accountName;
+        this._accountName = fields.accountName || "";
+        this._ownerId = fields.ownerId;
         this.recipeCategories.mealTime = fields.mealTime;
         this.recipeCategories.mealType = fields.mealType;
         this._mini = fields.mini;

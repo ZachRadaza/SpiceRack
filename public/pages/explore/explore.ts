@@ -82,13 +82,15 @@ export class Explore extends HTMLElement{
 
         for(let i = 0; i < listRecipes[0].length; i++) {
             const rec = document.createElement("recipe-mini") as Recipe;
+            const owner = await this.backendExtensionService.getUser(listRecipes[0][i]!.ownerId);
             rec.setAllFields({
                 id: listRecipes[0][i]!.id,
                 name: listRecipes[0][i]!.name,
                 ingredients: listRecipes[0][i]!.ingredients,
                 procedures: listRecipes[0][i]!.procedures,
                 imageLink: listRecipes[0][i]!.imageLink,
-                accountName: listRecipes[0][i]!.accountName,
+                accountName: owner.data.username,
+                ownerId: listRecipes[0][i]!.ownerId,
                 mealTime: listRecipes[0][i]!.mealTime,
                 mealType: listRecipes[0][i]!.mealType,
                 bookmarked: listRecipes[0][i]!.bookmarked,

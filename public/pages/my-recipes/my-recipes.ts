@@ -58,8 +58,10 @@ export class MyRecipes extends HTMLElement{
     async pullRecipesFromBackEnd(){
         this._recipeList.length = 0;
         const allRecipes = await this.extensionService.accountGetAllRecipes();
+        const owner = await this.extensionService.getUser(allRecipes[0][0]!.ownerId);
 
         allRecipes[0].forEach(rec => {
+            rec.accountName = owner.data.username;
             this.addRecipe(rec);
         });
 
@@ -80,7 +82,8 @@ export class MyRecipes extends HTMLElement{
             ingredients: r.ingredients,
             procedures: r.procedures,
             imageLink: r.imageLink,
-            accountName: r.accountName,
+            accountName: r.accountName || "",
+            ownerId: r.ownerId,
             mealTime: r.mealTime,
             mealType: r.mealType,
             bookmarked: r.bookmarked,

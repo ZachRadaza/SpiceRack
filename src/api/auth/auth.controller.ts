@@ -6,7 +6,7 @@ import { createSession, requireAuth, setSessionCookie } from "../../lib/session"
 
 export async function registerUserHandler(req: Request, res: Response){
     try{
-        const user = await AuthService.registerUser(req.body.user, req.body.password);
+        const user = await AuthService.registerUser(req.body);
 
         return res.status(201).json({
             message: "Successfully registered user",
@@ -42,9 +42,13 @@ export async function loginUserHandler(req: Request, res: Response){
     }
 }
 
-export async function getUserHandler(req: Request, res: Response){
+export async function getUserHandler(req: Request<{ id: string }>, res: Response){
     try{
-        const user = await AuthService.getUser(req.body.id);
+        const user = await AuthService.getUser(req.params.id);
+        return res.status(201).json({
+            message: "Successfully taken User",
+            data: user
+        });
     } catch(error: unknown){
         console.error("Error in Getting Current User: " + error);
         res.status(400).json({
@@ -52,5 +56,37 @@ export async function getUserHandler(req: Request, res: Response){
             message: "Invalid Request"
         });
 
+    }
+}
+
+export async function checkUsernameHandler(req: Request<{ username: string }>, res: Response){
+    try{
+        const avail = await AuthService.checkUsername(req.params.username);
+        return res.status(201).json({
+            message: "Successfully Checked Username",
+            data: avail
+        });
+    } catch(error: unknown){
+        console.error("Error Checking Username: " + error);
+        res.status(400).json({
+            error: error,
+            message: "Invalid Request"
+        });
+    }
+}
+
+export async function checkEmailHandler(req: Request<{ email: string }>, res: Response){
+    try{
+        const avail = await AuthService.checkEmail(req.params.email);
+        return res.status(201).json({
+            message: "Succesfully Checked Email",
+            data: avail
+        });
+    } catch(error: unknown){
+        console.error("Error Checking Email: " + error);
+        res.status(400).json({
+            error: error,
+            message: "Invalid Request"
+        });
     }
 }
