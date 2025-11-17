@@ -15,6 +15,7 @@ export class MyRecipes extends HTMLElement{
 
     private _recipeList: Recipe[] = [];
     private divList!: HTMLDivElement;
+    private addBtn!: HTMLButtonElement;
 
     private extensionService: BackendExtensionService = new BackendExtensionService();
 
@@ -44,29 +45,44 @@ export class MyRecipes extends HTMLElement{
         const filterBtn = this.shadow.getElementById("filter-btn") as HTMLButtonElement;
         const sortBtn = this.shadow.getElementById("sort-btn") as HTMLButtonElement;
 
-        if(!divList){
-            throw new Error("#recipe-list not found");
+        if(!divList || !addBtn){
+            throw new Error("#recipe-list #new-recipe not found");
         }
 
-        this.divList = divList;
         addBtn!.addEventListener("click", () => this.openEmptyRecipeDialog());
         filterBtn!.addEventListener("click", () => this.filterRecipeList());
         filterBtn!.addEventListener("click", () => this.sortRecipeList());
+
+        this.divList = divList;
+        this.addBtn = addBtn;
     }
 
     //pulls recipes from backend
     async pullRecipesFromBackEnd(){
         this._recipeList.length = 0;
-        const allRecipes = await this.extensionService.accountGetAllRecipes();
-        const owner = await this.extensionService.getUser(allRecipes[0][0]!.ownerId);
+        const clientUser = await this.extensionService.checkClientUser();
+        if(clientUser.id){
+            const user = await this.extensionService.getUser(clientUser.id);
+            console.log(user);
+            const allRecipes: RecipeFields[] = user.data.recipes;
+            const owner = user.data.username;
 
-        allRecipes[0].forEach(rec => {
-            rec.accountName = owner.data.username;
-            this.addRecipe(rec);
-        });
+            allRecipes.forEach(rec => {
+                rec.accountName = owner;
+                this.addRecipe(rec);
+            });
 
-        this.sortRecipeList();
-        this.update();
+            this.sortRecipeList();
+            this.update();
+        } else {
+            const message: HTMLHeadingElement = document.createElement("h4");
+            message.textContent = "Login/Sign-up to have your own recipes";
+            message.classList.add("no-account-message");
+
+            this.divList.append(message);
+
+            this.addBtn.disabled = true;
+        }
     }
 
     //add recipes

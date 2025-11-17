@@ -91,6 +91,7 @@ export class SignUpDialog extends HTMLElement{
             this.responseP.style.color = "green";
             await this.delay(1500);
             this.close();
+            window.location.reload();
         } else {
             this.responseP.textContent = "Wrong Email or Password";
             this.responseP.style.color = "var(--close-bg)";

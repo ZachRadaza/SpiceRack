@@ -54,7 +54,7 @@ export class RecipeDialog extends HTMLElement{
         this.update();
     }
 
-    private initializeHTMLElements() {
+    private async initializeHTMLElements() {
         const nameInput = this.querySelector<HTMLTextAreaElement>("#dlg-name");
         const procedureList = this.querySelector<HTMLOListElement>("#dlg-procedures");
         const ingredientsList = this.querySelector<HTMLUListElement>("#dlg-ingredients");
@@ -94,7 +94,6 @@ export class RecipeDialog extends HTMLElement{
         deleteBtn?.addEventListener("click", () => this.delete());
         saveBtn?.addEventListener("click", () => this.save());
         closeBtn?.addEventListener("click", () => this.close());
-
     }
 
     //setters
@@ -241,15 +240,19 @@ export class RecipeDialog extends HTMLElement{
         if(this.editable) elementList.appendChild(this.addButton(elementList));
     }
 
-    private disableComponents(): void{
+    private async disableComponents(): Promise<void>{
         this.bmInput.disabled = true;
         this.mealTimeBtn.disabled = true;
         this.mealTypeBtn.disabled = true;
 
         const saveBtn = this.querySelector<HTMLButtonElement>("#dlg-save");
         if(saveBtn){
-            saveBtn.textContent = "Close";
-            saveBtn.addEventListener("click", () => this.close());
+            saveBtn.textContent = "Save to Recipes";
+
+            const user = await this.extensionService.checkClientUser();
+            if(!user.id){
+                saveBtn.disabled = true;
+            }
         }
 
         this.nameInput.disabled = true;

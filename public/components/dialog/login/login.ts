@@ -65,6 +65,7 @@ export class LoginDialog extends HTMLElement{
             this.responseP.style.color = "green";
             await delay(1500);
             this.close();
+            window.location.reload();
         }
 
         function delay(ms: number){

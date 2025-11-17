@@ -2,6 +2,7 @@ import "./pages/home/home.js";
 import "./pages/explore/explore.js";
 import "./pages/my-recipes/my-recipes.js";
 import "./components/sidebar/sidebar.js";
+import "./components/header/header.js";
 
 export enum Pages {
     home = "home-page",

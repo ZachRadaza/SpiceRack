@@ -1,0 +1,163 @@
+.main-title-cont{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: var(--highlight);
+    border-bottom: 1px solid var(--accent);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.main-title-cont::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--tan));
+    opacity: .35;
+}
+
+.brand{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo{
+    width: 28px; height: 28px;
+    fill: var(--accent);
+}
+
+.title{
+    position: relative;
+    font-family: var(--font-heading);
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1.1;
+    display: inline-block;
+}
+
+.title::after{
+    content:"";
+    position:absolute;
+    left: 0; bottom: -4px;
+    height: 8px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--tan), var(--accent));
+    border-radius: 6px;
+    transform-origin: left center;
+    transform: scaleX(0.25) skewX(-8deg);
+    transition: transform .35s ease;
+    opacity: .9;
+}
+
+.brand:hover .title::after{
+    transform: scaleX(1) skewX(-8deg);
+}
+
+.badge{
+    margin-left: 6px;
+    padding: 2px 8px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--background);
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+}
+
+button.profile-section{
+    all: unset;
+    display: flex;
+    flex-direction: row;
+    width: 11rem;
+    padding: 0.2rem;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 0.1rem solid transparent;
+    position: relative;
+    z-index: 101;
+    background: var(--highlight);
+    transition: 200ms ease border;
+}
+.profile-section:hover{
+    border-bottom: 0.1rem solid var(--accent);
+}
+.profile-section svg{
+    height: 1rem;
+    width: auto;
+    fill: var(--text);
+    transition: all 200ms ease;
+}
+.profile-section:hover svg{
+    fill: var(--accent);
+}
+.profile-section .profile-pic-cont{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+#username{
+    color: var(--text);
+    padding: 0px;
+    margin: 0px;
+}
+.profile-pic{
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    padding: 0px;
+    margin: 0px;
+    background: linear-gradient(135deg, var(--highlight), var(--tan));
+    border: 2px solid var(--accent);
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+
+button.profile-section.toggled{
+    border-bottom: 0.1rem solid var(--accent);
+}
+button.profile-section.toggled svg{
+    fill: var(--accent);
+    transform: rotate(90deg);
+}
+
+#profile-dropdown{
+    position: absolute;
+    top: 75%;
+    right: 20px;
+    width: 11.5rem;
+    background: var(--highlight);
+    display: flex;
+    gap: 0.3rem;
+    visibility: visible;
+    flex-direction: column;
+    border: 0.1rem solid var(--accent);
+    border-bottom-left-radius: 0.4rem;
+    border-bottom-right-radius: 0.4rem;
+    padding: 0.5rem;
+    padding-top: 1rem;
+    z-index: 100;
+}
+#profile-dropdown.hidden{
+    visibility: hidden;
+    display: none;
+}
+#profile-dropdown button{
+    all: unset;
+    background: var(--tan);
+    border-bottom: 0.1rem solid var(--accent);
+    color: var(--accent);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    transition: all 200ms ease;
+}
+#profile-dropdown button:hover{
+    background: var(--accent);
+    color: var(--tan);
+}

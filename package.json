@@ -9,7 +9,8 @@
     "build:server": "tsc -p tsconfig.server.json",
     "build:client": "tsc -p tsconfig.client.json",
     "copy:public": "cpy \"public/**/*\" \"!public/**/*.ts\" \"!public/**/*.tsx\" \"!public/**/*.map\" dist/client --parents",
-    "start": "node dist/server/index.js"
+    "start": "node dist/server/index.js",
+    "create": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "",

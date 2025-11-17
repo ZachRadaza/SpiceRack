@@ -4,7 +4,6 @@ main{
   margin: 30px;
 }
 
-/* ---------- Top Bar ---------- */
 .north-cont{
   display: flex;
   flex-wrap: wrap;
@@ -32,7 +31,6 @@ main{
   place-items: center;
 }
 
-/* Filter / Sort stack */
 .modify-btn-cont{
   display: flex;
   flex-direction: column;
@@ -43,7 +41,6 @@ main{
   align-self: flex-end;
 }
 
-/* ---------- Book / Scroller ---------- */
 .book{
   position: relative;
   width: 100%;
@@ -62,13 +59,20 @@ main{
   height: 95%;
   width: fit-content;
 }
+#recipe-list h4.no-account-message{
+  text-align: center;
+  margin: auto;
+  text-justify: none;
+  justify-self: center;
+  min-width: 30vw;
+  color: var(--accent);
+}
 
 recipe-mini{
   grid-area: 1 / 1;
   transition: transform 300ms ease-out;
 }
 
-/* ---------- Arrow Buttons ---------- */
 .scroll-btn{
   position: absolute;
   top: 50%;
@@ -102,7 +106,6 @@ recipe-mini{
 .scroll-btn--left { left: 8px; }
 .scroll-btn--right{ right: 8px; }
 
-/* ---------- Responsive ---------- */
 @media (max-width: 640px){
   .modify-btn-cont button{ width: 100px; }
   .book{ padding: 0 36px; }

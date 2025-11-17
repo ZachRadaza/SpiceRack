@@ -106,11 +106,11 @@ export class Explore extends HTMLElement{
         this.hasNext = false;
     }
 
-    private searchName(){
+    private async searchName(){
         this.listAllRecipes.length = 0;
         this.searchArea.forEach(s => s.replaceChildren());
 
-        this.pullRecipesBackend(this.searchInput.value);
+        await this.pullRecipesBackend(this.searchInput.value);
 
         if(this.listAllRecipes.length === 0){
             const message: HTMLHeadingElement = document.createElement("h4");

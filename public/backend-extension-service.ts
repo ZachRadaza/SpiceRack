@@ -2,14 +2,6 @@ import { RecipeFields } from "./components/recipe/recipe-mini/recipe.js";
 
 export class BackendExtensionService{
 
-    async accountGetAllRecipes(): Promise<[RecipeFields[], number]>{
-        const res = await fetch("/api/recipes");
-        if(!res.ok) throw new Error(`Error: ${res.status}`);
-
-        const data = await res.json();
-        return data.data;
-    }
-
     async accountCreateRecipe(recipe: Omit<RecipeFields, "id" | "mini">): Promise<RecipeFields>{
         const res = await fetch("api/recipes", {
             method: "POST",
@@ -76,6 +68,15 @@ export class BackendExtensionService{
         return data;
     }
 
+    async logoutUser(){
+        const res = await fetch(`/api/auth/logout`, { method: 'POST', credentials: 'same-origin' });
+
+        if(!res.ok) throw new Error(`Error Logging out: ${res.status}`);
+
+        const data = await res.json();
+        return data;
+    }
+
     async signUpUser(signUpCred: { email: string, username: string, password: string }){
         const res = await fetch(`/api/auth/register`, {
             method: "POST",
@@ -110,6 +111,13 @@ export class BackendExtensionService{
         const res = await fetch(`/api/auth/${id}`);
 
         if(!res.ok) throw new Error(`Error Fetching User: ${res.status}`);
+
+        const data = await res.json();
+        return data;
+    }
+
+    async checkClientUser(){
+        const res = await fetch(`/api/auth/me`, { credentials: 'same-origin' });
 
         const data = await res.json();
         return data;
