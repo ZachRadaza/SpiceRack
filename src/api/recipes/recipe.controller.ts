@@ -2,44 +2,45 @@ import { Request, Response } from "express";
 import { Recipe } from "./recipe";
 import * as RecipeService from "./recipe.service";
 
-export async function getAllRecipesHandler(req: Request, res: Response){
-    try{
-        const q: string = req.query.q !== undefined ? req.query.q as string : "";
-        const skip: number = req.query.skip !== undefined ? parseInt(req.query.skip as string) : 0;
-        const take: number = req.query.take !== undefined ? parseInt(req.query.take as string) : 10;
+// handlers/getAllRecipesHandler.ts
+export async function getAllRecipesHandler(req: Request, res: Response) {
+    try {
+        const q = typeof req.query.q === "string" ? req.query.q : "";
+        const take = req.query.take ? Math.min(50, Math.max(1, parseInt(req.query.take as string))) : 10;
+        const skipParam = req.query.skip ? Math.max(0, parseInt(req.query.skip as string)) : 0;
+        const randomize = (req.query.random === "true") || (req.query.mode === "random");
 
-        let all = await RecipeService.returnAllFilteredRecipes({ q, skip, take });
-        const total = all.length;
-        const items = all.slice(skip, skip + take);
+        const { data, total, skip } = await RecipeService.returnAllFilteredRecipes({
+            q,
+            skip: skipParam,
+            take,
+            randomize,
+        });
 
         const hasPrev = skip > 0;
-        const hasNext = skip + take < total;
+        const hasNext = skip + data.length < total;
 
         return res.status(200).json({
-            data: items,
+            data,
             meta: {
-                query: { q: q, skip: skip, take: take },
-                total: total,
-                skip: skip,
-                take: take,
-                hasPrev: hasPrev,
-                hasNext: hasNext
+                query: { q, skip, take, randomize },
+                total,
+                skip,
+                take,
+                hasPrev,
+                hasNext,
             },
-            links:{
-                self: `/api/recipes?q=${q}&skip=${skip}&take=${take}`,
-                ...(hasPrev && {
-                    prev: `/api/recipes?q=${q}&skip=${skip - 1}&take=${take}`
-                }),
-                ...(hasNext && {
-                    next: `/api/recipes?q=${q}&skip=${skip + 1}&take=${take}`
-                }),
-            }
+            links: {
+                self: `/api/recipes?q=${encodeURIComponent(q)}&skip=${skip}&take=${take}${randomize ? "&random=true" : ""}`,
+                ...(hasPrev && { prev: `/api/recipes?q=${encodeURIComponent(q)}&skip=${Math.max(0, skip - take)}&take=${take}${randomize ? "&random=true" : ""}` }),
+                ...(hasNext && { next: `/api/recipes?q=${encodeURIComponent(q)}&skip=${skip + take}&take=${take}${randomize ? "&random=true" : ""}` }),
+            },
         });
-    } catch(error: unknown){
-        console.error("Error Fetching Recipes: " + error);
-        return res.status(404).json({
-            error: error,
-            message: "Invalid Request"
+    } catch (error: any) {
+        console.error("Error Fetching Recipes:", error);
+        return res.status(500).json({
+            error: error?.message ?? String(error),
+            message: "Failed to fetch recipes",
         });
     }
 }

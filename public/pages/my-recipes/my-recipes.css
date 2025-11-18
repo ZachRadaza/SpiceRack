@@ -1,106 +1,106 @@
 main{
-  background-image: url("../../assets/images/hero-page-bg.jpg");
-  background-size: cover;
-  margin: 30px;
+    background-image: url("../../assets/images/hero-page-bg.jpg");
+    background-size: cover;
+    margin: 1.9rem;
 }
 
 .north-cont{
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  background: transparent;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: transparent;
 }
 
 .title-recipes{
-  font-family: var(--font-heading);
-  font-size: clamp(28px, 4vw, 48px);
-  margin: 0;
-  color: var(--accent);
+    font-family: var(--font-heading);
+    font-size: clamp(1.7rem, 4vw, 3rem);
+    margin: 0;
+    color: var(--accent);
 }
 
 #new-recipe{
-  font-size: clamp(28px, 6vw, 40px);
-  width: clamp(60px, 10vw, 80px);
-  height: clamp(60px, 10vw, 80px);
-  border-radius: 25px;
-  padding: 0;
-  line-height: 1;
-  display: grid;
-  place-items: center;
+    font-size: clamp(1.7rem, 4vw, 3rem);
+    width: clamp(60px, 10vw, 80px);
+    height: clamp(60px, 10vw, 80px);
+    border-radius: 25px;
+    padding: 0;
+    line-height: 1;
+    display: grid;
+    place-items: center;
 }
 
 .modify-btn-cont{
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
 }
 .modify-btn-cont button{
-  width: 120px;
-  align-self: flex-end;
+    width: 120px;
+    align-self: flex-end;
 }
 
 .book{
-  position: relative;
-  width: 100%;
-  height: fit-content;
-  background-color: var(--tan);
-  border-radius: 20px;
-  border: 2px solid var(--accent);
-  margin: 20px;
-  scroll-padding: 20px;
-  overflow-x: auto;
+    position: relative;
+    width: 100%;
+    height: fit-content;
+    background-color: var(--tan);
+    border-radius: 1.3rem;
+    border: 0.2rem solid var(--accent);
+    margin: 1.3rem;
+    scroll-padding: 1.3rem;
+    overflow-x: auto;
 }
 
 #recipe-list{
-  display: grid;
-  padding: 50px 50px;
-  height: 95%;
-  width: fit-content;
+    display: grid;
+    padding: 3rem 3rem;
+    height: 95%;
+    width: fit-content;
 }
 #recipe-list h4.no-account-message{
-  text-align: center;
-  margin: auto;
-  text-justify: none;
-  justify-self: center;
-  min-width: 30vw;
-  color: var(--accent);
+    text-align: center;
+    margin: auto;
+    text-justify: none;
+    justify-self: center;
+    min-width: 30vw;
+    color: var(--accent);
 }
 
 recipe-mini{
-  grid-area: 1 / 1;
-  transition: transform 300ms ease-out;
+    grid-area: 1 / 1;
+    transition: transform 300ms ease-out;
 }
 
 .scroll-btn{
-  position: absolute;
-  top: 50%;
-  translate: 0 -50%;
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  border: 2px solid var(--accent);
-  background: var(--tan);
-  color: var(--text);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: background .2s, transform .1s;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-  z-index: 500;
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    background: var(--tan);
+    color: var(--text);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    z-index: 500;
 }
 .scroll-btn:hover{
-  background: var(--accent);
-  color: var(--background);
-  transform: translateY(-2px);
+    background: var(--accent);
+    color: var(--background);
+    transform: translateY(-2px);
 }
 .scroll-btn:disabled{
-  opacity: 0.4;
-  cursor: not-allowed;
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 .scroll-btn svg{
-  width: 60%; height: 60%;
-  fill: currentColor;
+    width: 60%; height: 60%;
+    fill: currentColor;
 }
 
 .scroll-btn--left { left: 8px; }

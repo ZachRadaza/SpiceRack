@@ -8,6 +8,7 @@ export class Explore extends HTMLElement{
 
     private searchArea: HTMLDivElement[] = [];
     private searchInput!: HTMLInputElement;
+    private loadMore!: HTMLButtonElement;
 
     private listAllRecipes: Recipe[] = [];
     private numberOfColumns: number = 0;
@@ -40,17 +41,21 @@ export class Explore extends HTMLElement{
         const searchInput = this.shadow.getElementById("search-bar-input") as HTMLInputElement;
         const searchAreaCont = this.shadow.getElementById("search-area-cont") as HTMLDivElement;
         const searchButton = this.shadow.getElementById("search-btn") as HTMLButtonElement;
+        const loadMore = this.shadow.getElementById("load-more") as HTMLButtonElement;
 
-        if(!searchButton || !searchInput || !searchAreaCont){
-            throw new Error("#search-area-cont, #search-btn, #search-bar-input is not found in explore.html");
+        if(!searchButton || !searchInput || !searchAreaCont || !loadMore){
+            throw new Error("#search-area-cont, #search-btn, #search-bar-input, or #load-more is not found in explore.html");
         }
 
         this.searchInput = searchInput;
+        this.loadMore = loadMore;
 
         searchButton.addEventListener("click", () => this.searchName());
         this.searchInput.addEventListener("keydown", (event: KeyboardEvent) => {
             if(event.key === 'Enter') this.searchName();
         });
+
+        this.loadMore.addEventListener("click", () => this.pullRecipesBackend());
 
         this.initializeSearchArea(searchAreaCont);
     }
@@ -78,22 +83,22 @@ export class Explore extends HTMLElement{
 
         const take = 15;
 
-        const listRecipes = await this.backendExtensionService.getAllRecipes(search, this.lastSkip, take);
+        const { data, meta } = await this.backendExtensionService.getAllRecipes(search, this.lastSkip, take);
 
-        for(let i = 0; i < listRecipes[0].length; i++) {
+        for(let i = 0; i < data.length; i++) {
             const rec = document.createElement("recipe-mini") as Recipe;
-            const owner = await this.backendExtensionService.getUser(listRecipes[0][i]!.ownerId);
+            const owner = await this.backendExtensionService.getUser(data[i]!.ownerId);
             rec.setAllFields({
-                id: listRecipes[0][i]!.id,
-                name: listRecipes[0][i]!.name,
-                ingredients: listRecipes[0][i]!.ingredients,
-                procedures: listRecipes[0][i]!.procedures,
-                imageLink: listRecipes[0][i]!.imageLink,
+                id: data[i]!.id,
+                name: data[i]!.name,
+                ingredients: data[i]!.ingredients,
+                procedures: data[i]!.procedures,
+                imageLink: data[i]!.imageLink,
                 accountName: owner.data.username,
-                ownerId: listRecipes[0][i]!.ownerId,
-                mealTime: listRecipes[0][i]!.mealTime,
-                mealType: listRecipes[0][i]!.mealType,
-                bookmarked: listRecipes[0][i]!.bookmarked,
+                ownerId: data[i]!.ownerId,
+                mealTime: data[i]!.mealTime,
+                mealType: data[i]!.mealType,
+                bookmarked: data[i]!.bookmarked,
                 mini: true
             });
 
@@ -102,8 +107,10 @@ export class Explore extends HTMLElement{
             this.searchArea[i % this.numberOfColumns]!.appendChild(rec);
         }
 
-        //this.hasNext = listRecipes.meta.hasNext;
-        this.hasNext = false;
+        this.hasNext = meta.hasNext || false;
+        if(!this.hasNext){
+            this.loadMore.disabled = true;
+        }
     }
 
     private async searchName(){

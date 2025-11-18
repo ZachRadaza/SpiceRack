@@ -91,11 +91,12 @@ header-component{
 }
 
 button {
-    border: 2px solid var(--accent);
+    border: 0.15rem solid var(--accent);
     background: var(--tan);
     color: var(--text);
     font-family: var(--font-heading);
     font-weight: 600;
+    font-size: 1rem;
     border-radius: 25px;
     padding: 10px 16px;
     cursor: pointer;
@@ -110,20 +111,20 @@ button:hover{
 
 button:disabled{
     background: var(--highlight);
-    border: 2px solid var(--tan);
+    border: 0.2rem solid var(--tan);
     color: var(--tan);
 }
 button:disabled:hover{
     background: var(--highlight);
-    border: 2px solid var(--tan);
+    border: 0.2rem solid var(--tan);
     color: var(--tan);
     transform: translateY(0px);
 }
 
 dialog{
     opacity: 0;
-    border: 4px solid var(--accent);
-    border-radius: 64px;
+    border: 0.3rem solid var(--accent);
+    border-radius: 4rem;
     background-color: var(--background);
     padding: 0px;
     overflow: hidden;

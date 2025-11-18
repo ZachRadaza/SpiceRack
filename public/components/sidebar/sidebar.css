@@ -33,11 +33,11 @@
     color: var(--background);
     font-weight: 700;
     z-index: 2;
-    font-size: large;
+    font-size: 1.5rem;
     transition: font-size 400ms ease, font-weight 400ms ease;
 }
 .sidebar-btn:hover h1{
-    font-size: x-large;
+    font-size: 1.7rem;
     font-weight: 900;
 }
 

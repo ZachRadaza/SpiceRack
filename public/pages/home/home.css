@@ -1,6 +1,6 @@
 main{
     display: block;
-    gap: 20px;
+    gap: 1.3rem;
 }
 
 #hero-section{
@@ -20,9 +20,9 @@ main{
     height: 40vh;
     width: auto;
     display: grid;
-    border: 2px solid var(--accent);
-    border-radius: 25px;
-    margin: 10px;
+    border: 0.2rem solid var(--accent);
+    border-radius: 1.5rem;
+    margin: 0.7rem;
     transition: transform 400ms ease, scale 400ms ease;
     overflow: hidden;
 }
@@ -54,17 +54,17 @@ main{
 .hero-image-description ul,
 .hero-image-description p{
     color: var(--background);
-    margin: 5px;
+    margin: 0.3rem;
 }
 .hero-image-description h2{
     justify-self: center;
     text-align: center;
-    font-size: xx-large;
+    font-size: 2rem;
     font-weight: 800;
     line-height: 1.2;
 }
 .hero-image-description h4{
-    font-size: large;
+    font-size: 1.6rem;
     font-weight: 700;
 }
 .hero-image img{
@@ -84,7 +84,7 @@ main{
 .hero-section-area #hero-expandable{
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 1rem;
     align-items: center;
     width: 100%;
     overflow: hidden;
@@ -107,7 +107,7 @@ main{
     grid-area:  1 / 1;
     stroke: var(--tan);
     width: auto;
-    height: 80px;
+    height: 5rem;
     opacity: 0;
     transition: 400ms opacity ease, stroke 200ms ease;
 }
@@ -137,12 +137,12 @@ main{
 
 .hero-text{
     text-align: left;
-    gap: 10px;
+    gap: 0.7rem;
     max-width: 70vw;
     max-height: 40vh;
     display: flex;
     flex-direction: column;
-    margin: 16px 16px 16px 30px;
+    margin: 1rem 1rem 1rem 1.8rem;
 }
 .hero-text h1{
     all: unset;
@@ -156,7 +156,7 @@ main{
     all: unset;
     font-family: var(--font-body);
     color: var(--text);
-    font-size: x-large;
+    font-size: 1.7rem;
     font-weight: 500;
 }
 .hero-text span{
@@ -164,7 +164,7 @@ main{
     font-family: var(--font-heading);
     color: var(--accent);
     font-weight: 700;
-    font-size: x-large;
+    font-size: 1.7rem;
 }
 .hero-text button{
     font-size: larger;
@@ -181,7 +181,7 @@ main{
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     overflow: hidden;
-    margin: 5px;
+    margin: 0.3rem;
 }
 
 .about-about{
@@ -222,7 +222,7 @@ main{
     overflow: hidden;
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: 1.3rem;
 }
 .about-cont-2 h1{
     color: var(--accent);
@@ -232,10 +232,10 @@ main{
 .about-cont-about{
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 1.3rem;
     align-items: center;
     justify-content: center;
-    margin: 2px;
+    margin: 0.2rem;
     overflow: auto;
 }
 
@@ -254,7 +254,7 @@ main{
 }
 .about h4{
     color: var(--accent);
-    font-size: larger;
+    font-size: 1.5rem;
 }
 .about p{
     justify-content: center;
@@ -266,10 +266,10 @@ main{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 128px 30px 30px 30px;
+    margin: 8rem 1.8rem 1.8rem 1.8rem;
     overflow-x: hidden;
     border: 4px solid var(--accent);
-    border-radius: 64px;
+    border-radius: 4rem;
 }
 #popular-section h3{
     all: unset;
@@ -293,7 +293,7 @@ main{
     overflow: hidden;
     margin: auto;
     justify-content: center;
-    gap: 20px;
+    gap: 1.3rem;
     width: 100%;
 }
 
@@ -302,10 +302,10 @@ main{
     height: fit-content;
     flex-direction: column;
     overflow-x: visible;
-    gap: 20px;
+    gap: 1.3rem;
     align-items: center;
     will-change: transform;
-    margin-top: 20px;
+    margin-top: 1.3rem;
 }
 
 #action-section{
@@ -314,9 +314,9 @@ main{
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 40px;
-    margin: 40px;
-    padding: 40px;
+    gap: 2.5rem;
+    margin: 2.5rem;
+    padding: 2.5rem;
     background-image: 
         linear-gradient(to top, rgba(255, 255, 255, 0) 60%, var(--background) 100%),
         url(../../assets/images/hero-page-bg.jpg);
@@ -329,10 +329,10 @@ main{
     height: auto;
     align-items: center;
     justify-content: center;
-    padding: 20px 60px;
+    padding: 1.3rem 3.8rem;
     background-color: var(--accent);
-    border: 4px solid var(--tan);
-    border-radius: 32px;
+    border: 0.2rem solid var(--tan);
+    border-radius: 2rem;
     transition: scale 200ms ease-in, transform 200ms ease-in;
 }
 #action-section button:hover{
@@ -343,7 +343,7 @@ main{
     display: flex;
     flex-direction: column;
     min-width: 0;
-    gap: 10px;
+    gap: 0.6rem;
     align-items: center;
     justify-content: center;
 }
@@ -360,7 +360,7 @@ main{
 }
 #action-section button div h2{
     color: var(--background);
-    font-size: xx-large;
+    font-size: 2rem;
     font-weight: 700;
     line-height: 1;
 }
@@ -376,16 +376,16 @@ footer{
     background-color: var(--accent);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 1.3rem;
     width: 100%;
     justify-items: center;
     align-items: center;
-    padding: 40px;
+    padding: 2.5rem;
 }
 
 footer h2{
     color: var(--tan);
-    font-size: x-large;
+    font-size: 1.8rem;
     font-weight: 700;
     width: 100%;
     text-align: center;
@@ -404,7 +404,7 @@ footer div .social-media{
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 40px;
+    gap: 2.5rem;
     width: 100%;
     align-items: center;
 }
@@ -416,7 +416,7 @@ footer div .social-media a:hover{
 }
 footer div .social-media a svg{
     fill: var(--tan);
-    height: 128px;
+    height: 8rem;
     width: auto;
     transition: fill 400ms ease;
 }

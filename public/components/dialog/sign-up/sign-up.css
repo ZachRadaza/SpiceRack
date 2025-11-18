@@ -24,7 +24,7 @@
     flex-direction: column;
     gap: 5px;
     background-color: var(--background);
-    border-radius: 16px;
+    border-radius: 1rem;
     padding: 10px;
     transition: scale 200ms ease, background 200ms ease;
 }
@@ -45,8 +45,8 @@
 #dlg-main-cred div input{
     all: unset;
     width: 350px;
-    border: 2px solid var(--accent);
-    border-radius: 16px;
+    border: 0.2rem solid var(--accent);
+    border-radius: 1rem;
     background-color: var(--background);
     font-style: var(--font-body);
     font-weight: 600;

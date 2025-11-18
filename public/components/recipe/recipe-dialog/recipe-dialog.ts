@@ -59,7 +59,7 @@ export class RecipeDialog extends HTMLElement{
         const procedureList = this.querySelector<HTMLOListElement>("#dlg-procedures");
         const ingredientsList = this.querySelector<HTMLUListElement>("#dlg-ingredients");
         const imageImg = this.querySelector<HTMLImageElement>("#dlg-image-cont img");
-        const imageInput = this.querySelector<HTMLInputElement>("#dlg-image-cont input");
+        const imageInput = this.querySelector<HTMLInputElement>("#dlg-image-link-cont input");
 
         const timeBtn = this.querySelector<HTMLButtonElement>("#dlg-meal-time");
         const typeBtn = this.querySelector<HTMLButtonElement>("#dlg-meal-type");
@@ -168,7 +168,13 @@ export class RecipeDialog extends HTMLElement{
         this.updateMealComponents();
 
         this.addIngProLine(this.ingredientsList);
-        this.addIngProLine(this.procedureList)
+        this.addIngProLine(this.procedureList);
+        requestAnimationFrame(() => {
+            this.querySelectorAll("textarea").forEach((el) => {
+                el.style.height = "auto";
+                el.style.height = el.scrollHeight + "px";
+            });
+        });
 
         if(this.brandNew) return;
 
@@ -182,7 +188,8 @@ export class RecipeDialog extends HTMLElement{
         this.updateIngPro();
 
         //add image
-        if(!!this._imageLink){
+        if(!!this._imageLink || this._imageLink !== ""){
+            this.imageInput.value = this._imageLink;
             this.imageImg.src = this._imageLink;
         }
 
@@ -379,7 +386,7 @@ export class RecipeDialog extends HTMLElement{
             this._ingredients.push(input.value);
         });
 
-        this._imageLink = this.imageInput.src;
+        this._imageLink = this.imageInput.value;
         this._bookmarked = this.bmInput.checked;
     }
 
@@ -396,7 +403,7 @@ export class RecipeDialog extends HTMLElement{
         let indexInput: number = 0;
 
         for(let i = 0; i < listOfElements.length; i++){
-            const input = listOfElements[i]!.querySelector<HTMLInputElement>("input.current-focus");
+            const input = listOfElements[i]!.querySelector<HTMLTextAreaElement>("textarea.current-focus");
             if(input){
                 input.blur();
                 indexInput = i;
@@ -418,7 +425,7 @@ export class RecipeDialog extends HTMLElement{
         //to focus
         const newIngPro = this.ingProInput(elementList)
         elementList.appendChild(newIngPro);
-        const newIngProInput = newIngPro.querySelector<HTMLInputElement>("input");
+        const newIngProInput = newIngPro.querySelector<HTMLTextAreaElement>("textarea");
         newIngProInput?.focus();
 
         while(temp.length > 0){
@@ -430,7 +437,17 @@ export class RecipeDialog extends HTMLElement{
 
     private addIngProEnd(elementList: HTMLOListElement | HTMLUListElement){
         const newLi = this.ingProInput(elementList);
-        const input = newLi.querySelector<HTMLInputElement>("input");
+        const input = newLi.querySelector<HTMLTextAreaElement>("textarea");
+        input!.rows = 1;
+
+        input!.addEventListener("input", () => {
+            const needsResize = input!.scrollHeight > input!.clientHeight;
+            if (needsResize) {
+                input!.style.height = "auto";
+                input!.style.height = input!.scrollHeight + "px";
+            }
+        });
+
         elementList.appendChild(newLi);
         input?.focus();
         elementList.appendChild(this.addButton(elementList));
@@ -441,7 +458,7 @@ export class RecipeDialog extends HTMLElement{
         let found = false;
 
         for(let i = listOfElements.length - 1; i >= 0; i--){
-            const input = listOfElements[i]!.querySelector<HTMLInputElement>("input");
+            const input = listOfElements[i]!.querySelector<HTMLTextAreaElement>("textarea");
             if(found) {
                 input?.focus();
                 break;
@@ -455,7 +472,8 @@ export class RecipeDialog extends HTMLElement{
     }
 
     private ingProInput(elementList: HTMLUListElement | HTMLOListElement, inside: string = ""): HTMLLIElement{
-        const input = document.createElement("input");
+        const input = document.createElement("textarea");
+        input.rows = 1;
         input.classList.add("body");
         input.placeholder = elementList instanceof HTMLUListElement ? "Ingredient" : "Procedure";
         input.value = inside;
@@ -466,9 +484,10 @@ export class RecipeDialog extends HTMLElement{
         else input.disabled = true;
 
         input.addEventListener("keydown", (event: KeyboardEvent) => {
-            if(event.key === 'Enter')
+            if(event.key === 'Enter'){
+                event.preventDefault();
                 this.addIngProLine(elementList);
-
+            }
             if(event.key === "Backspace" && input.value === ""){
                 this.removeIngProHelper(elementList);
 
@@ -482,6 +501,14 @@ export class RecipeDialog extends HTMLElement{
         
         input.addEventListener("blur", () => {
             input.classList.remove("current-focus");
+        });
+
+        input.addEventListener("input", () => {
+            const needsResize = input.scrollHeight > input.clientHeight;
+            if (needsResize) {
+                input.style.height = "auto";
+                input.style.height = input!.scrollHeight + "px";
+            }
         });
 
         return li;

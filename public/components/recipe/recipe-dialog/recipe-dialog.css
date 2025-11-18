@@ -1,204 +1,251 @@
 .edge{ transition: background 400ms ease; }
 
 .dlg-cont{
-  display: grid;
-  grid-template-columns: 32px 1fr 32px; /* edge | main | edge */
-  width: min(90vw, 900px);
-  height: 80vh;
+    display: grid;
+    grid-template-columns: 32px 1fr 32px; /* edge | main | edge */
+    width: min(90vw, 900px);
+    height: 80vh;
 }
 
-/*   Main column   */
 #dlg-main{
-  background-color: var(--background);
-  display: grid;
-  grid-template-rows: auto auto auto auto; /* top | upper | lower | footer */
-  min-height: 0; /* allow internal scrolling */
-  height: 100%;       /* fill parent */
-  overflow-y: auto;   /* actual scrolling */
-  overflow-x: hidden;
-  scrollbar-width: thin;                /* auto | thin | none */
-  scrollbar-color: var(--tan) var(--background);
+    background-color: var(--background);
+    display: grid;
+    grid-template-rows: auto auto auto auto;
+    min-height: 0;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--tan) var(--background);
 }
 
-/* Sections (spacing) */
 .section{ background: transparent; }
-.top-column{ padding: 12px 14px 0; display: flex; justify-content: space-between;}
-.upper-half{ padding: 12px 24px; display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; align-items: start; overflow: visible; }
-.lower-half{ padding: 0 24px 12px; overflow: visible; }
-.footer{ padding: 10px 24px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; overflow: visible; }
+.top-column{ 
+    padding: 12px 14px 0; 
+    display: flex; 
+    justify-content: space-between;
+}
+.upper-half{ 
+    padding: 12px 24px; 
+    display: grid; 
+    grid-template-columns: 1fr 1.2fr; 
+    gap: 16px; align-items: start; 
+    overflow: visible; 
+}
+.lower-half{ 
+    padding: 0 24px 12px; 
+    overflow: visible; 
+}
+.footer{ 
+    padding: 10px 24px 16px; 
+    display: flex; 
+    align-items: center;
+    justify-content: space-between; 
+    gap: 12px; 
+    overflow: visible; 
+}
 
-/* Shared Classes */
 .danger-btn{
-  all: unset;
-  place-items: center;
-  background: var(--close-bg);
-  color: var(--close-x);
-  cursor: pointer;
-  transition: transform .12s ease, background-color .2s ease;
+    all: unset;
+    place-items: center;
+    background: var(--close-bg);
+    color: var(--close-x);
+    cursor: pointer;
+    transition: transform .12s ease, background-color .2s ease;
 }
 .danger-btn:hover{
-  background: var(--close-hover); transform: scale(1.05);
+    background: var(--close-hover); transform: scale(1.05);
 }
 
-/* Top bar (bookmark + close) */
 #dlg-bookmark{
-  inline-size: 1.2rem; block-size: 1.2rem;
-  accent-color: var(--accent);
+    inline-size: 1.2rem; block-size: 1.2rem;
+    accent-color: var(--accent);
 }
 #dlg-close{
-  text-align: center;
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  font-size: 18px;
+    text-align: center;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    font-size: 1.2rem;
 }
 
-/*   Image picker / preview   */
 #dlg-image-cont{
-  display: grid;
-  gap: 10px;
+    display: grid;
+    gap: 10px;
 }
-
-#dlg-image-cont input[type="file"]{
-  display: block;
-  font-family: var(--font-body);
+#dlg-image-link-cont{
+    display: flex;
+    flex-direction: row;
+    gap: 0.4rem;
+    align-items: center;
+    width: 100%;
+}
+#dlg-image-link-cont h5{
+    padding: 0px;
+    margin: 0px;
+    white-space: nowrap;
+}
+#dlg-image-link-cont input{
+    font-family: var(--font-body);
+    border-radius: 0.5rem;
+    border: 0.1rem solid var(--tan);
+    padding: 0.4rem;
+    font-size: 0.8rem;
+    width: 100%;
 }
 
 #dlg-image-cont img{
-  width: 100%;
-  aspect-ratio: 16/9;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 1px solid var(--card-border);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  background: #f7f7f7;
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    background: #f7f7f7;
 }
 
-/* Name + meal buttons */
 .name-cont{
-  display: grid;
-  grid-template-rows: auto auto;
-  gap: 10px;
-  align-content: start;
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 10px;
+    align-content: start;
 }
 
 #dlg-name{
-  all: unset;
-  max-width: 380px;
-  min-height: 2em;
-  resize: vertical;
-  text-align: center;
-  font-family: var(--font-heading);
-  font-size: 50px;
-  font-weight: 700;
-  padding: 10px;
-  background: transparent;
-  transition: color 400ms ease;
-  margin: 20px;
+    all: unset;
+    max-width: 380px;
+    min-height: 2em;
+    resize: vertical;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 3.2rem;
+    font-weight: 700;
+    padding: 10px;
+    background: transparent;
+    transition: color 400ms ease;
+    margin: 20px;
 }
 .name-cont .btn-cont{
-  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
 }
 .name-cont .btn-cont button{
-  display: inline-flex; align-items: center; justify-content: center; color: var(--text) !important;
+    display: inline-flex; align-items: center; justify-content: center; color: var(--text) !important;
 }
 
 #dlg-meal-time, #dlg-meal-type{
-  border-color: transparent;
-  transition: background 400ms ease, transform 120ms ease;
+    border-color: transparent;
+    transition: background 400ms ease, transform 120ms ease;
 }
 #dlg-meal-time:disabled:hover, #dlg-meal-type:disabled:hover{
-  cursor: text;
+    cursor: text;
 } 
 
-/* Content (Ingredients / Procedures) */
 .lower-half .content{
-  display: grid;
-  gap: 8px;
-  margin: 0 0 12px 0;
+    display: grid;
+    gap: 8px;
+    margin: 0 0 12px 0;
 }
 .lower-half h3{
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: large;
-  color: var(--text);
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--text);
 }
 
 #dlg-ingredients, #dlg-procedures{
-  list-style: circle;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 8px;
+    padding-left: 1.2em;
+    margin: 0;
+    display: grid;
+    gap: 8px;
 }
 
-/* Input line rows (input + remove button pattern you’re using) */
-#dlg-ingredients li:not(:has(button:only-child)),
-#dlg-procedures  li:not(:has(button:only-child)){
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  width: 100%;
+#dlg-ingredients li {
+    display: list-item; 
+    list-style: disc;
 }
-#dlg-ingredients input, #dlg-procedures input{
-  all: unset;
-  width: 97%;
-  max-width: 97%;
-  resize: vertical;
-  min-height: 2em;
-  padding: 8px 10px;
-  font-size: medium;
-  font-weight: 500;
-  line-height: 1.2;
-  border: 1px solid var(--tan);
-  border-radius: 16px;
-  background: #fff;
-  font-family: var(--font-body);
+#dlg-procedures li { 
+    display: list-item; 
+}
+#dlg-ingredients li::marker,
+#dlg-procedures li::marker {
+    transform: translateY(1rem);
+}
+#dlg-ingredients li > *,
+#dlg-procedures li > * {
+    display: inline-block;
+    vertical-align: top;
+}
+#dlg-ingredients textarea, #dlg-procedures textarea{
+    all: unset;
+    field-sizing: content;
+    max-width: calc(100% - 3.5rem); 
+    min-height: 1em;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    display: inline-block;    
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.2;
+    border: 1px solid var(--tan);
+    border-radius: 16px;
+    background: #fff;
+    font-family: var(--font-body);
+    overflow: hidden;
+    resize: none;
+    position: relative;
+    top: -0.4rem; 
+    vertical-align: top;
 }
 #dlg-ingredients li input:focus, #dlg-procedures li input:focus{
-  border: 2px solid var(--accent);
-  outline-color: var(--accent);
+    border: 2px solid var(--accent);
+    outline-color: var(--accent);
 }
 #dlg-ingredients input:disabled, #dlg-procedures input:disabled{
-  background-color: transparent;
-  border: none;
-  border-left: 2px solid var(--accent);
-  color: var(--text);
-  cursor: text;
+    background-color: transparent;
+    border: none;
+    border-left: 2px solid var(--accent);
+    color: var(--text);
+    cursor: text;
 }
 
-/* The trailing (+) row */
 #dlg-ingredients li:has(> button:only-child),
 #dlg-procedures  li:has(> button:only-child){
-  display: flex;
-  justify-content: flex-start;
-  gap: 10px;
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
 }
 #dlg-ingredients li > button,
 #dlg-procedures  li > button{
-  padding: 8px 12px;
-  border-radius: 16px;
-  margin-left: 10px;
+    padding: 8px 12px;
+    border-radius: 16px;
+    margin-left: 10px;
+    display: inline-block;
+    position: relative;
+    top: -0.4rem; 
+    vertical-align: top;
 }
 
-/*   Footer   */
 #dlg-delete{
-  border-radius: 25px;
-  font-weight: 600;
-  padding: 10px 16px;
+    border-radius: 25px;
+    font-weight: 600;
+    padding: 10px 16px;
 }
 
 #dlg-save{
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: .95rem;
-  font-weight: 700;
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center;
+    font-size: .95rem;
+    font-weight: 700;
 }
 
 #dlg-creator{
-  font-family: var(--font-body);
-  font-style: italic;
-  font-size: .95rem;
-  color: var(--text);
-  background: transparent;
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: .95rem;
+    color: var(--text);
+    background: transparent;
 }
 
 /*   Meal-time bg classes reused from cards   */

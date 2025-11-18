@@ -55,8 +55,6 @@ export class LoginDialog extends HTMLElement{
 
         const valid = await this.validateInputs(inputs);
 
-        console.log(valid);
-
         if(!valid){
             this.responseP.textContent = "Wrong Email or Password";
             this.responseP.style.color = "var(--close-bg)";

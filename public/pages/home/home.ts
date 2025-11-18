@@ -68,24 +68,24 @@ export class Home extends HTMLElement{
 
         const numberOfColumns: number = initDiv(this.popularRecipesDiv, this.popularRecipesDivArea);
 
-        const listRecipes = await this.backendExtensionService.getAllRecipes();
+        const { data } = await this.backendExtensionService.getAllRecipes();
 
-        for(let i = 0; i < listRecipes[0].length; i++) {
+        for(let i = 0; i < data.length; i++) {
             const rec = [];
             for(let j = 0; j < 2; j++){
                 const recipe = document.createElement("recipe-mini") as Recipe;
-                const owner = await this.backendExtensionService.getUser(listRecipes[0][i]!.ownerId);
+                const owner = await this.backendExtensionService.getUser(data[i]!.ownerId);
                 recipe.setAllFields({
-                    id: listRecipes[0][i]!.id,
-                    name: listRecipes[0][i]!.name,
-                    ingredients: listRecipes[0][i]!.ingredients,
-                    procedures: listRecipes[0][i]!.procedures,
-                    imageLink: listRecipes[0][i]!.imageLink,
+                    id: data[i]!.id,
+                    name: data[i]!.name,
+                    ingredients: data[i]!.ingredients,
+                    procedures: data[i]!.procedures,
+                    imageLink: data[i]!.imageLink,
                     accountName: owner.data.username,
-                    ownerId: listRecipes[0][i]!.ownerId,
-                    mealTime: listRecipes[0][i]!.mealTime,
-                    mealType: listRecipes[0][i]!.mealType,
-                    bookmarked: listRecipes[0][i]!.bookmarked,
+                    ownerId: data[i]!.ownerId,
+                    mealTime: data[i]!.mealTime,
+                    mealType: data[i]!.mealType,
+                    bookmarked: data[i]!.bookmarked,
                     mini: true
                 });
                 rec.push(recipe);

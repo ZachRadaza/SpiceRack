@@ -63,13 +63,12 @@ export class MyRecipes extends HTMLElement{
         const clientUser = await this.extensionService.checkClientUser();
         if(clientUser.id){
             const user = await this.extensionService.getUser(clientUser.id);
-            console.log(user);
             const allRecipes: RecipeFields[] = user.data.recipes;
             const owner = user.data.username;
 
             allRecipes.forEach(rec => {
                 rec.accountName = owner;
-                this.addRecipe(rec);
+                this.addRecipe(rec, owner);
             });
 
             this.sortRecipeList();
@@ -86,7 +85,7 @@ export class MyRecipes extends HTMLElement{
     }
 
     //add recipes
-    public addRecipe(r: RecipeFields){
+    public async addRecipe(r: RecipeFields, owner: string){
         const rec = document.createElement("recipe-mini") as Recipe;
         this._recipeList.push(rec);
 
@@ -98,7 +97,7 @@ export class MyRecipes extends HTMLElement{
             ingredients: r.ingredients,
             procedures: r.procedures,
             imageLink: r.imageLink,
-            accountName: r.accountName || "",
+            accountName: owner,
             ownerId: r.ownerId,
             mealTime: r.mealTime,
             mealType: r.mealType,
@@ -179,7 +178,11 @@ export class MyRecipes extends HTMLElement{
     //for new recipes created, to be used by dialog as an actual new recipe is added
     async addNewRecipe(r: RecipeFields){
         const newRecipe = await this.extensionService.accountCreateRecipe(r);
-        this.addRecipe(newRecipe);
+        const clientUser = await this.extensionService.checkClientUser();
+        const user = await this.extensionService.getUser(clientUser.id);
+        const owner = user.data.username;
+
+        this.addRecipe(newRecipe, owner);
 
         this.sortRecipeList();
         this.update();
