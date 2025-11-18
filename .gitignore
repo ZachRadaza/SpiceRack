@@ -1,9 +1,21 @@
-# Dependencies
+# dependencies & build
 node_modules/
-
-# Build output
 dist/
+build/
+*.log
 
-/src/generated/prisma
-
+# env & secrets
 .env
+.env.*
+!.env.example
+cookies.txt
+Cookie/
+
+# OS/editor junk
+.DS_Store
+.vscode/
+.idea/
+
+# Prisma artifacts (generated during install/build)
+# (No need to ignore prisma/ itself; we DO commit schema + migrations)
+.prisma/

@@ -4,13 +4,20 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "prisma generate",
-    "dev": "nodemon --watch src --exec ts-node -P tsconfig.server.json dist/server/index.js",
+    "dev": "nodemon --watch src --exec \"ts-node -P tsconfig.server.json src/index.ts\"",
     "build": "npm run build:server && npm run build:client && npm run copy:public",
     "build:server": "tsc -p tsconfig.server.json",
     "build:client": "tsc -p tsconfig.client.json",
     "copy:public": "cpy \"public/**/*\" \"!public/**/*.ts\" \"!public/**/*.tsx\" \"!public/**/*.map\" dist/client --parents",
     "start": "node dist/server/index.js",
-    "create": "npm run build && npm run start"
+    "start:prod": "npm run prisma:deploy && node dist/server/index.js",
+    "start:api": "node dist/server/index.js",
+    "create": "npm run build && npm run start",
+    "typecheck": "tsc -p tsconfig.server.json --noEmit && tsc -p tsconfig.client.json --noEmit",
+    "prisma:deploy": "prisma migrate deploy && prisma generate",
+    "prisma:studio": "prisma studio",
+    "prisma:reset": "prisma migrate reset --force"
+
   },
   "keywords": [],
   "author": "",
