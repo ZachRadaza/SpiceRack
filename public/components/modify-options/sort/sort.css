@@ -1,0 +1,32 @@
+.sort-options{
+    background: var(--accent);
+    border: 0.15rem solid var(--accent);
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    width: 130px;
+    max-height: 8rem;
+    gap: 0.2rem;
+}
+
+.sort-options button{
+    all: unset;
+    background: var(--accent);
+    border: 0.15rem solid var(--background);
+    color: var(--background);
+    border-radius: 25px;
+    padding: 0.3rem;
+    width: 90%;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 200ms ease;
+}
+.sort-options button:hover, .sort-options button.toggled{
+    background: var(--tan);
+    color: var(--text);
+    border: 0.15rem solid var(--accent);
+}

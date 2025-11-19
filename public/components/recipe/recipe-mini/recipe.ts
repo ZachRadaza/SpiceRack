@@ -118,7 +118,7 @@ export class Recipe extends HTMLElement{
         this._canEdit = e;
     }
 
-    public setAllFields(fields: RecipeFields, myRecipes?: MyRecipes, canEdit?: boolean){
+    public setAllFields(fields: RecipeFields, myRecipes?: MyRecipes | null, canEdit?: boolean){
         this._id = fields.id;
         this._name = fields.name;
         this._ingredients = fields.ingredients;
@@ -191,14 +191,14 @@ export class Recipe extends HTMLElement{
         //updates changed fields
         if(!this.initialized) return;
 
-        enum Elements { eName = 0, eIngredients = 1, eProcedure = 2, eImage = 3, eCreator = 4};
-        const ids: string[] = ["#name", "#ingredients", "#procedures", "#image", "#creator"];
+        enum Elements { eName = 0, eIngredients = 1, eProcedure = 2, eImage = 3, eCreator = 4, eBookmark = 5};
+        const ids: string[] = ["#name", "#ingredients", "#procedures", "#image img", "#creator", "#bookmark"];
         const elements: HTMLElement[] = [];
 
-        for (const id of ids) {
-            const el = this.shadow.querySelector<HTMLElement>(id);
-            if (!el) throw new Error(`${id} not found`);
-            elements.push(el); // el is HTMLElement here
+        for (let i = 0; i < ids.length; i++) {
+            const el = this.shadow.querySelector<HTMLElement>(ids[i]!);
+            if (!el) throw new Error(`${ids[i]!} not found`);
+            elements.push(el);
         }
 
         elements[Elements.eName]!.textContent = this._name;
@@ -218,9 +218,13 @@ export class Recipe extends HTMLElement{
         });
 
         elements[Elements.eImage]!.setAttribute('src', this._imageLink);
-        if(!this._imageLink) elements[Elements.eImage]!.remove();
+        if(!this._imageLink) elements[Elements.eImage]!.style.display = "none";
+        else elements[Elements.eImage]!.style.display = "block";
 
         elements[Elements.eCreator]!.textContent = this._accountName + "'s Recipe";
+
+        if(!this.bookmarked) elements[Elements.eBookmark]!.style.display = "none";
+        else elements[Elements.eBookmark]!.style.display = "block";
 
         this.updateMealCategory();
 

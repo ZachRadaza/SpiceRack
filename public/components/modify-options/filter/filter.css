@@ -1,0 +1,57 @@
+.filter-cont{
+    background: var(--accent);
+    border-radius: 25px;
+    border: 0.15rem solid var(--accent);
+    padding: 0.5rem 0px;
+    max-height: 8rem;
+    overflow: hidden;
+}
+
+.inside-cont{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    background: var(--tan);
+    gap: 0.1rem;
+    overflow: hidden;
+}
+
+.section-filter{
+    padding: 0px 0.4rem;
+    display: flex;
+    flex-direction: column;
+    background: var(--accent);
+    width: 100%;
+    gap: 0.3rem;
+}
+
+.section-filter.meal-types{
+    display: flex;
+    flex-direction: row !important;
+    gap: 0.5rem;
+}
+
+.section-filter.meal-types > div{
+    gap: 0.3rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-filter button{
+    all: unset;
+    background: var(--accent);
+    border: 0.15rem solid var(--background);
+    color: var(--background);
+    border-radius: 25px;
+    padding: 0.3rem;
+    width: 5.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 200ms ease;
+}
+.section-filter button:hover, .section-filter button.toggled{
+    background: var(--tan);
+    color: var(--text);
+    border: 0.15rem solid var(--accent);
+}
+

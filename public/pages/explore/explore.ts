@@ -1,5 +1,9 @@
 import { Recipe } from "../../components/recipe/recipe-mini/recipe.js";
 import { BackendExtensionService } from "../../backend-extension-service.js";
+import { SortPopUp, Sorts } from "../../components/modify-options/sort/sort.js";
+import { FilterPopUp, Filters } from "../../components/modify-options/filter/filter.js";
+import { MealTime, MealType } from "../../main.js";
+import { sortRecipeListService, filterRecipeListService } from "../../utils/sortFilter.js";
 
 export class Explore extends HTMLElement{
 
@@ -11,6 +15,9 @@ export class Explore extends HTMLElement{
     private loadMore!: HTMLButtonElement;
 
     private listAllRecipes: Recipe[] = [];
+    private currentList: Recipe[] = [];
+    private currentSort: Sorts = Sorts.Alphabetical;
+    private currentFilter: Filters = Filters.None;
     private numberOfColumns: number = 0;
     private hasNext: boolean = true;
     private lastSkip: number = -1;
@@ -42,13 +49,22 @@ export class Explore extends HTMLElement{
         const searchAreaCont = this.shadow.getElementById("search-area-cont") as HTMLDivElement;
         const searchButton = this.shadow.getElementById("search-btn") as HTMLButtonElement;
         const loadMore = this.shadow.getElementById("load-more") as HTMLButtonElement;
+        const sortBtn = this.shadow.getElementById("sort") as HTMLButtonElement;
+        const filterBtn = this.shadow.getElementById("filter") as HTMLButtonElement;
+        const sortPopup = this.shadow.querySelector("sort-popup") as SortPopUp;
+        const filterPopup = this.shadow.querySelector("filter-popup") as FilterPopUp;
 
-        if(!searchButton || !searchInput || !searchAreaCont || !loadMore){
-            throw new Error("#search-area-cont, #search-btn, #search-bar-input, or #load-more is not found in explore.html");
+        if(!searchButton || !searchInput || !searchAreaCont || !loadMore || !sortBtn || !filterBtn || !sortPopup || !filterPopup){
+            throw new Error("#sort, #filter, #search-area-cont, #search-btn, #search-bar-input, or #load-more is not found in explore.html");
         }
 
         this.searchInput = searchInput;
         this.loadMore = loadMore;
+
+        sortBtn.addEventListener("click", () => this.openModifyPopup(sortBtn, sortPopup));
+        filterBtn.addEventListener("click", () => this.openModifyPopup(filterBtn, filterPopup));
+        sortPopup.parentComp = this;
+        filterPopup.parentComp = this;
 
         searchButton.addEventListener("click", () => this.searchName());
         this.searchInput.addEventListener("keydown", (event: KeyboardEvent) => {
@@ -85,31 +101,45 @@ export class Explore extends HTMLElement{
 
         const { data, meta } = await this.backendExtensionService.getAllRecipes(search, this.lastSkip, take);
 
-        for(let i = 0; i < data.length; i++) {
+        for(const r of data) {
             const rec = document.createElement("recipe-mini") as Recipe;
-            const owner = await this.backendExtensionService.getUser(data[i]!.ownerId);
+            const user = await this.backendExtensionService.getUser(r.ownerId);
+            const owner = user.data.username;
+
             rec.setAllFields({
-                id: data[i]!.id,
-                name: data[i]!.name,
-                ingredients: data[i]!.ingredients,
-                procedures: data[i]!.procedures,
-                imageLink: data[i]!.imageLink,
-                accountName: owner.data.username,
-                ownerId: data[i]!.ownerId,
-                mealTime: data[i]!.mealTime,
-                mealType: data[i]!.mealType,
-                bookmarked: data[i]!.bookmarked,
+                id: r.id,
+                name: r.name,
+                ingredients: r.ingredients,
+                procedures: r.procedures,
+                imageLink: r.imageLink,
+                accountName: owner,
+                ownerId: r.ownerId,
+                mealTime: r.mealTime,
+                mealType: r.mealType,
+                bookmarked: r.bookmarked,
                 mini: true
-            });
-
+            }, null, false);
             this.listAllRecipes.push(rec);
-
-            this.searchArea[i % this.numberOfColumns]!.appendChild(rec);
         }
+
+        this.currentList = [...this.listAllRecipes];
 
         this.hasNext = meta.hasNext || false;
         if(!this.hasNext){
             this.loadMore.disabled = true;
+        }
+        this.update(true);
+    }
+
+    private update(more: boolean = false){
+        if(!more){
+            for(let i = 0; i < this.numberOfColumns; i++){
+                this.searchArea[i]!.replaceChildren();
+            }
+        }
+
+        for(let i = 0; i < this.listAllRecipes.length; i++) {
+            this.searchArea[i % this.numberOfColumns]!.appendChild(this.currentList[i]!);
         }
     }
 
@@ -129,5 +159,31 @@ export class Explore extends HTMLElement{
         }
     }
 
+    public sortRecipeList(sort: Sorts){
+        this.currentSort = sort;
+        this.listAllRecipes = sortRecipeListService(sort, this.listAllRecipes);
+        this.currentList = [...this.listAllRecipes];
+        this.update();
+    }
+
+    public filterRecipeList(filter: Filters){
+        this.currentFilter = filter;
+
+        this.currentList = filterRecipeListService(filter, this.listAllRecipes);
+
+        this.update();
+    }
+
+    private openModifyPopup(btn: HTMLButtonElement, popup: HTMLElement){
+        if(btn.classList.contains("toggled"))
+            btn.classList.remove("toggled");
+        else 
+            btn.classList.add("toggled");
+
+        if(popup.classList.contains("opened"))
+            popup.classList.remove("opened");
+        else
+            popup.classList.add("opened");
+    }
 }
 customElements.define("explore-page", Explore);

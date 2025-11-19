@@ -53,6 +53,29 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    position: relative
+}
+
+.modify-popup{
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+    max-width: 475px;
+    width: fit-content;
+    transition: opacity 200ms ease, visibility 400ms ease;
+}
+.modify-popup.opened{
+    opacity: 1;
+    visibility: visible;
+}
+sort-popup.modify-popup{
+    top: 0px;
+    left: 5rem;
+}
+filter-popup.modify-popup{
+    top: 0px;
+    right: 5rem;
 }
 
 .search-results{

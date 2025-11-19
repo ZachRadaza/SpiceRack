@@ -23,7 +23,7 @@ export class RecipeDialog extends HTMLElement{
 
     private mealTimeBtn!: HTMLButtonElement;
     private mealTypeBtn!: HTMLButtonElement;
-    private bmInput!: HTMLInputElement;
+    private bmBtn!: HTMLButtonElement;
 
     private nameInput!: HTMLTextAreaElement;
     private procedureList!: HTMLOListElement;
@@ -63,14 +63,14 @@ export class RecipeDialog extends HTMLElement{
 
         const timeBtn = this.querySelector<HTMLButtonElement>("#dlg-meal-time");
         const typeBtn = this.querySelector<HTMLButtonElement>("#dlg-meal-type");
-        const bmInput = this.querySelector<HTMLInputElement>("#dlg-bookmark");
+        const bmBtn = this.querySelector<HTMLButtonElement>("#dlg-bookmark");
         
         const deleteBtn = this.querySelector<HTMLButtonElement>("#dlg-delete");
         const saveBtn = this.querySelector<HTMLButtonElement>("#dlg-save");
         const closeBtn = this.querySelector<HTMLButtonElement>("#dlg-close");
         const dialog = this.querySelector<HTMLDialogElement>('dialog');
 
-        if(!timeBtn || !typeBtn || !bmInput || !nameInput || !procedureList || !ingredientsList || !imageImg || !imageInput || !dialog){
+        if(!timeBtn || !typeBtn || !bmBtn || !nameInput || !procedureList || !ingredientsList || !imageImg || !imageInput || !dialog){
             throw new Error("dialog, #dlg-meal-time, #dlg-meal-type, #dlg-name, #dlg-procedures, #dlg-ingredients, and #dlg-image-cont img/input not found in recipe-dialog");
         }
 
@@ -82,15 +82,14 @@ export class RecipeDialog extends HTMLElement{
 
         this.mealTimeBtn = timeBtn;
         this.mealTypeBtn = typeBtn;
-        this.bmInput = bmInput;
+        this.bmBtn = bmBtn;
         this.dialog = dialog;
 
         const mTime = Object.values(MealTime);
         const mType = Object.values(MealType);
         this.mealTimeBtn.addEventListener("click", () => this.mealCategoryChange(mTime, this.mealTimeBtn));
         this.mealTypeBtn.addEventListener("click", () => this.mealCategoryChange(mType, this.mealTypeBtn));
-        this.imageInput.addEventListener("change", () => this.changeImage());
-        this.bmInput?.addEventListener("change", () => this.bookmarkRecipe());
+        this.bmBtn?.addEventListener("click", () => this.bookmarkRecipe());
         deleteBtn?.addEventListener("click", () => this.delete());
         saveBtn?.addEventListener("click", () => this.save());
         closeBtn?.addEventListener("click", () => this.close());
@@ -102,7 +101,7 @@ export class RecipeDialog extends HTMLElement{
         this._name = fields.name;
         this._ingredients = fields.ingredients;
         this._procedures = fields.procedures;
-        this._imageLink = fields.imageLink;
+        this._imageLink = fields.imageLink || "";
         this._accountName = fields.accountName || "";
         this._ownerId = fields.ownerId;
         this.recipeCategories.mealTime = fields.mealTime;
@@ -179,7 +178,7 @@ export class RecipeDialog extends HTMLElement{
         if(this.brandNew) return;
 
         this.nameInput.value = this._name;
-        if(this._bookmarked) this.bmInput.checked = true;
+        if(this._bookmarked) this.bmBtn.classList.add("checked");
 
         //update creator tag
         this.updateCreatorTag();
@@ -188,7 +187,7 @@ export class RecipeDialog extends HTMLElement{
         this.updateIngPro();
 
         //add image
-        if(!!this._imageLink || this._imageLink !== ""){
+        if(!!this._imageLink){
             this.imageInput.value = this._imageLink;
             this.imageImg.src = this._imageLink;
         }
@@ -248,7 +247,7 @@ export class RecipeDialog extends HTMLElement{
     }
 
     private async disableComponents(): Promise<void>{
-        this.bmInput.disabled = true;
+        this.bmBtn.disabled = true;
         this.mealTimeBtn.disabled = true;
         this.mealTypeBtn.disabled = true;
 
@@ -377,17 +376,17 @@ export class RecipeDialog extends HTMLElement{
         this._name = this.nameInput.value;
 
         this._procedures.length = 0;
-        this.procedureList.querySelectorAll("input").forEach(input => {
+        this.procedureList.querySelectorAll("textarea").forEach(input => {
             this._procedures.push(input.value);
         });
 
         this._ingredients.length = 0;
-        this.ingredientsList.querySelectorAll("input").forEach(input => {
+        this.ingredientsList.querySelectorAll("textarea").forEach(input => {
             this._ingredients.push(input.value);
         });
 
         this._imageLink = this.imageInput.value;
-        this._bookmarked = this.bmInput.checked;
+        this._bookmarked = this.bmBtn.classList.contains("checked");
     }
 
     private addIngProLine(elementList: HTMLUListElement | HTMLOListElement): void{
@@ -517,22 +516,11 @@ export class RecipeDialog extends HTMLElement{
     //make fancier
     private bookmarkRecipe(): void{
         this._bookmarked = !this._bookmarked;
-        this.bmInput.checked = this._bookmarked;
-    }
-
-    private changeImage(){
-        const file = this.imageInput.files?.[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = e => {
-            const dataUrl = String(e.target?.result || "");
-            this._imageLink = dataUrl;
-            this.imageImg.src = dataUrl;
-            this.imageImg.style.display = "block";   // show image
-            // this.imageInput.style.display = "none";  // optionally hide picker
-        };
-        reader.readAsDataURL(file);
+        
+        if(this._bookmarked)
+            this.bmBtn.classList.add("checked");
+        else
+            this.bmBtn.classList.remove("checked");
     }
 
     public close(){

@@ -76,6 +76,8 @@
 #dlg-response{
     justify-content: center;
     font-weight: 600;
+    text-align: center;
+    width: 100%;
 }
 
 #dlg-close{

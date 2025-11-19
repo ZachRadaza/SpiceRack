@@ -2,6 +2,8 @@ main{
     background-image: url("../../assets/images/hero-page-bg.jpg");
     background-size: cover;
     margin: 1.9rem;
+    min-height: 90vh;
+    height: 100%;
 }
 
 .north-cont{
@@ -35,11 +37,28 @@ main{
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
+    position: relative;
 }
 .modify-btn-cont button{
     width: 120px;
     align-self: flex-end;
 }
+.modify-btn-cont .modify-popup-cont{
+    position: absolute;
+    display: grid;
+    height: fit-content;
+    overflow: visible;
+    left: 110%;
+    top: -0.5rem;
+    z-index: 1000;
+}
+.modify-popup-cont .popup{
+    visibility: hidden;
+    opacity: 0;
+    grid-area: 1 / 1;
+    transition: visibility 400ms ease, opacity 200ms ease;
+}
+.modify-popup-cont .popup.opened{ visibility: visible; opacity: 1; }
 
 .book{
     position: relative;

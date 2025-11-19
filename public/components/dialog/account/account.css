@@ -1,0 +1,67 @@
+.dlg-acc-top{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: -44px;
+}
+
+#dlg-close{
+    all: unset;
+    place-items: center;
+    background: var(--close-bg);
+    color: var(--close-x);
+    cursor: pointer;
+    text-align: center;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    font-size: 18px;
+    transition: transform .12s ease, background-color .2s ease;
+}
+#dlg-close:hover{
+    background-color: var(--close-hover);
+    transform: scale(1.05);
+}
+
+.dlg-acc-cont{
+    width: 500px;
+    min-width: 250px;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    gap: 0.6rem;
+    margin: 1.3rem 1.8rem;
+    align-items: center;
+    justify-content: space-around;
+    overflow-y: auto;
+}
+
+.acc-info-row-cont{
+    display: flex;
+    flex-direction: column;
+}
+
+.acc-info-row{
+    display: flex;
+    flex-direction: row;
+    gap: 0.3rem;
+}
+.acc-info-row .type-info{
+    color: var(--accent);
+    font-weight: 700 !important;
+}
+.acc-info-row .info{
+    font-style: italic;
+    font-weight: 500 !important;
+}
+.profile-pic{
+    width: 100px; 
+    height: 100px;
+    border-radius: 50%;
+    padding: 0px;
+    margin: 0px;
+    background: linear-gradient(135deg, var(--highlight), var(--tan));
+    border: 2px solid var(--accent);
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}

@@ -1,5 +1,7 @@
 import { BackendExtensionService } from "../../backend-extension-service.js";
+import { AccountDialog } from "../dialog/account/account.js";
 import { LoginDialog } from "../dialog/login/login.js";
+import { SignUpDialog } from "../dialog/sign-up/sign-up.js";
 
 export class Header extends HTMLElement{
     private shadow = this.attachShadow({ mode:"open" });
@@ -51,6 +53,7 @@ export class Header extends HTMLElement{
 
         this.button.addEventListener("click", () => this.profileClick());
         this.logBtn.addEventListener("click", () => this.logClick(this.logBtn.classList.contains("logout")));
+        this.accBtn.addEventListener("click", () => this.accountClick(this.accBtn.classList.contains("account-open")))
 
         const { id } = await this.backendService.checkClientUser();
         const user = await this.backendService.getUser(id);
@@ -60,6 +63,9 @@ export class Header extends HTMLElement{
 
             this.logBtn.classList.add("logout");
             this.logBtn.textContent = "Log-out";
+
+            this.accBtn.classList.add("account-open");
+            this.accBtn.textContent = "Account Info";
         }
     }
 
@@ -86,8 +92,17 @@ export class Header extends HTMLElement{
         }
     }
 
-    private accountClick(){
+    private async accountClick(accountProfile: boolean){
+        let dialog;
+        if(accountProfile){
+            await import('../dialog/account/account.js');
+            await customElements.whenDefined('account-dialog');
+            dialog = document.createElement('account-dialog') as any;
+        } else
+            dialog = document.createElement('sign-up-dialog') as SignUpDialog;
 
+        document.body.appendChild(dialog);
+        dialog.showModal();
     }
 }
 customElements.define('header-component', Header);

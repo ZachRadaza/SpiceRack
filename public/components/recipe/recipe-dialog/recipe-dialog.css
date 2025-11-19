@@ -57,10 +57,28 @@
     background: var(--close-hover); transform: scale(1.05);
 }
 
-#dlg-bookmark{
-    inline-size: 1.2rem; block-size: 1.2rem;
-    accent-color: var(--accent);
+#dlg-bookmark{ 
+    all: unset;
+    border: none;
+    outline: none;
+    transition: transform 200ms ease;
 }
+#dlg-bookmark:active{
+    transform: scale(0.95);
+}
+#dlg-bookmark:hover{
+    transform: scale(1.05);
+}
+#dlg-bookmark svg{
+    fill: var(--tan);
+    height: 2rem;
+    width: auto;
+    transition: all 200ms ease;
+}
+#dlg-bookmark.checked svg{
+    fill: var(--accent);
+}
+
 #dlg-close{
     text-align: center;
     width: 36px; height: 36px;

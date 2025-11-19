@@ -103,7 +103,7 @@ button {
     transition: background .2s, transform .1s;
 }
 
-button:hover{
+button:hover, button.toggled{
     background: var(--accent);
     color: var(--background);
     transform: translateY(-2px);
