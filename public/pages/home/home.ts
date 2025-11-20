@@ -112,7 +112,7 @@ export class Home extends HTMLElement{
 
     private initPopularRecipesDiv(): number{
         let widthRecipe = 350 + 30;
-        if(window.innerWidth < 768) widthRecipe = 180 + 20;
+        if(window.innerWidth < 768) widthRecipe = 140 + 20;
         else if (window.innerWidth > 768 && window.innerWidth < 1024) widthRecipe = 250 + 20;
         const ret = Math.floor(this.popularRecipesDiv.offsetWidth / widthRecipe);
 

@@ -155,7 +155,7 @@
 @media (max-width: 767.98px) {
     #recipe-cont {
         grid-template-columns: .4rem 1fr .4rem;
-        width: 180px;
+        width: 140px;
         max-height: var(--random-height);
         overflow: hidden;
     }

@@ -218,9 +218,10 @@ export class MyRecipes extends HTMLElement{
             } else {
                 const gap = 80;
                 //const recipeWidth = this.currentList[i]!.style.width;
-                let recipeWidth = 350;
-                if(window.innerWidth < 768) recipeWidth = 280;
-                this.currentList[i]!.style.transform = `translateX(${(30 * i) + 40 + recipeWidth}px)`;
+                let widthRecipe = 350;
+                if(window.innerWidth < 768) widthRecipe = 140 + 20;
+                 else if (window.innerWidth > 768 && window.innerWidth < 1024) widthRecipe = 250 + 20;
+                this.currentList[i]!.style.transform = `translateX(${(30 * i) + 40 + widthRecipe}px)`;
                 this.currentList[i]!.style.zIndex = (this.currentSplitPoint - (i - this.currentSplitPoint) + 1000).toString();
             }
 
