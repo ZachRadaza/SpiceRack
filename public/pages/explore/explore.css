@@ -154,7 +154,6 @@ filter-popup.modify-popup{
 
     #search-area-cont {
         margin: 1rem 0;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
     .search-area { align-items: stretch; }
 
