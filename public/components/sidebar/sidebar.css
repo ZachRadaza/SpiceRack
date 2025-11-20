@@ -60,3 +60,28 @@
 .sidebar-btn:hover span{
     opacity: 1;
 }
+
+@media (max-width: 767.98px) {
+    #sidebar-cont {
+        display: grid;
+        grid-template-rows: none;
+        grid-template-columns: repeat(3, 1fr);
+        width: 100%;
+        height: var(--sidebar-mobile-h, 56px);
+        opacity: 1;
+    }
+    .sidebar-btn {
+        min-height: var(--sidebar-mobile-h, 56px);
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        padding: 0;
+    }
+    .sidebar-btn h1 {
+        font-size: 1rem;
+        line-height: 1;
+    }
+    .sidebar-btn span {
+        display: none !important;
+    }
+}

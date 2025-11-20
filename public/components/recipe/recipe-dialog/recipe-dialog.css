@@ -282,3 +282,110 @@
 .edge.side, #dlg-main button.side, #dlg-meal-type.side    { background: var(--side); }
 .edge.snack, #dlg-main button.snack, #dlg-meal-type.snack { background: var(--snack); }
 .edge.food, #dlg-main button.food, #dlg-meal-type.food    { background: var(--food); }
+
+@media (max-width: 767.98px) {
+    .dlg-cont {
+        grid-template-columns: 20px 1fr 20px;
+        width: 100vw;
+        height: 92dvh;
+    }
+
+    #dlg-main {
+        grid-template-rows: auto auto 1fr auto;
+    }
+
+    .upper-half {
+        display: grid;
+        grid-template-areas:
+        "name"
+        "image";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        gap: 12px;
+        padding: 10px 12px;
+    }
+
+    .name-cont {
+        grid-area: name;
+        gap: 8px;
+    }
+
+    #dlg-image-cont {
+        grid-area: image;
+    }
+
+    #dlg-name {
+        max-width: 100%;
+        margin: 0 0 8px 0;
+        font-size: clamp(1.6rem, 6vw, 2.2rem);
+        padding: 8px;
+        text-align: center;
+    }
+
+    #dlg-image-cont img {
+        aspect-ratio: 4/3;
+    }
+
+    #dlg-image-link-cont h5 { font-size: .9rem; }
+    #dlg-image-link-cont input { font-size: .9rem; }
+
+    .lower-half {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 0 12px 12px;
+    }
+
+    #dlg-ingredients,
+    #dlg-procedures {
+        max-height: 32dvh;
+        overflow-y: auto;
+        padding-right: 8px;
+    }
+
+    .footer {
+        padding: 10px 12px 14px;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+    .upper-half {
+        display: grid;
+        grid-template-areas:
+        "name"
+        "image";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        gap: 14px;
+        padding: 12px 18px;
+    }
+
+    .name-cont {
+        grid-area: name;
+        gap: 10px;
+    }
+
+    #dlg-image-cont {
+        grid-area: image;
+    }
+
+    #dlg-name {
+        max-width: 100%;
+        font-size: clamp(2rem, 4vw, 2.6rem);
+        margin: 0 0 10px 0;
+        text-align: center;
+    }
+
+    #dlg-image-cont img {
+        aspect-ratio: 4/3;
+    }
+
+    #dlg-ingredients,
+    #dlg-procedures {
+        max-height: 36dvh;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+}

@@ -153,3 +153,62 @@ dialog:not([open]){
 .recipe-card.dinner    { background: var(--mt-dinner); }
 
 
+/* responsiveness */
+:root{
+  --sidebar-mobile-h: 56px;
+  --sidebar-tablet-w: 64px;
+}
+
+button { min-height: 44px; touch-action: manipulation; }
+@supports (padding: max(0px)) {
+    body { padding-bottom: max(0px, env(safe-area-inset-bottom)); }
+}
+
+@media (max-width: 767.98px) {
+    .main-body{
+        flex-direction: column;
+    }
+
+    sidebar-component{
+        width: 100% !important;
+        min-width: 0 !important;
+        height: var(--sidebar-mobile-h);
+        border-right: none;
+        border-bottom: 4px solid var(--text);
+    }
+
+    @media (hover: none) {
+        sidebar-component:hover { width: 100% !important; }
+    }
+
+    .main{
+        min-height: calc(100dvh - var(--sidebar-mobile-h));
+    }
+
+    #page-cont{
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    dialog{
+        width: 100vw;
+        max-width: none;
+        margin: 0;
+        border-radius: 24px;
+    }
+    dialog::backdrop { background: rgba(0,0,0,.35); }
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+    sidebar-component{
+        width: var(--sidebar-tablet-w);
+        min-width: var(--sidebar-tablet-w);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    sidebar-component { transition: none; }
+    button { transition: none; }
+    dialog { transition: none; }
+}

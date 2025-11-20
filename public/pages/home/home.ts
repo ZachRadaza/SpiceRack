@@ -31,12 +31,9 @@ export class Home extends HTMLElement{
             ${html}`;
 
         this.initializeHTMLElements();
-
         await this.pullPopularRecipesBackend();
 
         this.initialized = true;
-
-        this.movingRecipe();
     }
 
     private initializeHTMLElements(): void{
@@ -65,16 +62,16 @@ export class Home extends HTMLElement{
     private async pullPopularRecipesBackend(){
         this.popularRecipesDiv.replaceChildren();
         this.popularRecipes.length = 0;
+        this.popularRecipesDivArea.length = 0;
 
-        const numberOfColumns: number = initDiv(this.popularRecipesDiv, this.popularRecipesDivArea);
-
+        const numberOfColumns: number = this.initPopularRecipesDiv();
+        const copyRecipes: Recipe[] = [];
         const { data } = await this.backendExtensionService.getAllRecipes();
 
         for(let i = 0; i < data.length; i++) {
-            const rec = [];
+            const owner = await this.backendExtensionService.getUser(data[i]!.ownerId);
             for(let j = 0; j < 2; j++){
                 const recipe = document.createElement("recipe-mini") as Recipe;
-                const owner = await this.backendExtensionService.getUser(data[i]!.ownerId);
                 recipe.setAllFields({
                     id: data[i]!.id,
                     name: data[i]!.name,
@@ -88,104 +85,49 @@ export class Home extends HTMLElement{
                     bookmarked: data[i]!.bookmarked,
                     mini: true
                 });
-                rec.push(recipe);
+
+                if(j === 1) this.popularRecipes.push(recipe!);
+                else copyRecipes.push(recipe!);
             }
-
-            this.popularRecipes.push(rec[0]!);
-
-            this.popularRecipesDivArea[(i % numberOfColumns) * 2]!.appendChild(rec[0]!);
-            this.popularRecipesDivArea[((i % numberOfColumns) * 2) + 1]!.appendChild(rec[1]!);
         }
 
-        function initDiv(areaCont: HTMLDivElement, listAreaDiv: HTMLDivElement[]): number{
-            const widthRecipe = 350;
-            const ret = Math.floor(areaCont.offsetWidth / widthRecipe);
-
-            for(let i = 0; i < ret; i++){
-                const columnDiv = document.createElement("div") as HTMLDivElement;
-
-                columnDiv.style.gridArea = `1 / ${i + 1}`;
-                columnDiv.classList.add("popular-area");
-
-                const copy = columnDiv.cloneNode(true);
-
-                areaCont.appendChild(columnDiv);
-                areaCont.appendChild(copy);
-
-                listAreaDiv.push(columnDiv);
-                listAreaDiv.push(copy as HTMLDivElement);
-            }
-            areaCont.style.width = "auto";
-
-            return ret;
+        for (let i = 0; i < this.popularRecipes.length; i++) {
+            this.popularRecipesDivArea[i % numberOfColumns]!.appendChild(this.popularRecipes[i]!);
         }
+
+        for (let i = 0; i < this.popularRecipes.length; i++) {
+            this.popularRecipesDivArea[i % numberOfColumns]!.appendChild(copyRecipes[i]!);
+        }
+
+        requestAnimationFrame(() => {
+            this.popularRecipesDivArea.forEach((col, idx) => {
+                const seg = Math.round(col.scrollHeight / 2);
+                col.style.setProperty('--seg', `${seg}px`);
+                col.style.height = `${seg * 2}px`;
+                col.classList.add('scrolling');
+                if (idx % 2) col.style.animationDelay = 'calc(var(--dur, 60s) / -2)';
+            });
+        });
     }
 
-    //animation of moving recipes
-    private async movingRecipe(){
-        const recipesArea = Array.from(this.popularRecipesDivArea);
-        const msWait = 40000;
-        const delay = emulateFirstRow();
+    private initPopularRecipesDiv(): number{
+        let widthRecipe = 350 + 30;
+        if(window.innerWidth < 768) widthRecipe = 280;
+        const ret = Math.floor(this.popularRecipesDiv.offsetWidth / widthRecipe);
 
-        firstRow(recipesArea);
+        for(let i = 0; i < ret; i++){
+            const columnDiv = document.createElement("div") as HTMLDivElement;
 
-        await wait((delay * 2) + (msWait / 2));
-        //await wait(msWait / 2);
+            columnDiv.style.gridArea = `1 / ${i + 1}`;
+            columnDiv.classList.add("popular-area");
 
-        secondRow(recipesArea);
+            this.popularRecipesDiv.appendChild(columnDiv);
 
-        function wait(ms: number){
-            return new Promise(resolve => setTimeout(resolve, ms));
+            this.popularRecipesDivArea.push(columnDiv);
         }
+        this.popularRecipesDiv.style.width = "fit-content";
 
-        async function firstRow(recipesArea: HTMLDivElement[]){
-            while(true){
-                for(let i = 0; i < recipesArea.length; i += 2){
-                    recipesArea[i]!.style.transform = `translateY(-${recipesArea[i]!.offsetHeight}px)`;
-                    recipesArea[i]!.style.transition = `transform ${msWait}ms linear`;
-                }
-
-                await wait(msWait);
-
-                for(let i = 0; i < recipesArea.length; i += 2) {
-                    recipesArea[i]!.style.transform = `translateY(${recipesArea[i]!.offsetHeight}px)`;
-                    recipesArea[i]!.style.transition = ``;
-                }
-            }
-        }
-
-        //used to get how long it takes to run the commands to have accurate delay
-        function emulateFirstRow():number {
-            const startTime = Date.now();
-        
-            for(let i = 0; i < recipesArea.length; i += 2){
-                recipesArea[i]!.style.transform = `translateY(-${recipesArea[i]!.offsetHeight}px)`;
-                recipesArea[i]!.style.transition = `transform ${msWait}ms linear`;
-            }
-
-            for(let i = 0; i < recipesArea.length; i += 2) {
-                recipesArea[i]!.style.transform = `translateY(${recipesArea[i]!.offsetHeight}px)`;
-                recipesArea[i]!.style.transition = ``;
-            }
-
-            return  Date.now() - startTime;
-        }
-
-        async function secondRow(recipesArea: HTMLDivElement[]){
-            while(true){
-                for(let i = 1; i < recipesArea.length; i += 2){
-                    recipesArea[i]!.style.transform = `translateY(-${recipesArea[i]!.offsetHeight}px)`;
-                    recipesArea[i]!.style.transition = `transform ${msWait}ms linear`;
-                }
-
-                await wait(msWait);
-
-                for(let i = 1; i < recipesArea.length; i += 2) {
-                    recipesArea[i]!.style.transform = `translateY(${recipesArea[i]!.offsetHeight}px)`;
-                    recipesArea[i]!.style.transition = ``;
-                }
-            }
-        }
+        return ret;
     }
 
     private openSignUp(){

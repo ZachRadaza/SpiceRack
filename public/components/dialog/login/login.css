@@ -97,3 +97,67 @@
 #dlg-submit{
     font-size: large;
 }
+
+@media (max-width: 767.98px) {
+    #dlg-main-cred {
+        width: 100%;
+        max-width: 100%;
+        margin: 1rem;
+        padding: 1rem;
+        gap: .75rem;
+        align-items: stretch;
+    }
+
+    #dlg-top-cred {
+        margin: .5rem .5rem -1rem;
+    }
+    #dlg-close {
+        width: 40px; height: 40px;
+        font-size: 16px;
+    }
+
+    #dlg-login {
+        font-size: 1.6rem;
+        text-align: center;
+    }
+
+    #dlg-main-cred div {
+        padding: .75rem;
+        gap: .5rem;
+    }
+
+    #dlg-main-cred div input {
+        width: 100%;
+        max-width: 100%;
+        font-size: 1rem;
+        padding: .5rem .75rem;
+    }
+
+    #dlg-submit {
+        width: 100%;
+        max-width: 400px;
+        padding: .75rem;
+        align-self: center;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+    #dlg-main-cred {
+        width: min(640px, 90vw);
+        gap: 1rem;
+    }
+    #dlg-main-cred div input {
+        width: 100%;
+        max-width: 480px;
+    }
+    #dlg-login {
+        font-size: 2rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #dlg-main-cred div,
+    #dlg-close {
+        transition: none;
+    }
+}

@@ -130,3 +130,98 @@ recipe-mini{
   .book{ padding: 0 36px; }
   .scroll-btn{ width: 42px; height: 42px; }
 }
+
+@media (max-width: 767.98px) {
+    main { margin: 1rem; min-height: 80vh; }
+
+    .north-cont { gap: .75rem; }
+    .title-recipes { font-size: clamp(1.4rem, 6vw, 2rem); }
+
+    #new-recipe {
+        width: clamp(52px, 14vw, 72px);
+        height: clamp(52px, 14vw, 72px);
+        font-size: clamp(1.4rem, 6vw, 2rem);
+    }
+
+    .modify-btn-cont {
+        width: 100%;
+        align-items: stretch;
+    }
+    .modify-btn-cont button {
+        width: 100%;
+        align-self: stretch;
+    }
+    .modify-btn-cont .modify-popup-cont {
+        position: fixed;
+        left: 0; right: 0; bottom: 0;
+        top: auto;
+        width: 100%;
+        z-index: 1000;
+        display: block;
+        padding: .5rem;
+    }
+    .modify-popup-cont .popup {
+        visibility: hidden;
+        opacity: 0;
+        max-width: 100%;
+        transition: visibility 300ms ease, opacity 200ms ease;
+    }
+    .modify-popup-cont .popup.opened {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .book {
+        margin: .75rem 0;
+        padding: 0 40px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+
+    #recipe-list {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(240px, 85vw);
+        gap: 1rem;
+        padding: 1.25rem;
+        width: max-content;
+    }
+
+    recipe-mini {
+        grid-area: auto;
+        scroll-snap-align: start;
+    }
+
+    .scroll-btn { display: none; }
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+    main { margin: 1.25rem; }
+
+    .modify-btn-cont .modify-popup-cont {
+        left: auto;
+        right: 0;
+        top: calc(100% + .5rem);
+    }
+
+    .book {
+        padding: 0 44px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #recipe-list {
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(280px, 48vw);
+        gap: 1.25rem;
+        padding: 2rem;
+    }
+
+    recipe-mini { grid-area: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .modify-popup-cont .popup,
+    .scroll-btn { transition: none; }
+}
