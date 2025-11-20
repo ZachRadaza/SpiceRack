@@ -167,13 +167,13 @@ button.profile-section.toggled svg{
 
 @media (max-width: 767.98px) {
     .main-title-cont {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         padding: 0.75rem 1rem;
-        gap: 0.75rem;
+        gap: 0.5rem;
     }
     .brand {
-        flex: 1 1 100%;
-        justify-content: center;
+        flex: 0 1 auto;
+        justify-content: flex-start;
     }
     .logo {
         width: 1.4rem;
@@ -190,6 +190,7 @@ button.profile-section.toggled svg{
         width: auto;
         gap: 0.25rem;
         padding: 0.3rem 0.4rem;
+        margin-left: auto;
         justify-content: flex-end;
     }
     .profile-section svg {
@@ -204,6 +205,7 @@ button.profile-section.toggled svg{
     }
     #profile-dropdown {
         right: 8px;
+        left: auto;
         width: 9rem;
     }
 }
@@ -224,3 +226,4 @@ button.profile-section.toggled svg{
         height: 36px;
     }
 }
+

@@ -122,19 +122,29 @@ filter-popup.modify-popup{
     .search-optimize {
         gap: .75rem;
         justify-content: center;
+        position: relative;
     }
     .search-optimize > button { flex: 1 1 45%; max-width: 240px; }
 
     .modify-popup {
         position: fixed;
-        left: 0; right: 0; bottom: 0;
-        top: auto;
+        left: 0; right: 0;
+        bottom: max(0px, env(safe-area-inset-bottom));
+        top: auto !important;
         width: 100%;
         max-width: 100%;
+        max-height: 70vh;
+        overflow-y: auto;
         margin: 0;
+        background: var(--accent);
+        border-top: 1px solid var(--tan);
     }
-    sort-popup.modify-popup { left: 0; right: 0; }
-    filter-popup.modify-popup { left: 0; right: 0; }
+    sort-popup.modify-popup,
+    filter-popup.modify-popup {
+        left: 0; right: 0;
+        bottom: max(0px, env(safe-area-inset-bottom));
+        top: auto !important;
+    }
 
     .search-results {
         width: 100%;
@@ -161,8 +171,18 @@ filter-popup.modify-popup{
     #search-area-cont {
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     }
-    sort-popup.modify-popup { top: calc(100% + 8px); left: 0; right: auto; }
-    filter-popup.modify-popup { top: calc(100% + 8px); right: 0; left: auto; }
+    sort-popup.modify-popup {
+        position: absolute;
+        top: calc(100% + 8px) !important;
+        left: 0; right: auto;
+        max-width: 475px;
+    }
+    filter-popup.modify-popup {
+        position: absolute;
+        top: calc(100% + 8px) !important;
+        right: 0; left: auto;
+        max-width: 475px;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

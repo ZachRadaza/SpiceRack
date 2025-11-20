@@ -126,9 +126,9 @@ recipe-mini{
 .scroll-btn--right{ right: 8px; }
 
 @media (max-width: 640px){
-  .modify-btn-cont button{ width: 100px; }
-  .book{ padding: 0 36px; }
-  .scroll-btn{ width: 42px; height: 42px; }
+    .modify-btn-cont button{ width: 100px; }
+    .book{ padding: 0 36px; }
+    .scroll-btn{ width: 42px; height: 42px; }
 }
 
 @media (max-width: 767.98px) {
@@ -153,27 +153,41 @@ recipe-mini{
     }
     .modify-btn-cont .modify-popup-cont {
         position: fixed;
-        left: 0; right: 0; bottom: 0;
-        top: auto;
+        left: 0; right: 0;
+        bottom: max(0px, env(safe-area-inset-bottom));
+        top: auto !important;
         width: 100%;
-        z-index: 1000;
-        display: block;
-        padding: .5rem;
+        z-index: 1100;
+        max-width: 100%;
+        height: 100%;
+        max-height: 20vh;
+        display: grid;
+        padding: 0;
+        visibility: hidden;
+        transition: visibility 300ms ease;
     }
     .modify-popup-cont .popup {
-        visibility: hidden;
+        grid-area: 1 / 1;
         opacity: 0;
+        width: 100%;
         max-width: 100%;
-        transition: visibility 300ms ease, opacity 200ms ease;
+        max-height: 70vh;
+        overflow-y: auto;
+        margin: 0;
+        background: var(--accent);
+        border-top: 1px solid var(--tan);
+        transition: opacity 200ms ease;
+    }
+    .modify-popup-cont:has(.opened){
+        visibility: visible;
     }
     .modify-popup-cont .popup.opened {
-        visibility: visible;
         opacity: 1;
     }
 
     .book {
         margin: .75rem 0;
-        padding: 0 40px;
+        padding: 20px 40px;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
@@ -181,16 +195,9 @@ recipe-mini{
 
     #recipe-list {
         display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: minmax(240px, 85vw);
         gap: 1rem;
         padding: 1.25rem;
         width: max-content;
-    }
-
-    recipe-mini {
-        grid-area: auto;
-        scroll-snap-align: start;
     }
 
     .scroll-btn { display: none; }
@@ -200,9 +207,16 @@ recipe-mini{
     main { margin: 1.25rem; }
 
     .modify-btn-cont .modify-popup-cont {
+        position: absolute;
         left: auto;
         right: 0;
-        top: calc(100% + .5rem);
+        top: calc(100% + .5rem) !important;
+        width: auto;
+        padding: 0;
+    }
+    .modify-popup-cont .popup {
+        width: max-content;
+        max-width: 475px;
     }
 
     .book {
@@ -212,13 +226,9 @@ recipe-mini{
     }
 
     #recipe-list {
-        grid-auto-flow: column;
-        grid-auto-columns: minmax(280px, 48vw);
         gap: 1.25rem;
         padding: 2rem;
     }
-
-    recipe-mini { grid-area: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {

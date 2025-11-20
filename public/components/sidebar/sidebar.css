@@ -18,9 +18,13 @@
     display: grid;
     place-items: center;
     background-color: var(--accent);
+    transition: filter 200ms ease;
 }
 .sidebar-btn:hover {
     transform: translateY(0px);
+}
+.sidebar-btn:active{
+    filter: brightness(80%);
 }
 
 .sidebar-btn h1, .sidebar-btn span{
@@ -80,6 +84,10 @@
     .sidebar-btn h1 {
         font-size: 1rem;
         line-height: 1;
+    }
+    .sidebar-btn:hover h1{
+        line-height: 1;
+        font-size: 1rem;
     }
     .sidebar-btn span {
         display: none !important;

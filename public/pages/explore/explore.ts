@@ -78,7 +78,8 @@ export class Explore extends HTMLElement{
 
     private initializeSearchArea(areaCont: HTMLDivElement){
         let widthRecipe = 350 + 30; //30 for safer spacing
-        if(window.innerWidth < 768) widthRecipe = 280;
+        if(window.innerWidth < 768) widthRecipe = 180 + 20;
+        else if (window.innerWidth > 768 && window.innerWidth < 1024) widthRecipe = 250 + 20;
         this.numberOfColumns = Math.floor(areaCont.offsetWidth / widthRecipe);
 
         for(let i = 0; i < this.numberOfColumns; i++){
